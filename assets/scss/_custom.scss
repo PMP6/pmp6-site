@@ -1,1 +1,31 @@
-/* empty file */
+.orbit-slide {
+    max-height: 30vh;
+    width: auto;
+}
+
+.top-bar {
+    .menu-title a {
+        color: $white;
+        font-weight: bold;
+    }
+
+    .is-active > a {
+        color: unset !important;
+    }
+
+    li, a {
+        color: $medium-gray;
+        &:hover {
+            color: $white !important;
+        }
+    }
+
+    .dropdown.menu > li.is-dropdown-submenu-parent > a::after {
+        // arrows
+        border-color: $medium-gray rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
+    }
+
+    .is-dropdown-submenu {
+        border: none;
+    }
+}
