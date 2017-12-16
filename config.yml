@@ -22,6 +22,7 @@ PATHS:
   # Paths to JavaScript entry points for webpack to bundle modules
   entries:
     - "assets/js/app.js"
+    - "assets/js/fontawesome/fontawesome-all.min.js"
     - "node_modules/foundation-sites/dist/js/foundation.min.js"
     - "node_modules/jquery/dist/jquery.min.js"
     - "node_modules/what-input/dist/what-input.min.js"

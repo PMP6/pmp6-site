@@ -3,9 +3,17 @@
     width: auto;
 }
 
+body {
+    background: $light-gray !important;
+}
+
+h1 {
+    text-align: center;
+}
+
 .top-bar {
     .menu-title a {
-        color: $white;
+        color: $light-gray;
         font-weight: bold;
     }
 
@@ -13,10 +21,10 @@
         color: unset !important;
     }
 
-    li, a {
+    li, a, a:focus {
         color: $medium-gray;
         &:hover {
-            color: $white !important;
+            color: $white ;
         }
     }
 
@@ -27,5 +35,36 @@
 
     .is-dropdown-submenu {
         border: none;
+    }
+}
+
+article {
+    header {
+        .pub-time {
+            font-size: x-small;
+            color: $dark-gray;
+        }
+    }
+}
+
+footer {
+    background: $black;
+    padding: 0.5rem;
+    text-align: center;
+    color: $dark-gray;
+
+    a, a:focus {
+        color: $dark-gray;
+        &:hover {
+            color: $light-gray;
+        }
+    }
+
+    #immatriculation {
+        font-size: small;
+    }
+
+    .icons {
+        font-size: x-large;
     }
 }
