@@ -4,3 +4,10 @@ npm-debug.log
 bower_components
 dist
 *.swp
+yarn-error.log
+
+_client
+_deps
+_server
+local
+.depend
