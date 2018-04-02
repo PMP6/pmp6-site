@@ -1,48 +1,98 @@
-.orbit-slide {
-    max-height: 30vh;
-    width: auto;
+.email {
+    font-family: $font-family-monospace;
 }
 
-body {
-    background: $light-gray !important;
-}
+.grid-container {
 
-h1 {
-    text-align: center;
+    h1 {
+        text-align: center;
+
+        img {
+            height: 2em;
+        }
+    }
+    background-color: $white;
 }
 
 .top-bar {
-    .menu-title a {
-        color: $light-gray;
-        font-weight: bold;
+    // Color
+    $active-color: white;
+    $standard-color: $medium-gray;
+
+    // Font and display
+    font-family: "Open Sans", $body-font-family;
+    font-variant: small-caps;
+    text-transform: uppercase;
+    font-size: 0.85em;
+
+    // Shadow
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.75);
+    position: relative;
+    z-index: 99;
+
+    .top-bar-right {
+        padding-right: 0.5rem;
     }
 
-    .is-active > a {
-        color: unset !important;
-    }
+    .dropdown.menu {
 
-    li, a, a:focus {
-        color: $medium-gray;
-        &:hover {
-            color: $white ;
+        .menu-title a {
+            // PMP6
+            color: $active-color !important;
+            font-family: $header-font-family;
+            font-size: 2em;
+
+            img {
+                height: 1em;
+            }
         }
-    }
 
-    .dropdown.menu > li.is-dropdown-submenu-parent > a::after {
+        .is-dropdown-submenu {
+            box-shadow: 0 0 5px $topbar-background;
+            border: none;
+        }
+
+        & > li.is-dropdown-submenu-parent > a::after {
         // arrows
-        border-color: $medium-gray rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
+            border-color: $standard-color rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
+        }
+
+        & > li.is-dropdown-submenu-parent.is-active > a::after {
+        // active arrows
+        border-color: $active-color rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
+        }
+
+        .is-active > a {
+            color: $active-color;
+        }
+
+        li, a, a:focus {
+            color: $standard-color;
+            &:hover {
+                color: $active-color;
+                text-shadow: 0 0 3px rgba(0, 0, 0, 0.75);
+            }
+        }
+
+        li {
+            // Vertically center menu items on top bar
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
     }
 
-    .is-dropdown-submenu {
-        border: none;
-    }
 }
 
-article {
-    header {
-        .pub-time {
-            font-size: x-small;
-            color: $dark-gray;
+#section-actu {
+    margin-bottom: 1.5vh;
+
+    article {
+        header {
+            .pub-time {
+                font-size: small;
+            }
         }
     }
 }
@@ -51,10 +101,12 @@ footer {
     background: $black;
     padding: 0.5rem;
     text-align: center;
-    color: $dark-gray;
+    color: $medium-gray;
+
+    font-family: "Open Sans", $body-font-family;
 
     a, a:focus {
-        color: $dark-gray;
+        color: $medium-gray;
         &:hover {
             color: $light-gray;
         }

@@ -5,9 +5,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PMP6</title>
-    <link rel="stylesheet" href="/assets/css/app.css">
 
-    <script defer src="/assets/js/fontawesome-all.min.js"></script>
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Kaushan+Script|Open+Sans|Raleway" rel="stylesheet">
 
     <link rel="apple-touch-icon" sizes="76x76" href="/assets/img/favicons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png">
@@ -17,7 +18,10 @@
     <meta name="theme-color" content="#ffffff">
 
   </head>
+
   <body>
+
+    <!-- Loading the Facebook Page Plugin -->
     <div id="fb-root"></div>
     <script>
       (function(d, s, id) {
@@ -32,7 +36,12 @@
     <header class="top-bar">
       <nav class="top-bar-left">
         <ul class="dropdown menu" data-dropdown-menu>
-          <li class="menu-title"><a href="#">PMP6 Plongée</a></li>
+          <li class="menu-title">
+            <a href="#" class="media-object-section">
+              <img src="/assets/img/pavillon-alpha.png" alt="Pavillon alpha" />
+              PMP6
+            </a>
+          </li>
           <li>
             <a href="#">Actualités</a>
           </li>
@@ -49,6 +58,7 @@
           <li>
             <a href="#">Informations pratiques</a>
             <ul class="menu vertical">
+              <li><a href="#">Guide du débutant</a></li>
               <li><a href="#">Piscine</a></li>
               <li><a href="#">Fosse</a></li>
               <li><a href="#">Inscription au club</a></li>
@@ -74,7 +84,10 @@
 
     </header>
 
-    <div class="orbit" role="region" aria-label="Favorite Space Pictures" data-orbit>
+    <div class="orbit carrousel-photos-plongeur"
+         role="region"
+         aria-label="Images de plongeurs"
+         data-orbit>
       <div class="orbit-wrapper">
 
         <div class="orbit-controls">
@@ -100,22 +113,24 @@
               <figcaption class="orbit-caption">Chloé est OK</figcaption>
             </figure>
           </li>
-          <!-- <li class="orbit-slide"> -->
-          <!--   <figure class="orbit-figure"> -->
-          <!--     <img class="orbit-image" src="/assets/img/04.jpg" alt="Space"> -->
-          <!--     <figcaption class="orbit-caption">Outta This World</figcaption> -->
-          <!--   </figure> -->
-          <!-- </li> -->
         </ul>
       </div>
+
       <nav class="orbit-bullets">
-        <button class="is-active" data-slide="0"><span class="show-for-sr">First slide details.</span><span class="show-for-sr">Current Slide</span></button>
-        <button data-slide="1"><span class="show-for-sr">Second slide details.</span></button>
-        <button data-slide="2"><span class="show-for-sr">Third slide details.</span></button>
+
+        <button data-slide="0" class="is-active">
+          <span class="show-for-sr">Photo 1</span>
+          <span class="show-for-sr">Photo en cours</span>
+        </button>
+
+        <button data-slide="1"><span class="show-for-sr">Photo 2</span></button>
+        <button data-slide="2"><span class="show-for-sr">Photo 3</span></button>
+
       </nav>
+
     </div>
 
-
+    <!-- Corps principal de la page -->
     <div class="grid-container">
       <h1>
         <img src="/assets/img/pmp6-poulpe.png" alt="Le poulpe, notre mascotte"/>
@@ -132,95 +147,286 @@
         </p>
 
         <p>
-          Présentation rapide pour ceux qui ne connaissent pas le
-          club.
+          Encadrés par une vingtaine de moniteurs bénévoles, nous
+          proposons des formations à tous les niveaux de plongeur
+          ainsi qu'un accompagnement pour ceux qui désirent se
+          préparer aux niveaux d'encadrement.
         </p>
 
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing
-          elit. Nam ultricies suscipit eros, a sollicitudin purus
-          mollis non. Fusce a ullamcorper erat, at dignissim
-          massa. Etiam non feugiat nibh. Nam consequat ex est,
-          quis imperdiet neque dictum a. Pellentesque libero
-          mauris, aliquam id dui a, porttitor egestas lorem. In in
-          egestas felis, quis elementum lacus. Nullam nibh urna,
-          viverra ut lacus nec, accumsan lacinia mi. In euismod
-          ultricies feugiat. Ut molestie augue nulla, ut facilisis
-          augue fermentum non. Donec dolor libero, luctus a nibh
-          aliquam, sodales consequat tortor. Sed ac nisl pretium
-          mauris porta maximus eu non metus. Proin luctus, velit
-          ac pharetra varius, erat nisi porta nisi, sit amet
-          egestas lacus purus et erat. Nunc sit amet quam
-          augue. Maecenas fringilla non lorem non
-          varius. Vestibulum sagittis, libero eu tincidunt
-          commodo, turpis nibh porttitor massa, vel pharetra lorem
-          dolor vitae elit. Sed bibendum erat nec neque aliquet,
-          nec ultricies tellus blandit. </p>
+          Notre entraînement hebdomadaire se déroule à la piscine Jean
+          Taris, dans le V<sup>ème</sup>. Nous proposons également des
+          séances régulières en fosse pour travailler la technique
+          jusqu'à 20m de profondeur. Enfin, nous organisons des stages
+          en milieu naturel pour valider les niveaux... et pour le
+          plaisir de plonger !
+        </p>
+
+        <p>
+          N'hésitez pas à parcourir les différentes sections de ce
+          site pour plus d'informations. Si vous avez des questions,
+          vous pouvez aussi contacter nos délégués
+          à l'adresse <a href="mailto:delegues@pmp6.fr"
+                         class="email">delegues@pmp6.fr</a>.
+        </p>
 
       </section>
 
-      <section class="callout">
+      <section id="section-actu">
         <h2>En ce moment...</h2>
         <hr />
         <div class="grid-x grid-padding-x">
-          <article class="large-auto medium-12 cell article grid-container">
 
-            <header class="grid-x align-bottom">
+          <div class="large-auto medium-12 cell">
 
-              <h3 class="h5 cell auto">Banyuls Pâques</h3>
+            <ul class="tabs"
+                id="tabs-actu"
+                data-keep-link="true"
+                data-responsive-accordion-tabs="tabs small-accordion medium-tabs large-tabs"
+                data-multi-expand="true" data-allow-all-closed="true"
+                >
 
-              <div class="h5 cell shrink">
-                <time class="pub-time"> 15 novembre 2017, 18 h 32 </time>
+              <li class="tabs-title is-active">
+                <a data-tabs-target="actu-banyuls-paques" href="#actu-banyuls-paques" aria-selected="true">
+                  Banyuls Pâques
+                </a>
+              </li>
+
+              <li class="tabs-title">
+                <a href="#actu-carantec-ascension" aria-selected="true">
+                  Carantec Ascension
+                </a>
+              </li>
+
+            </ul>
+
+            <div class="tabs-content" data-tabs-content="tabs-actu">
+
+              <div class="tabs-panel is-active" id="actu-banyuls-paques">
+                <article>
+                  <header class="grid-x align-bottom">
+
+                    <!-- Title and pub-time must belong to the same hn
+                         class to be vertically aligned -->
+                    <h3 class="h4 cell auto">Banyuls Pâques</h3>
+
+                    <div class="h4 subheader cell shrink">
+                      <time class="pub-time"> 15 novembre 2017, 18 h 32 </time>
+                    </div>
+
+                  </header>
+
+                  <div>
+                    Les inscriptions pour le stage à 🌊Banyuls🌊 ce
+                    printemps sont ouvertes ! Les infos sont les suivantes :
+
+                    <ul>
+                      <li>
+                        Dates : le stage débute le lundi 16 avril au matin,
+                        et se termine le mercredi 25 avril au soir.
+                      </li>
+
+                      <li>
+                        Effectifs : 12 places pour les stagiaires, avec
+                        4 encadrants.  Le stage est destiné aux prépas N2 et
+                        N3 en priorité, pour un séjour complet de
+                        préférence.
+                      </li>
+
+                      <li>
+                        Les étudiants seront logés au centre d'hébergement
+                        du laboratoire Arago. Les non-étudiants peuvent
+                        éventuellement y être logés à un tarif supérieur, ou
+                        bien devront envisager une solution alternative
+                        comme la location d'un appartement à proximité.  Les
+                        repas seront assurés par le restaurant du labo
+                      </li>
+
+                      <li>
+                        Tarif du stage (logé, nourri et plongé) : 550 euros
+                        / 10j pour les étudiants.  Pour les non-étudiants,
+                        veillez d'abord prendre contact avec François pour
+                        être informé du tarif selon les modalités de
+                        logement.  L'inscription est validée par le dépôt
+                        des arrhes : 100 euros.  Le règlement du montant
+                        total peut se faire par CB, ou en 2 ou 3 fois par
+                        chèques en dépôt à l'AS.
+                      </li>
+                    </ul>
+
+                  </div>
+                </article>
               </div>
 
-            </header>
+              <div class="tabs-panel" id="actu-carantec-ascension">
+                <article>
+                  <header class="grid-x align-bottom">
 
-            <div>
-              Les inscriptions pour le stage à 🌊Banyuls🌊 ce
-              printemps sont ouvertes ! Les infos sont les suivantes :
+                    <!-- Title and pub-time must belong to the same hn
+                         class to be vertically aligned -->
+                    <h3 class="h4 cell auto">Carantec Printemps</h3>
 
-              <ul>
-                <li>
-                  Dates : le stage débute le lundi 16 avril au matin,
-                  et se termine le mercredi 25 avril au soir.
-                </li>
+                    <div class="h4 subheader cell shrink">
+                      <time class="pub-time">7 mars 2018, 20h33 </time>
+                    </div>
 
-                <li>
-                  Effectifs : 12 places pour les stagiaires, avec
-                  4 encadrants.  Le stage est destiné aux prépas N2 et
-                  N3 en priorité, pour un séjour complet de
-                  préférence.
-                </li>
+                  </header>
 
-                <li>
-                  Les étudiants seront logés au centre d'hébergement
-                  du laboratoire Arago. Les non-étudiants peuvent
-                  éventuellement y être logés à un tarif supérieur, ou
-                  bien devront envisager une solution alternative
-                  comme la location d'un appartement à proximité.  Les
-                  repas seront assurés par le restaurant du labo
-                </li>
+                  <div>
+                    <p>
+                      Bonjour à tous,
+                    </p>
 
-                <li>
-                  Tarif du stage (logé, nourri et plongé) : 550 euros
-                  / 10j pour les étudiants.  Pour les non-étudiants,
-                  veillez d'abord prendre contact avec François pour
-                  être informé du tarif selon les modalités de
-                  logement.  L'inscription est validée par le dépôt
-                  des arrhes : 100 euros.  Le règlement du montant
-                  total peut se faire par CB, ou en 2 ou 3 fois par
-                  chèques en dépôt à l'AS.
-                </li>
-              </ul>
+                    <p>
+                      Nous avons le plaisir de vous annoncer les
+                      stages de plongée à Carantec 2018 ! Venez
+                      plonger dans un paysage somptueux !
+                    </p>
 
-            </div>
-          </article>
+                    <p>
+                      Tombants, délirantes dérivantes, laminaires et
+                      crustacés, raies & roussettes, anémones bijoux
+                      et lièvres de mer...  C'est ce qu'offre le
+                      chenal de la baie de Morlaix entre le château du
+                      taureau et l'île Louët.  Venez plonger dans
+                      l’eau fraîche et profiter d’un bon bol d’air
+                      iodé avec option sauna et jacuzzi au camping !
+                      N'y manquez pas !
+                    </p>
+
+                    <p>
+                      Niveau N2 et + recommandé (renseignez vous
+                      auprès de l'encadrement à la piscine si vous
+                      n'êtes pas encore N2 et souhaitez venir).
+                    </p>
+
+                    <p>
+                      Les inscriptions sont ouvertes à l’AS mais ce
+                      n’est pas là peine de vous y précipiter avant
+                      d’avoir obligatoirement contacté Olivier pour
+                      vérifier les disponibilités :
+                      <a href="mailto:omembrive@gmail.com"
+                         class="email">omembrive@gmail.com</a>.
+                    </p>
+
+                    <h4 class="h5">Carantec 1 (Ascension)</h4>
+
+                    <ul>
+                      <li>
+                        Jeudi 10 Mai - Dimanche 13 Mai (arrivée le
+                        Mercredi 9 Mai au soir)
+                      </li>
+
+                      <li>
+                        4 jours - 4 nuits - (7-8 plongées)
+                      </li>
+
+                      <li>
+                        Tarifs :
+                        <ul>
+                          <li>
+                            Étudiants: 175 €
+                          </li>
+                          <li>
+                            Autres (anciens, personnels, extérieurs...) : 200 €
+                          </li>
+                        </ul>
+                      </li>
+
+                      <li>
+                        Environ 18 personnes en tout (~ 12 stagiaires +
+                        4-6 encadrants)
+                      </li>
+                    </ul>
+
+                    <h4 class="h5">Carantec 2 (Pentecôte)</h4>
+
+                    <ul>
+                      <li>
+                        Samedi 19 Mai- Lundi 21 Mai (arrivée le Vendredi
+                        18 Mai au soir)
+                      </li>
+                      <li>
+                        3 jours - 3 nuits - (5-6 plongées)
+                      </li>
+                      <li>
+                        Tarifs :
+                        <ul>
+                          <li>
+                            Étudiants: 135 €
+                          </li>
+                          <li>
+                            Autres (anciens, personnels, extérieurs...) : 155 €
+                          </li>
+                        </ul>
+                      <li>
+                        Environ 18 personnes en tout  (~12 stagiaires + 4-6 encadrants)
+                      </li>
+                    </ul>
+
+                    <h4 class="h5">Quelques informations</h4>
+
+                    <p>Le tarif comprend :</p>
+
+                    <ul>
+                      <li>
+                        Hébergement (en Bungalow au camping Yelloh Village - Les Mouettes à Carantec),
+                      </li>
+
+                      <li>
+                        Repas (sauf le premier et le dernier soir),
+                      </li>
+
+                      <li>
+                        Plongées (prêt du matériel, sauf PMT et combi).
+                      </li>
+
+                      <li>
+                        Des covoiturages seront organisés entre les
+                        participants pour assurer un aller/retour sur
+                        Paris. (environ 40-50€ de frais de transport par
+                        personne à prévoir en partageant les frais)
+                      </li>
+                    </ul>
+
+                    <p>
+                      À savoir que face à l'engouement pour ces
+                      stages, et ne pouvant malheureusement pas
+                      accueillir tout le monde, des règles de
+                      priorités sont mises en places, elles vont dans
+                      ce sens :
+                    </p>
+
+                    <ol>
+                      <li>
+                        À l'encadrement nécessaire pour assurer le stage.
+                      </li>
+                      <li>
+                        Aux étudiants inscrit pour l'année en cours.
+                      </li>
+                      <li>
+                        Aux personnes qui participent activement
+                        à la vie de la section plongée.
+                      </li>
+                      <li>
+                        Aux autres, suivant les places disponibles.
+                      </li>
+                    </ol>
+
+
+                  </div>
+                </article>
+              </div>
+
+            </div> <!-- tabs-content -->
+          </div> <!-- Bloc news -->
 
           <div class="shrink cell">
             <div
-              class="fb-page"
+              class="fb-page callout"
               data-href="https://www.facebook.com/as.pmp6"
               data-tabs="timeline"
+              data-height="1000"
               <!-- data-width="500" -->
               data-small-header="true"
               data-adapt-container-width="true"
@@ -235,8 +441,9 @@
                 </a>
               </blockquote>
             </div>
-          </div>
-        </div>
+          </div> <!-- Bloc Page Facebook -->
+
+        </div> <!-- grid-x -->
       </section>
     </div>
 
@@ -272,6 +479,7 @@
     <!-- this will include every plugin and utility required by Foundation -->
     <script>
       $(document).foundation();
+      fontawesome.dom.i2svg();
     </script>
   </body>
 </html>
