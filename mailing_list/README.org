@@ -1,0 +1,137 @@
+#+title: Créer et gérer une liste de diffusion PMP6
+#+author: Thibault Suzanne
+
+#+begin_abstract
+
+Les listes de diffusion PMP6 sont hébergées sur [[https://framalistes.org][Framalistes]], un
+hébergeur libre qui nous permet de créer des listes gratuitement, sans
+restriction sur les adresses des membres.
+
+Ce document décrit la procédure adoptée pour créer ces listes. Il est
+un peu long et relativement indigeste à lire d'une traite, mais si on
+se contente de suivre les étapes, ce n'est pas très compliqué.
+
+#+end_abstract
+
+* Qui peut créer une liste ?
+
+Le compte de PMP6 est lié à l'adresse [[mailto:pmp6@pmp6.fr][=pmp6@pmp6.fr=]]. Le mot de passe
+est normalement connu au moins des délégués et peut être réinitialisé
+par mail. Demander si besoin au responsable des différents outils
+informatiques de la section.
+
+N'importe quelle personne ayant accès au compte framalistes de PMP6
+peut créer et gérer une liste. Bien qu'il soit techniquement possible
+de créer des listes depuis d'autres comptes, il est souhaitable de
+toutes les regrouper pour simplifier leur gestion et leur visibilité.
+
+Si un encadrant ou un membre veut créer une liste, il peut donc
+s'adresser aux délégués ou à un membre ayant accès au compte (par
+exemple celui qui gère les outils informatiques de la section), qui
+pourra soit le faire à sa place, soit le cas échéant lui donner le mot
+de passe pour qu'il le fasse lui-même. Dans tous les cas, il est
+important de suivre la procédure décrite dans ce document pour éviter
+que ça devienne le bazar.
+
+Il est possible de créer une liste et de donner délégation à quelqu'un
+par la suite pour qu'il la gère (notamment qu'il puisse ajouter ou
+retirer des membres). C'est sans doute la solution préférable dans le
+cas général.
+
+* Créer la liste sur Framalistes
+
+Pour créer une liste, il faut d'abord se connecter au compte de PMP6
+(Login) sur [[https://framalistes.org]]. Il faut ensuite suivre les
+instructions suivantes (l'interface peut éventuellement avoir changé
+depuis la rédaction de ce document).
+
+1. Se rendre dans l'onglet /Request a List/
+2. Dans /List name/, indiquer le nom de la liste. La convention veut
+   que ce nom soit préfixé par ~pmp6-~, par exemple
+   ~pmp6-carantec-2018~.
+3. Comme /List type/, choisir /Hotline mailing list/.
+4. Comme /Subject/, on peut mettre quelque chose comme par exemple
+   /PMP6 - Carantec 2018/.
+5. L'/Audience/ qui semble correspondre au mieux à nos listes est
+   simplement /Sport/.
+6. Dans la /Description/, préciser le rôle exact de la liste. Cette
+   description sera envoyée automatiquement dans le mail de bienvenue
+   à tous les futurs inscrits, c'est donc une bonne idée d'y mettre
+   toutes les informations qui peuvent être utiles au bon usage de la
+   liste (en particulier les membres qui la composent).
+7. On peut ensuite valider la création de la liste.
+
+* Configurer la liste
+
+Après avoir créé la liste, on arrive sur la page principale de sa
+gestion. On peut également arriver sur cette page depuis l'onglet
+/Home/, puis en cliquant sur /My lists/ et en choisissant la liste
+à gérer, puis en cliquandt sur /Admin/ dans le menu à gauche.
+
+Pour que les listes fonctionnent de façon optimale, il faut encore
+faire quelques réglages.
+
+Dans les /Basic Operations/, Onglet /Edit List Config/, choisir
+/DKIM/. Renseigner l'alias ~@pmp6.fr~ qui sera choisi dans le champ
+/New From address/ : par exemple, ~carantec-2018@pmp6.fr~. *Attention
+à ne pas se tromper ici* : une erreur rendrait les /Répondre à tous/
+impossible !
+
+Dans la même page, choisir l'option /"Name" (e-mail)/ pour /New From
+name format/. Valider les changements en cliquant sur /Update/.
+
+* Créer l'alias ~@pmp6.fr~
+
+Actuellement, c'est très simple : demander au membre qui gère les
+outils informatiques de la section, et notamment le compte OVH sur
+lequel le domaine ~pmp6.fr~ est enregistré. On verra plus tard si on
+peut mettre en place facilement une gestion par les délégués (par
+exemple) de ces alias.
+
+* Déléguer la gestion à un membre de la section
+
+Pour qu'un membre de la section n'ayant pas accès au compte de PMP6
+puisse gérer une liste, il faut l'ajouter comme /Owner/ de la
+liste. On peut ajouter comme /Owner/ n'importe quel membre ou groupe
+de membre identifié par une adresse email (par exemple, on peut
+ajouter ~delegues@pmp6.fr~).
+
+Il faut d'abord que le membre en question crée un compte sur
+Framalistes. On ne va pas détailler comment faire... Une fois le
+compte créé, depuis le compte de PMP6, il faut aller sur la page
+d'Administration de la liste, puis choisir /List definition/ depuis
+/Edit List Config/.
+
+Il faut descendre un peu pour aller dans la section *Owner*. Tous les
+/owners/ actuels de la liste sont listés ici à la suite les uns des
+autres. Pour en retirer un, il suffit d'effacer son adresse mail. *Il
+ne faut pas effacer ~pmp6@pmp6.fr~ !* Si on l'a fait par mégarde, on
+peut normalement le restaurer. Demander à quelqu'un qui sait faire si
+on n'y arrive pas.
+
+À la suite de cette liste des /owners/, il y a une entrée vide qu'on
+peut utiliser pour en ajouter un. Il suffit d'écrire son adresse mail
+et son nom dans les champs correspondants. On peut laisser les autres
+entrées telles quelles. Tout en bas de la page, il faut ensuite
+valider en cliquant sur /Update/.
+
+Le nouveau gestionnaire de la liste pourra alors la gérer depuis son
+propre compte Framalistes en suivant les instructions de ce document.
+
+* Ajouter ou supprimer des membres à la liste
+
+Une fois la liste créée (et idéalement /après/ avoir aussi créé
+l'alias), on peut ajouter des membres depuis la page d'administration
+dans l'onglet /Manage Subscribers/. C'est assez intuitif.
+
+Un seul point noir : il faut ajouter les membres un par un
+manuellement, pas possible de faire un copié-collé depuis une liste
+d'adresses... Il est envisageable de faire un outil qui automatise un
+peu ça un jour, mais ce n'est pas la priorité. En attendant, on peut
+simplement s'y mettre à plusieurs pour aller plus vite...
+
+La même page permet de supprimer les membres.
+
+* En cas de problème ou de doute
+
+Pour faire simple, demander à quelqu'un qui sait faire.
