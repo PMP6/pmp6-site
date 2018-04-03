@@ -10,10 +10,17 @@ include Makefile.options
 ##----------------------------------------------------------------------
 ##			      Internals
 
+# Use sort to get subdir uniqueness
+SERVER_SUBDIRS := $(sort $(dir $(SERVER_FILES)))
+CLIENT_SUBDIRS := $(sort $(dir $(CLIENT_FILES)))
+
 ## Required binaries
-ELIOMC            := eliomc -ppx
-ELIOMOPT          := eliomopt -ppx
-JS_OF_ELIOM       := js_of_eliom -ppx
+SERVERINCLUDE := $(addprefix -I $(ELIOM_SERVER_DIR)/,$(SERVER_SUBDIRS))
+CLIENTINCLUDE := $(addprefix -I $(ELIOM_CLIENT_DIR)/,$(CLIENT_SUBDIRS))
+
+ELIOMC            := eliomc -ppx $(SERVERINCLUDE)
+ELIOMOPT          := eliomopt -ppx $(SERVERINCLUDE)
+JS_OF_ELIOM       := js_of_eliom -ppx $(CLIENTINCLUDE) -jsopt +base/runtime.js
 ELIOMDEP          := eliomdep
 OCSIGENSERVER     := ocsigenserver
 OCSIGENSERVER.OPT := ocsigenserver.opt
@@ -225,6 +232,8 @@ $(DEPSDIR)/%.client: % | $(DEPSDIR)
 
 $(DEPSDIR):
 	mkdir $@
+	mkdir -p $(addprefix $@/, $(SERVER_SUBDIRS))
+	mkdir -p $(addprefix $@/, $(CLIENT_SUBDIRS))
 
 ##----------------------------------------------------------------------
 ## Clean up

@@ -4,10 +4,15 @@
 
 PROJECT_NAME := pmp6
 
+# Root dir for source files.
+SRCDIR := src
+
+ALL_FILES := $(shell find $(SRCDIR) -name *.eliom -o -name *.eliomi)
+
 # Source files for the server
-SERVER_FILES := $(wildcard *.eliomi *.eliom)
+SERVER_FILES := $(ALL_FILES)
 # Source files for the client
-CLIENT_FILES := $(wildcard *.eliomi *.eliom)
+CLIENT_FILES := $(ALL_FILES)
 
 # OCamlfind packages for the server
 SERVER_PACKAGES := lwt.ppx js_of_ocaml-ppx.deriving
