@@ -61,7 +61,7 @@ function clean(done) {
 // This task skips over the "img", "js", and "scss" folders, which are parsed separately
 function copy() {
     return gulp.src(PATHS.assets)
-        .pipe(gulp.dest(PATHS.dist + '/assets'));
+        .pipe(gulp.dest(PATHS.dist));
 }
 
 // Generate a style guide from the Markdown content and HTML template in styleguide/
@@ -87,7 +87,7 @@ function sass() {
         .pipe($.autoprefixer({browsers: COMPATIBILITY}))
         .pipe($.if(PRODUCTION, $.cleanCss({ compatibility: 'ie9' })))
         .pipe($.if(!PRODUCTION, $.sourcemaps.write()))
-        .pipe(gulp.dest(PATHS.dist + '/assets/css'))
+        .pipe(gulp.dest(PATHS.dist + '/css'))
         .pipe(browser.reload({ stream: true }));
 }
 
@@ -115,7 +115,7 @@ function javascript() {
         .pipe($.if(PRODUCTION,
                    $.uglify().on('error', e => { console.log(e); })))
         .pipe($.if(!PRODUCTION, $.sourcemaps.write()))
-        .pipe(gulp.dest(PATHS.dist + '/assets/js'));
+        .pipe(gulp.dest(PATHS.dist + '/js'));
 }
 
 // Copy images to the "dist" folder
@@ -123,7 +123,7 @@ function javascript() {
 function images() {
     return gulp.src('assets/img/**/*')
         .pipe($.if(PRODUCTION, $.imagemin({progressive: true})))
-        .pipe(gulp.dest(PATHS.dist + '/assets/img'));
+        .pipe(gulp.dest(PATHS.dist + '/img'));
 }
 
 // Start a server with BrowserSync to preview the site in

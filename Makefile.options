@@ -19,8 +19,11 @@ SERVER_PACKAGES := lwt.ppx js_of_ocaml-ppx.deriving
 # OCamlfind packages for the client
 CLIENT_PACKAGES := lwt.ppx js_of_ocaml-ppx js_of_ocaml-ppx.deriving
 
+# Url under which static files will be served. No trailing/leading /
+STATIC_URL = static
+
 # Directory with files to be statically served
-LOCAL_STATIC = static
+LOCAL_STATIC = dist
 
 # The backend for persistent data. Can be dbm or sqlite.
 # Make sure you have the following packages installed
