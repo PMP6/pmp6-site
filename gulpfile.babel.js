@@ -5,12 +5,12 @@ import yargs         from 'yargs';
 import browser       from 'browser-sync';
 import gulp          from 'gulp';
 import rimraf        from 'rimraf';
-import sherpa        from 'style-sherpa';
 import yaml          from 'js-yaml';
 import fs            from 'fs';
 import webpackStream from 'webpack-stream';
 import webpack2      from 'webpack';
 import named         from 'vinyl-named';
+import autoprefixer  from 'autoprefixer';
 
 // Load all Gulp plugins into one variable
 const $ = plugins();
@@ -36,8 +36,16 @@ gulp.task(
             javascript,
             images,
             copy
-        ),
-        styleGuide
+        )
+    )
+);
+
+// Build the site and watch for file changes without running the server
+gulp.task(
+    'watch',
+    gulp.series(
+        'build',
+        watch
     )
 );
 
@@ -64,27 +72,18 @@ function copy() {
         .pipe(gulp.dest(PATHS.dist));
 }
 
-// Generate a style guide from the Markdown content and HTML template in styleguide/
-function styleGuide(done) {
-    sherpa(
-        'styleguide/index.md',
-        {
-            output: PATHS.dist + '/styleguide.html',
-            template: 'styleguide/template.html'
-        },
-        done
-    );
-}
-
-gulp.task('sass', sass);
-
 // Compile Sass into CSS
 // In production, the CSS is compressed
 function sass() {
+    const postCssPlugins = [
+        // Autoprefixer
+        autoprefixer({ browsers: COMPATIBILITY }),
+    ];
+
     return gulp.src('assets/scss/app.scss')
         .pipe($.sourcemaps.init())
         .pipe($.sass({includePaths: PATHS.sass}).on('error', $.sass.logError))
-        .pipe($.autoprefixer({browsers: COMPATIBILITY}))
+        .pipe($.postcss(postCssPlugins))
         .pipe($.if(PRODUCTION, $.cleanCss({ compatibility: 'ie9' })))
         .pipe($.if(!PRODUCTION, $.sourcemaps.write()))
         .pipe(gulp.dest(PATHS.dist + '/css'))
@@ -92,18 +91,22 @@ function sass() {
 }
 
 let webpackConfig = {
+    mode: (PRODUCTION ? 'production' : 'development'),
     module: {
         rules: [
             {
-                test: /.js$/,
-                use: [
-                    {
-                        loader: 'babel-loader'
+                test: /\.js$/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [ "@babel/preset-env" ],
+                        compact: false
                     }
-                ]
+                }
             }
         ]
-    }
+    },
+    devtool: !PRODUCTION && 'source-map'
 }
 // Combine JavaScript into one file
 // In production, the file is minified
@@ -122,7 +125,9 @@ function javascript() {
 // In production, the images are compressed
 function images() {
     return gulp.src('assets/img/**/*')
-        .pipe($.if(PRODUCTION, $.imagemin({progressive: true})))
+        .pipe($.if(PRODUCTION, $.imagemin([
+            $.imagemin.jpegtran({ progressive: true }),
+            ])))
         .pipe(gulp.dest(PATHS.dist + '/img'));
 }
 
@@ -130,8 +135,7 @@ function images() {
 function server(done) {
     browser.init({
         server: PATHS.dist, port: PORT
-    });
-    done();
+    }, done);
 }
 
 // Reload the browser with BrowserSync
@@ -146,5 +150,4 @@ function watch() {
     gulp.watch('assets/scss/**/*.scss').on('all', sass);
     gulp.watch('assets/js/**/*.js').on('all', gulp.series(javascript, browser.reload));
     gulp.watch('assets/img/**/*').on('all', gulp.series(images, browser.reload));
-    gulp.watch('styleguide/**').on('all', gulp.series(styleGuide, browser.reload));
 }
