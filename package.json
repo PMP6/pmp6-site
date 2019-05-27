@@ -13,6 +13,7 @@
     "dependencies": {
         "foundation-sites": "^6.5.3",
         "jquery": "^3.2.1",
+        "moment": "^2.24.0",
         "motion-ui": "^2.0.3",
         "what-input": "^5.1.2"
     },
