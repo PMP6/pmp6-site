@@ -80,7 +80,7 @@ function sass() {
         autoprefixer({ browsers: COMPATIBILITY }),
     ];
 
-    return gulp.src('assets/scss/app.scss')
+    return gulp.src(PATHS.sass_entries)
         .pipe($.sourcemaps.init())
         .pipe($.sass({includePaths: PATHS.sass}).on('error', $.sass.logError))
         .pipe($.postcss(postCssPlugins))
