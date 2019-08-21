@@ -1,8 +1,23 @@
+html {
+    height: 100%;
+    min-height: 100%;
+}
+
+body {
+    @include flex;
+    @include flex-direction(column);
+    min-height: 100%;
+}
+
+dd + dt {
+    margin-top: 1em;
+}
+
 .email {
     font-family: $font-family-monospace;
 }
 
-.grid-container {
+.content {
 
     h1 {
         text-align: center;
@@ -11,7 +26,9 @@
             height: 2em;
         }
     }
+
     background-color: $white;
+    width: 100%;
 }
 
 .top-bar {
@@ -30,16 +47,12 @@
     position: relative;
     z-index: 99;
 
-    .top-bar-right {
-        padding-right: 0.5rem;
-    }
-
     .dropdown.menu {
 
         .menu-title a {
             // PMP6
             color: $active-color !important;
-            font-family: $header-font-family;
+            font-family: 'Kaushan Script';
             font-size: 2em;
 
             img {
@@ -53,13 +66,13 @@
         }
 
         & > li.is-dropdown-submenu-parent > a::after {
-        // arrows
+            // arrows
             border-color: $standard-color rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
         }
 
         & > li.is-dropdown-submenu-parent.is-active > a::after {
-        // active arrows
-        border-color: $active-color rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
+            // active arrows
+            border-color: $active-color rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
         }
 
         .is-active > a {
@@ -83,6 +96,15 @@
 
     }
 
+    .top-bar-right {
+        padding-right: 0.5rem;
+
+        .input-group {
+            // Vertically center the search form
+            margin: auto;
+        }
+    }
+
 }
 
 #section-actu {
@@ -92,6 +114,7 @@
         header {
             .pub-time {
                 font-size: small;
+                color: $dark-gray;
             }
         }
     }
@@ -102,6 +125,8 @@ footer {
     padding: 0.5rem;
     text-align: center;
     color: $medium-gray;
+
+    margin-top: auto;
 
     font-family: "Open Sans", $body-font-family;
 
