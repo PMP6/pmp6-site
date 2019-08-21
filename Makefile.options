@@ -9,18 +9,35 @@ SRCDIR := src
 
 ALL_FILES := $(shell find $(SRCDIR) -name *.eliom -o -name *.eliomi)
 
+WARNINGS := +a-4-40-41-42-44-45-48-58-59
+CFLAGS := -open Base -open Core_kernel -strict-formats -short-paths
+
 # Source files for the server
 SERVER_FILES := $(ALL_FILES)
 # Source files for the client
 CLIENT_FILES := $(ALL_FILES)
 
-# OCamlfind packages for the server
-SERVER_PACKAGES := lwt.ppx js_of_ocaml-ppx.deriving
-# OCamlfind packages for the client
-CLIENT_PACKAGES := lwt.ppx js_of_ocaml-ppx js_of_ocaml-ppx.deriving
+# OCamlfind packages used for both server and client
+COMMON_PACKAGES := \
+	eliom \
+	uucp \
+	uuseg \
+	uuseg.string \
+	uunf \
+	uunf.string \
+	tyxml-ppx \
+	lwt_ppx
 
-# Url under which static files will be served. No trailing/leading /
-STATIC_URL = static
+# OCamlfind packages for the server
+SERVER_PACKAGES := $(COMMON_PACKAGES) base core_kernel eliom.server js_of_ocaml-ppx.deriving
+#ptime.clock.os
+
+# OCamlfind packages for the client
+CLIENT_PACKAGES := $(COMMON_PACKAGES) base core_kernel eliom.client js_of_ocaml-ppx.deriving js_of_ocaml-ppx
+#ptime.clock.jsoo
+
+# A list of runtimes providing functions for js_of_ocaml
+JS_RUNTIMES := base/runtime.js core_kernel/runtime.js bin_prot/runtime.js time_now/runtime.js
 
 # Directory with files to be statically served
 LOCAL_STATIC = dist

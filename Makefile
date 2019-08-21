@@ -10,17 +10,14 @@ include Makefile.options
 ##----------------------------------------------------------------------
 ##			      Internals
 
-# Use sort to get subdir uniqueness
-SERVER_SUBDIRS := $(sort $(dir $(SERVER_FILES)))
-CLIENT_SUBDIRS := $(sort $(dir $(CLIENT_FILES)))
+
+## Generate js_of_eliom runtime options
+JSOPT_RUNTIMES := $(addprefix -jsopt +,${JS_RUNTIMES})
 
 ## Required binaries
-SERVERINCLUDE := $(addprefix -I $(ELIOM_SERVER_DIR)/,$(SERVER_SUBDIRS))
-CLIENTINCLUDE := $(addprefix -I $(ELIOM_CLIENT_DIR)/,$(CLIENT_SUBDIRS))
-
-ELIOMC            := eliomc -ppx $(SERVERINCLUDE)
-ELIOMOPT          := eliomopt -ppx $(SERVERINCLUDE)
-JS_OF_ELIOM       := js_of_eliom -ppx $(CLIENTINCLUDE) -jsopt +base/runtime.js
+ELIOMC            := eliomc -ppx -w ${WARNINGS} ${CFLAGS}
+ELIOMOPT          := eliomopt -ppx -w ${WARNINGS} ${CFLAGS}
+JS_OF_ELIOM       := js_of_eliom -ppx ${JSOPT_RUNTIMES}
 ELIOMDEP          := eliomdep
 OCSIGENSERVER     := ocsigenserver
 OCSIGENSERVER.OPT := ocsigenserver.opt
@@ -38,7 +35,7 @@ DEPSDIR := _deps
 ifeq ($(DEBUG),yes)
   GENERATE_DEBUG ?= -g
   RUN_DEBUG ?= "-v"
-  DEBUG_JS ?= -jsopt -pretty -jsopt -noinline -jsopt -debuginfo
+  DEBUG_JS ?= -jsopt --pretty -jsopt --noinline -jsopt --debuginfo
 endif
 
 ##----------------------------------------------------------------------
@@ -159,10 +156,15 @@ $(TEST_PREFIX)${ETCDIR}/${PROJECT_NAME}-test.conf: ${PROJECT_NAME}.conf.in Makef
 ##----------------------------------------------------------------------
 ## Server side compilation
 
+# Use sort to get subdir uniqueness
+SERVER_DIRS := $(sort $(dir $(SERVER_FILES)))
+SERVER_DEP_DIRS := ${addprefix -eliom-inc ,${SERVER_DIRS}}
+SERVER_INC_DIRS := ${addprefix -I $(ELIOM_SERVER_DIR)/, ${SERVER_DIRS}}
+
 SERVER_INC  := ${addprefix -package ,${SERVER_PACKAGES}}
 
 ${ELIOM_TYPE_DIR}/%.type_mli: %.eliom
-	${ELIOMC} -infer ${SERVER_INC} $<
+	${ELIOMC} -infer ${SERVER_INC} ${SERVER_INC_DIRS} $<
 
 $(TEST_PREFIX)$(LIBDIR)/$(PROJECT_NAME).cma: $(call objs,$(ELIOM_SERVER_DIR),cmo,$(SERVER_FILES)) | $(TEST_PREFIX)$(LIBDIR)
 	${ELIOMC} -a -o $@ $(GENERATE_DEBUG) \
@@ -176,24 +178,29 @@ $(TEST_PREFIX)$(LIBDIR)/$(PROJECT_NAME).cmxa: $(call objs,$(ELIOM_SERVER_DIR),cm
 	$(ELIOMOPT) -shared -linkall -o $@ $(GENERATE_DEBUG) $<
 
 ${ELIOM_SERVER_DIR}/%.cmi: %.mli
-	${ELIOMC} -c ${SERVER_INC} $(GENERATE_DEBUG) $<
+	${ELIOMC} -c ${SERVER_INC} ${SERVER_INC_DIRS} $(GENERATE_DEBUG) $<
 
 ${ELIOM_SERVER_DIR}/%.cmi: %.eliomi
-	${ELIOMC} -c ${SERVER_INC} $(GENERATE_DEBUG) $<
+	${ELIOMC} -c ${SERVER_INC} ${SERVER_INC_DIRS} $(GENERATE_DEBUG) $<
 
 ${ELIOM_SERVER_DIR}/%.cmo: %.ml
-	${ELIOMC} -c ${SERVER_INC} $(GENERATE_DEBUG) $<
+	${ELIOMC} -c ${SERVER_INC} ${SERVER_INC_DIRS} $(GENERATE_DEBUG) $<
 ${ELIOM_SERVER_DIR}/%.cmo: %.eliom
-	${ELIOMC} -c ${SERVER_INC} $(GENERATE_DEBUG) $<
+	${ELIOMC} -c ${SERVER_INC} ${SERVER_INC_DIRS} $(GENERATE_DEBUG) $<
 
 ${ELIOM_SERVER_DIR}/%.cmx: %.ml
-	${ELIOMOPT} -c ${SERVER_INC} $(GENERATE_DEBUG) $<
+	${ELIOMOPT} -c ${SERVER_INC} ${SERVER_INC_DIRS} $(GENERATE_DEBUG) $<
 ${ELIOM_SERVER_DIR}/%.cmx: %.eliom
-	${ELIOMOPT} -c ${SERVER_INC} $(GENERATE_DEBUG) $<
+	${ELIOMOPT} -c ${SERVER_INC} ${SERVER_INC_DIRS} $(GENERATE_DEBUG) $<
 
 
 ##----------------------------------------------------------------------
 ## Client side compilation
+
+# Use sort to get subdir uniqueness
+CLIENT_DIRS := $(sort $(dir $(CLIENT_FILES)))
+CLIENT_DEP_DIRS := ${addprefix -eliom-inc ,${CLIENT_DIRS}}
+CLIENT_INC_DIRS := ${addprefix -I $(ELIOM_CLIENT_DIR)/,${CLIENT_DIRS}}
 
 CLIENT_LIBS := ${addprefix -package ,${CLIENT_PACKAGES}}
 CLIENT_INC  := ${addprefix -package ,${CLIENT_PACKAGES}}
@@ -207,15 +214,15 @@ $(TEST_PREFIX)$(ELIOMSTATICDIR)/$(PROJECT_NAME).js: $(call objs,$(ELIOM_CLIENT_D
 	  $(call depsort,$(ELIOM_CLIENT_DIR),cmo,-client,$(CLIENT_INC),$(CLIENT_FILES))
 
 ${ELIOM_CLIENT_DIR}/%.cmi: %.mli
-	${JS_OF_ELIOM} -c ${CLIENT_INC} $(GENERATE_DEBUG) $<
+	${JS_OF_ELIOM} -c ${CLIENT_INC} ${CLIENT_INC_DIRS} $(GENERATE_DEBUG) $<
 
 ${ELIOM_CLIENT_DIR}/%.cmo: %.eliom
-	${JS_OF_ELIOM} -c ${CLIENT_INC} $(GENERATE_DEBUG) $<
+	${JS_OF_ELIOM} -c ${CLIENT_INC} ${CLIENT_INC_DIRS} $(GENERATE_DEBUG) $<
 ${ELIOM_CLIENT_DIR}/%.cmo: %.ml
-	${JS_OF_ELIOM} -c ${CLIENT_INC} $(GENERATE_DEBUG) $<
+	${JS_OF_ELIOM} -c ${CLIENT_INC} ${CLIENT_INC_DIRS} $(GENERATE_DEBUG) $<
 
 ${ELIOM_CLIENT_DIR}/%.cmi: %.eliomi
-	${JS_OF_ELIOM} -c ${CLIENT_INC} $(GENERATE_DEBUG) $<
+	${JS_OF_ELIOM} -c ${CLIENT_INC} ${CLIENT_INC_DIRS} $(GENERATE_DEBUG) $<
 
 ##----------------------------------------------------------------------
 ## Dependencies
@@ -226,15 +233,15 @@ include .depend
 	cat $^ > $@
 
 $(DEPSDIR)/%.server: % | $(DEPSDIR)
-	$(ELIOMDEP) -server -ppx $(SERVER_INC) $< > $@
+	$(ELIOMDEP) -server -ppx $(SERVER_INC) $(SERVER_DEP_DIRS) $< > $@
 
 $(DEPSDIR)/%.client: % | $(DEPSDIR)
-	$(ELIOMDEP) -client -ppx $(CLIENT_INC) $< > $@
+	$(ELIOMDEP) -client -ppx $(CLIENT_INC) $(CLIENT_DEP_DIRS) $< > $@
 
 $(DEPSDIR):
 	mkdir $@
-	mkdir -p $(addprefix $@/, $(SERVER_SUBDIRS))
-	mkdir -p $(addprefix $@/, $(CLIENT_SUBDIRS))
+	mkdir -p $(addprefix $@/, $(SERVER_DIRS))
+	mkdir -p $(addprefix $@/, $(CLIENT_DIRS))
 
 ##----------------------------------------------------------------------
 ## Clean up
