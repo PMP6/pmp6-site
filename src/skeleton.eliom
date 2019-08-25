@@ -97,13 +97,6 @@ module Informations = struct
       ]
 end
 
-module Galerie = struct
-  include SubLeaf (struct let path_root = "galerie" end)
-
-  let hierarchy_item =
-    make_hierarchy_item "Galerie" []
-end
-
 module Contact = struct
   include SubLeaf (struct let path_root = "contact" end)
 

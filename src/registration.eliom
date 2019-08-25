@@ -18,6 +18,5 @@ let () =
   Skeleton.Informations.Services.piscine => Piscine.piscine_page;
   Skeleton.Informations.Services.fosse => Fosse.fosse_page;
   Skeleton.Informations.Services.inscription => Inscription.inscription_page;
-  Skeleton.Galerie.service => Galerie.galerie_page;
   Skeleton.Contact.service => Contact.contact_page;
   ()
