@@ -15,20 +15,13 @@ PATHS:
   assets:
     - "assets/**/*"
     - "!assets/{img,js,scss}/**/*"
-    # PhotoSwipe default skin: trick to get default-skin as an assets
-    # subfolder (but not the other elements of photoswipe/dist/)
-    - "node_modules/photoswipe/dist/**/*"
-    - "!node_modules/photoswipe/dist/*"
   # Paths to Sass libraries, which can then be loaded with @import
   sass:
     - "node_modules/foundation-sites/scss"
     - "node_modules/motion-ui/src"
-    - "node_modules/photoswipe/src/css"
   # Paths to JavaScript entry points for webpack to bundle modules
   entries:
     - "assets/js/app.js"
-    - "assets/js/photoswipe.js"
   # Paths to Sass entry points to be generated into css files
   sass_entries:
-    - "assets/scss/photoswipe.scss"
     - "assets/scss/app.scss"
