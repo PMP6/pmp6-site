@@ -77,7 +77,7 @@ function copy() {
 function sass() {
     const postCssPlugins = [
         // Autoprefixer
-        autoprefixer({ browsers: COMPATIBILITY }),
+        autoprefixer(),
     ];
 
     return gulp.src(PATHS.sass_entries)
