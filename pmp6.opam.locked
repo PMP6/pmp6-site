@@ -18,7 +18,7 @@ depends: [
   "base_quickcheck" {= "v0.12.0"}
   "bin_prot" {= "v0.12.0"}
   "biniou" {= "1.2.1"}
-  "camlp4" {= "4.07+system"}
+  "camlp4" {= "4.07+1"}
   "cmdliner" {= "1.0.4"}
   "conf-dbm" {= "1.0.0"}
   "conf-gmp" {= "1"}
@@ -63,10 +63,10 @@ depends: [
   "num" {= "1.2"}
   "oasis" {= "0.4.11"}
   "ocaml" {= "4.07.1"}
+  "ocaml-base-compiler" {= "4.07.1"}
   "ocaml-compiler-libs" {= "v0.12.0"}
   "ocaml-config" {= "1"}
   "ocaml-migrate-parsetree" {= "1.4.0"}
-  "ocaml-system" {= "4.07.1"}
   "ocamlbuild" {= "0.14.0"}
   "ocamlfind" {= "1.8.1"}
   "ocamlify" {= "0.0.1"}
