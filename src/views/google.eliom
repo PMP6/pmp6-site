@@ -1,3 +1,33 @@
+module Analytics = struct
+
+  let id =
+    "UA-146402770-1"
+
+  let gtag_manager () =
+    let open Html in
+    let service =
+      Eliom_service.extern
+        ~prefix:"https://www.googletagmanager.com"
+        ~path:["gtag"; "js"]
+        ~meth:(Eliom_service.Get (Eliom_parameter.string "id"))
+        () in
+    let src = make_uri ~service id in
+    script ~a:[
+      a_async ();
+      a_src src;
+    ] (txt "")
+
+  let gtag () =
+    let open Html in
+    script @@ txt @@ Printf.sprintf {|
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '%s');
+    |} id
+
+end
+
 module Maps = struct
 
   let embed pb =

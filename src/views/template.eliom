@@ -68,6 +68,8 @@ let head ?(other_head=[]) ~title () =
     app_js_script;
     favicon_link ~size:16;
     favicon_link ~size:32;
+    Google.Analytics.gtag_manager ();
+    Google.Analytics.gtag ();
   ] @ other_head
 
 let menu_title_entry =
