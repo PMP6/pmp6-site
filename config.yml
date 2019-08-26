@@ -15,10 +15,13 @@ PATHS:
   assets:
     - "assets/**/*"
     - "!assets/{img,js,scss}/**/*"
+    - "node_modules/@fortawesome/fontawesome-free/**/*"
+    - "!node_modules/@fortawesome/fontawesome-free/{css,less,scss}/**/*"
   # Paths to Sass libraries, which can then be loaded with @import
   sass:
     - "node_modules/foundation-sites/scss"
     - "node_modules/motion-ui/src"
+    - "node_modules/@fortawesome/fontawesome-free/scss"
   # Paths to JavaScript entry points for webpack to bundle modules
   entries:
     - "assets/js/app.js"

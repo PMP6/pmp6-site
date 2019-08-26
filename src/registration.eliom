@@ -8,7 +8,7 @@ let ( => ) service page =
   Pmp6_app.register
     ~service
     (fun () () ->
-       let _ = [%client (Foundation.init (); Icon.init () : unit)] in
+       let _ = [%client (Foundation.init () : unit)] in
        Lwt.return @@ page ())
 
 let () =

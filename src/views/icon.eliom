@@ -15,8 +15,3 @@ let solid ?(a=[]) =
 
 let brands ?(a=[]) =
   icon ~a ~style:"fab"
-
-let%client init () =
-  Js_of_ocaml.Js.Unsafe.eval_string {|
-    jQuery(document).foundation();
-  |}

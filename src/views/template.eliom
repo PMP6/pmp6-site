@@ -183,12 +183,6 @@ let footer =
     ]
   ]
 
-let fa_script () =
-  let script_txt = {|
-    fontawesome.dom.i2svg();
-  |} in
-  H.script (H.txt script_txt)
-
 let make_body content =
   (* empty anchor does not work for smooth scroll *)
   H.body ~a:[H.a_id "top"] [
@@ -196,7 +190,6 @@ let make_body content =
     carousel;
     main ~content;
     footer;
-    (* fa_script (); *)
   ]
 
 let make_page ?(other_head=[]) ~title content =
