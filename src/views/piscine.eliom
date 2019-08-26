@@ -31,7 +31,7 @@ let piscine_page () =
       ];
       p [
         txt "Les deux séances sont ouvertes à tous nos \
-             adhérents. Elles se déroulent aux horaires suivants :";
+             adhérents. Elles se déroulent aux horaires suivants :";
       ];
       ul [
         li [txt "Le mardi de 21h à 22h"];
@@ -41,7 +41,7 @@ let piscine_page () =
         txt "Selon l'encadrement, certaines séances, notamment pendant \
              les périodes de vacances scolaires ou de stage, peuvent \
              être annulées. Les adhérents sont alors prévenus \
-             à l'avance via nos divers caneaux de communication.";
+             à l'avance via nos divers canaux de communication.";
       ];
       div_classes ["grid-x"; "align-center"] [
         div_classes ["cell"; "large-8"; "medium-10"; "small-12"] [

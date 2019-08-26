@@ -55,7 +55,7 @@ let niveau_2 =
     ];
     p [
       txt "Avec le Niveau 2, vous progressez à la fois vers \
-           l'autonomie et la profondeur : vous pourrez plonger jusqu'à \
+           l'autonomie et la profondeur : vous pourrez plonger jusqu'à \
            20m sans guide (accompagné d'un plongeur au moins du même \
            niveau), et jusqu'à 40m en palanquée guidée.";
     ];
@@ -93,8 +93,8 @@ let niveau_3 =
     p [
       txt "Le Niveau 3 est le niveau le plus élevé de plongeur loisir \
            dans la progression fédérale. Depuis le Niveau 2, la \
-           progression est considérable : vous pourrez plonger en \
-           autonomie jusqu'à 60m de profondeur !"
+           progression est considérable : vous pourrez plonger en \
+           autonomie jusqu'à 60m de profondeur !"
     ];
     p [
       txt "Plonger dans cette zone nécessite une bonne technique, une \
@@ -115,7 +115,7 @@ let niveau_3 =
            nécessaire d'avoir accumulé suffisamment d'expérience sur \
            ces deux axes. Ainsi, il est indispensable pour attaquer le \
            stage dans de bonnes conditions d'avoir plongé suffisamment \
-           depuis votre Niveau 2 : nous recommandons au moins une \
+           depuis votre Niveau 2 : nous recommandons au moins une \
            dizaine de plongées autonomes à 20m et 4-5 plongées au delà \
            de 30m avant de vous lancer dans la partie finale de la \
            formation. Ces plongées pour acquérir de l’expérience \
@@ -156,10 +156,10 @@ let autres =
       txt "Si la demande est suffisante, nous pouvons également \
            proposer des formations à d'autres brevets. Si vous êtes \
            intéressés, n'hésitez pas à prend contact avec les \
-           encadrants ou les délégués !"
+           encadrants ou les délégués !"
     ];
     p [
-      txt "Voici quelques exemples :"
+      txt "Voici quelques exemples :"
     ];
     dl [
       dt [txt "Niveau 4"];
@@ -178,7 +178,7 @@ let autres =
 
       dt [txt "Nitrox"];
       dd [txt "Enrichissez votre air en oxygène pour réduire vos \
-               paliers et augmenter la sécurité !"];
+               paliers et augmenter la sécurité !"];
 
       dt [txt "Plongée scientifique"];
       dd [txt "Les étudiants de Sorbonne Université ont accès à une ";

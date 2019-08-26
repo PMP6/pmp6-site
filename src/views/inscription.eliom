@@ -22,7 +22,7 @@ let inscription_page () =
   Template.make_page ~title:"Inscription"
     H.[
       h1 [txt "Inscription au club"];
-      h2 [txt "Qui ?"];
+      h2 [txt "Qui ?"];
       p [
         txt "L'inscription au club est ouverte aux étudiants et \
              personnels de Sorbonne Université, ainsi qu'aux anciens \
@@ -35,11 +35,11 @@ let inscription_page () =
              et celle de la Faculté des Sciences et Ingénierie de \
              Sorbonne Université. Si cette convention n'existe pas \
              encore, il est possible de demander à la mettre en \
-             place : ";
+             place : ";
         a ~service:Skeleton.Contact.service [txt "contactez nous"] ();
         txt " pour plus d'informations.";
       ];
-      h2 [txt "Comment ?"];
+      h2 [txt "Comment ?"];
       p [
         txt "Pour s'inscrire à la section plongée, il faut d'abord \
              s'inscrire à l'";
@@ -51,8 +51,8 @@ let inscription_page () =
         txt "L'inscription est possible tout au long de \
              l'année. Toutefois, nos capacités d'encadrement sont \
              limitées, et il nous faut un minimum de temps pour former \
-             un plongeur : si vous débutez, nous vous conseillons donc \
-             de vous y prendre dès la rentrée !";
+             un plongeur : si vous débutez, nous vous conseillons donc \
+             de vous y prendre dès la rentrée !";
       ];
       h2 [txt "Documents nécessaires"];
       p [
@@ -73,7 +73,8 @@ let inscription_page () =
              généraliste.";
       ];
       p [
-        txt "Vous aurez également besoin d'un document correspondant à votre statut :";
+        txt "Vous aurez également besoin d'un document correspondant \
+             à votre statut :";
       ];
       ul [
         li [txt "Pour les étudiants de Sorbonne Université, la carte d'étudiant ;"];

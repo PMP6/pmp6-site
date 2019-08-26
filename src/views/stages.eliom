@@ -21,7 +21,7 @@ let banyuls =
     p [
       txt "Au cœur de la côte vermeille, au pied du massif des \
            Albères, réside une station marine à laquelle est rattaché \
-           un observatoire océanologique : le laboratoire Arago. C'est \
+           un observatoire océanologique : le laboratoire Arago. C'est \
            aussi le lieu d'accueil d'un fragile paradis sous-marin, la \
            réserve naturelle marine de Cerbère-Banyuls."
     ];
@@ -34,7 +34,7 @@ let banyuls =
       txt ".";
     ];
     p [
-      txt "Les stages à Banyuls sont organisés sur deux périodes de l'année :"
+      txt "Les stages à Banyuls sont organisés sur deux périodes de l'année :"
     ];
     ul [
       li [
@@ -51,7 +51,7 @@ let banyuls =
              abondante, ce stage est principalement dédié aux plongées \
              d'exploration. Il peut toutefois être l'occasion de \
              valider des niveaux si l'encadrement est suffisant. Il \
-             n'est bien sûr pas nécessaire de rester un mois entier : \
+             n'est bien sûr pas nécessaire de rester un mois entier : \
              la priorité est donnée aux stagiaires restant au moins \
              une semaine complète, mais il est en général possible de \
              choisir ses dates d'arrivée et de départ.";
@@ -76,7 +76,7 @@ let carantec =
     ];
     p [
       txt "Tombants, délirantes dérivantes, laminaires et crustacés, \
-           raies et roussettes : voilà ce qui vous attend sous la \
+           raies et roussettes : voilà ce qui vous attend sous la \
            surface de la magnifique baie de Morlaix."
     ];
     p [
@@ -110,8 +110,8 @@ let dieppe =
       h2 [txt "Dieppe"];
     ];
     p [
-      txt "Tôles, congres, homards et tacauds : venez plonger sur les \
-           épaves de Normandie !";
+      txt "Tôles, congres, homards et tacauds : venez plonger sur les \
+           épaves de Normandie !";
     ];
     p [
       txt "Ce stage est organisé sur un week-end entre septembre et \
@@ -169,7 +169,7 @@ let provence =
       h2 [txt "Provence"];
     ];
     p [
-      txt "Marseille, Hyères ou le Lavandou : au sud de la France, le \
+      txt "Marseille, Hyères ou le Lavandou : au sud de la France, le \
            pays des santons est aussi le berceau historique de la \
            plongée sous-marine."
     ];

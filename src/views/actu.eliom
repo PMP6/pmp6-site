@@ -14,7 +14,7 @@ let content_piscine =
       txt "Nos entraînements en piscine ont lieu à la piscine Jean \
            Taris, au 16 rue Thouin (Paris V";
       sup [txt "ème"];
-      txt "). Ils se déroulent sur les créneaux suivants :";
+      txt "). Ils se déroulent sur les créneaux suivants :";
     ];
     ul [
       li [H.txt "Le mardi de 21h à 22h"];
@@ -35,7 +35,7 @@ let content_fosse =
     ];
     p [
       txt "Elles se déroulent à l'Espace Plongée d'Antony, à l'adresse \
-           suivante :";
+           suivante :";
     ];
     p [
       txt "Centre Aquatique Pajeaud";

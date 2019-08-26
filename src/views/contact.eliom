@@ -5,8 +5,8 @@ let contact_page () =
     p [
       txt "Vous voulez vous inscrire, avez des questions sur nos \
            activités ou souhaitez des renseignements supplémentaires \
-           sur notre club ? N'hésitez pas à joindre nos délégués par \
-           mail :";
+           sur notre club ? N'hésitez pas à joindre nos délégués par \
+           mail :";
     ];
     p ~a:[a_class ["text-center"]] [
       mailto_a
@@ -18,7 +18,7 @@ let contact_page () =
     ];
     p [
       txt "Vous pouvez également nous contacter directement sur notre \
-           page Facebook ou via Messenger :";
+           page Facebook ou via Messenger :";
     ];
     p ~a:[a_class ["text-center"]] [
       a

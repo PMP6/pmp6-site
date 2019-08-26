@@ -11,7 +11,7 @@ let presentation_section () =
       ~alt:"Le poulpe, notre mascotte"
       () in
   section ~a:[a_id "presentation"] [
-    h1 [poulpe (); txt " Bienvenue à PMP6 ! "; poulpe ()];
+    h1 [poulpe (); txt " Bienvenue à PMP6 ! "; poulpe ()];
     hr ();
     p [
       txt "Club de plongée associatif de Sorbonne Université, nous \

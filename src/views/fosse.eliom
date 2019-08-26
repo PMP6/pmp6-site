@@ -33,7 +33,7 @@ let fosse_page () =
       ];
       p [
         txt "Elles se déroulent à l'Espace Plongée d'Antony, à l'adresse \
-             suivante :";
+             suivante :";
       ];
       p [
         txt "Centre Aquatique Pajeaud";
@@ -48,7 +48,7 @@ let fosse_page () =
       ];
       p [
         txt "Pour l'année 2019-2020, les séances sont prévues aux \
-             dates suivantes :";
+             dates suivantes :";
       ];
       ul [
         li [txt "Mercredi 30 octobre à 21 h"];
