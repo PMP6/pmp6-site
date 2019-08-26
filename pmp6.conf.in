@@ -16,6 +16,7 @@
     <extension findlib-package="ocsigenserver.ext.staticmod"/>
     <extension findlib-package="ocsigenserver.ext.ocsipersist-%%PERSISTENT_DATA_BACKEND%%"/>
     <extension findlib-package="eliom.server"/>
+    <extension findlib-package="ocsigenserver.ext.deflatemod" />
     %%% This will include the packages defined as SERVER_PACKAGES in your Makefile:
     %%PACKAGES%%
     <host defaulthostname="pmp6.fr" hostfilter="*">
@@ -25,6 +26,10 @@
       <eliom>
         <applicationscript async="true"/>
       </eliom>
+      <deflate compress="only">
+        <extension>.js</extension>
+        <extension>.css</extension>
+      </deflate>
     </host>
   </server>
 </ocsigen>

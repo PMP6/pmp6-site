@@ -7,7 +7,18 @@ authors: "Thibault Suzanne <thi.suzanne@gmail.com>"
 homepage: "http://pmp6.fr"
 dev-repo: "git+https://github.com/PMP6/pmp6-site.git"
 bug-reports: "https://github.com/PMP6/pmp6-site/issues"
-depends: ["eliom" "core_kernel" "js_of_ocaml" "uuseg" "uucp" "uunf" "tyxml" "lwt" "tyxml-ppx"]
+depends: [
+  "eliom"
+  "core_kernel"
+  "js_of_ocaml"
+  "uuseg"
+  "uucp"
+  "uunf"
+  "tyxml"
+  "lwt"
+  "tyxml-ppx"
+  "camlzip"
+]
 build: make
 install: [make "install"]
 url {

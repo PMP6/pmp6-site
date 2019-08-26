@@ -19,6 +19,7 @@ depends: [
   "bin_prot" {= "v0.12.0"}
   "biniou" {= "1.2.1"}
   "camlp4" {= "4.07+1"}
+  "camlzip" {= "1.08"}
   "cmdliner" {= "1.0.4"}
   "conf-dbm" {= "1.0.0"}
   "conf-gmp" {= "1"}
