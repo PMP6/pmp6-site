@@ -1,7 +1,7 @@
 module H = Html
 
 let app_js_script =
-  Skeleton.Static.js_script ["app.js"] ()
+  Skeleton.Static.js_script ~a:[H.a_async ()] ["app.js"] ()
 
 let thumbnail alt path =
   let open H in

@@ -22,7 +22,9 @@
       <static dir="%%STATICDIR%%" />
       <static dir="%%ELIOMSTATICDIR%%" />
       <eliommodule module="%%LIBDIR%%/%%PROJECT_NAME%%.cma" />
-      <eliom/>
+      <eliom>
+        <applicationscript async="true"/>
+      </eliom>
     </host>
   </server>
 </ocsigen>
