@@ -2,10 +2,12 @@ module H = Html
 
 let gmaps_embed () =
   Google.Maps.embed
-    "!1m14!1m8!1m3!1d10502.828329918975!2d2.3479414!3d48.8447257\
-     !3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x46ae112e3e572b43!2s\
-     Piscine+Municipale+Jean-Taris!5e0!3m2!1sfr!2sfr!4v1557766003999!\
-     5m2!1sfr!2sfr"
+    "!1m28!1m12!1m3!1d2625.701212225977!2d2.347797254921896!3d48.84483766236752\
+     !2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e2!4m5!1s0x47e671e554d151e3\
+     %3A0xfa89cdfe21b23752!2sPlace+Jussieu!3m2!1d48.84597!\
+     2d2.3551297!4m5!1s0x47e671e8c0e6a739%3A0x46ae112e3e572b43!2sPiscine+\
+     Jean-Taris%2C+16+Rue+Thouin!3m2!1d48.8447257!2d2.\
+     3479414!5e0!3m2!1sfr!2sfr!4v1566935487391!5m2!1sfr!2sfr"
 
 let piscine_page () =
   Template.make_page ~title:"Piscine"
