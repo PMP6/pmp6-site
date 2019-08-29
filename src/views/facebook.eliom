@@ -27,5 +27,5 @@ let page_widget () =
     a_src plugin_uri;
     a_width 500;
     a_height 1000;
-    a_style "border: none; overflow: hidden; background-color: transparent";
+    a_style "border: none; overflow: auto; background-color: transparent";
   ] []

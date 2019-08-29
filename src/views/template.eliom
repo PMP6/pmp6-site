@@ -21,7 +21,7 @@ let thumbnail_row ?(max_size=12) ~subdir alt_and_filenames =
   let make_cell (alt, filename) =
     H.div_classes [
       "cell";
-      "medium-5"; "small-8"; large_size;
+      "medium-5"; "small-10"; large_size;
       "text-center";
     ] [
       thumbnail alt (subdir @ [filename])
@@ -72,18 +72,39 @@ let head ?(other_head=[]) ~title () =
     Google.Analytics.gtag ();
   ] @ other_head
 
-let menu_title_entry =
+let menu_title () =
+  let open H in
+  a
+    ~service:Skeleton.home_service
+    ~a:[a_class ["top-title"]]
+    [
+      img
+        ~src:(Skeleton.Static.img_uri ["pavillon-alpha.png"])
+        ~alt:"Pavillon alpha"
+        ~a:[a_class ["show-for-large"]]
+        ();
+      txt " PMP6";
+    ] ()
+
+let menu_title_entry () =
   H.(
-    li ~a:[a_class ["menu-title"]] [
-      a ~service:Skeleton.home_service [
-        img
-          ~src:(Skeleton.Static.img_uri ["pavillon-alpha.png"])
-          ~alt:"Pavillon alpha"
-          ();
-        txt " PMP6";
-      ] ()
-    ]
+    li ~a:[a_class ["show-for-large"]] [menu_title ()]
   )
+
+let menu_toggle () =
+  let open H in
+  div_class "title-bar"
+    ~a:[
+      a_user_data "responsive-toggle" "top-menu";
+      a_user_data "hide-for" "large";
+    ] [
+    button ~a:[
+      a_class ["menu-icon"];
+      a_button_type `Button;
+      a_user_data "toggle" "top-menu";
+    ] [];
+    div_class "title-bar-title" [menu_title ()];
+  ]
 
 let top_menu items =
   let open H in
@@ -109,11 +130,17 @@ let top_menu items =
       in Some (li ~a:li_class (a_elt :: submenu))
   in
   ul ~a:[
-    a_class ["dropdown"; "menu"];
-    a_user_data "dropdown-menu" "";
+    a_class [
+      "menu";
+      "vertical";
+      "large-horizontal";
+    ];
+    a_user_data
+      "responsive-menu"
+      "accordion large-dropdown";
     a_user_data "click-open" "true";
   ] @@
-  menu_title_entry :: List.filter_map ~f:entry items
+  menu_title_entry () :: List.filter_map ~f:entry items
 
 let search_form =
   let create_form =
@@ -121,25 +148,28 @@ let search_form =
     fun (as_sitesearch, q) ->
       [
         Form.input ~input_type:`Hidden ~name:as_sitesearch ~value:"pmp6.fr" Form.string;
-        div_class "input-group" [
+        div_classes ["input-group"] [
           Form.input
             ~input_type:`Search ~name:q
             ~a:[a_placeholder "Rechercher"; a_class ["input-group-field"]]
             Form.string;
-          div_class "input-group-button" [
+          div_classes ["input-group-button"] [
             Form.button_no_value
               ~button_type:`Submit ~a:[a_class ["button"]]
               [Icon.solid "fa-search" ()];
-          ];
-        ];
+          ]
+        ]
       ]
   in H.Form.get_form ~service:(Google.Search.service) create_form
 
 let header =
   let open H in
-  header ~a:[a_class ["top-bar"]] [
-    nav ~a:[a_class ["top-bar-left"]] [top_menu Skeleton.hierarchy_items];
-    div ~a:[a_class ["top-bar-right"]] [search_form];
+  header [
+    menu_toggle ();
+    div ~a:[a_class ["top-bar"; "stacked-for-medium"]; a_id "top-menu"] [
+      nav ~a:[a_class ["top-bar-left"]] [top_menu Skeleton.hierarchy_items];
+      div ~a:[a_class ["top-bar-right"]] [search_form];
+    ]
   ]
 
 let carousel =

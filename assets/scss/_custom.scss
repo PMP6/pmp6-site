@@ -3,6 +3,11 @@ html {
     min-height: 100%;
 }
 
+iframe {
+    max-width: 100%;
+    overflow: auto;
+}
+
 body {
     @include flex;
     @include flex-direction(column);
@@ -31,6 +36,33 @@ dd + dt {
     width: 100%;
 }
 
+.top-title {
+    // PMP6
+    color: white !important;
+    font-family: 'Kaushan Script';
+    font-weight: normal;
+    font-size: 2em;
+
+    img {
+        height: 1.1em;
+    }
+}
+
+/* Prevent FOUC on menus */
+.no-js {
+    @include breakpoint(medium down) {
+        .top-bar {
+            display: none;
+        }
+    }
+
+    @include breakpoint(large) {
+        .title-bar {
+            display: none;
+        }
+    }
+}
+
 .top-bar {
     // Color
     $active-color: white;
@@ -47,36 +79,31 @@ dd + dt {
     position: relative;
     z-index: 99;
 
-    .dropdown.menu {
-
-        .menu-title a {
-            // PMP6
-            color: $active-color !important;
-            font-family: 'Kaushan Script';
-            font-size: 2em;
-
-            img {
-                height: 1em;
-            }
-        }
+    .menu {
 
         .is-dropdown-submenu {
             box-shadow: 0 0 5px $topbar-background;
             border: none;
         }
 
-        & > li.is-dropdown-submenu-parent > a::after {
+        li.is-accordion-submenu-parent > a::after,
+        li.is-dropdown-submenu-parent > a::after {
             // arrows
-            border-color: $standard-color rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
+            border-color: $standard-color rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) !important;
         }
 
-        & > li.is-dropdown-submenu-parent.is-active > a::after {
+        li.is-accordion-submenu-parent.is-active > a::after,
+        li.is-dropdown-submenu-parent.is-active > a::after {
             // active arrows
-            border-color: $active-color rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
+            border-color: $active-color rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) !important;
         }
 
         .is-active > a {
-            color: $active-color;
+            color: $active-color !important;
+        }
+
+        .is-accordion-submenu-item {
+            margin-left: 2ch;
         }
 
         li, a, a:focus {
@@ -97,7 +124,9 @@ dd + dt {
     }
 
     .top-bar-right {
-        padding-right: 0.5rem;
+        @include breakpoint(large) {
+            padding-right: 0.5rem;
+        }
 
         .input-group {
             // Vertically center the search form
@@ -116,6 +145,12 @@ dd + dt {
                 font-size: small;
                 color: $dark-gray;
             }
+        }
+    }
+
+    .cell {
+        @include breakpoint(medium down) {
+            @include xy-gutters($gutter-position:top bottom);
         }
     }
 }

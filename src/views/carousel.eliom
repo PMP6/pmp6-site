@@ -73,7 +73,7 @@ let make_elt images =
     ]
     [
       div_class "orbit-wrapper" [
-        div_class "orbit-controls" [
+        div_classes ["orbit-controls"; "show-for-large"] [
           button ~a:[a_class ["orbit-previous"]] [
             span ~a:[a_class ["show-for-sr"]] [txt "Photo précédente"];
             Icon.solid "fa-chevron-left" ~transform:["grow-10"] ();
