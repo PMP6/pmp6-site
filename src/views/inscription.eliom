@@ -13,8 +13,8 @@ end
 
 let caci_service =
   Eliom_service.extern
-    ~prefix:"https://ffessm.fr"
-    ~path:["ckfinder"; "userfiles"; "files"; "pdf"; "CACI_V_05_2018.pdf"]
+    ~prefix:"http://medical.ffessm.fr"
+    ~path:["wp-content"; "uploads"; "CACI_V_05_2018.pdf"]
     ~meth:(Eliom_service.Get Eliom_parameter.unit)
     ()
 
