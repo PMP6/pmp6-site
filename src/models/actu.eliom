@@ -21,8 +21,8 @@ let content_rentree () =
     ];
     p [
       txt "La première séance de piscine pour les anciens aura lieu \
-           à Jean Taris le mardi 3 septembre. Pour les nouveaux \
-           arrivants, les séances commenceront le mardi 1";
+           à Jean Taris le mardi 3 septembre à 21h. Pour les nouveaux \
+           arrivants, les séances de formation commenceront le mardi 1";
       sup [txt "er"];
       txt " octobre. Pour plus d'informations ou pour connaître les \
            horaires, consultez ";
@@ -33,9 +33,9 @@ let content_rentree () =
     ];
     p [
       txt "Par ailleurs, une réunion de rentrée et d'information, \
-           à laquelle tous les nouveaux inscrits sont conviés, se \
-           déroulera sur le campus Jussieu le 24 septembre en fin \
-           d'après-midi."
+           à laquelle tous les plongeurs, anciens comme nouveaux, sont \
+           conviés, se déroulera sur le campus Jussieu le 24 septembre \
+           en fin d'après-midi."
     ];
     p [
       txt "Enfin, n'oubliez pas de vous inscrire ! Les préinscriptions \
