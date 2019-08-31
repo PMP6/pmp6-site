@@ -27,6 +27,7 @@
     <extension findlib-package="ocsigenserver.ext.deflatemod" />
     <extension findlib-package="ocsigenserver.ext.redirectmod"/>
     <extension findlib-package="ocsigenserver.ext.outputfilter"/>
+    <extension findlib-package="ocsigenserver.ext.accesscontrol"/>
     %%% This will include the packages defined as SERVER_PACKAGES in your Makefile:
     %%PACKAGES%%
     <host defaulthostname="pmp6.fr" hostfilter="*">
