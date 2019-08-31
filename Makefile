@@ -138,9 +138,11 @@ else
 endif
 
 LOCAL_SED_ARGS := -e "s|%%PORT%%|$(TEST_PORT)|g"
+LOCAL_SED_ARGS += -e "s|%%PORTTLS%%|$(TEST_PORTTLS)|g"
 LOCAL_SED_ARGS += -e "s|%%STATICDIR%%|$(LOCAL_STATIC)|g"
 LOCAL_SED_ARGS += -e "s|%%USERGROUP%%||g"
 GLOBAL_SED_ARGS := -e "s|%%PORT%%|$(PORT)|g"
+GLOBAL_SED_ARGS += -e "s|%%PORTTLS%%|$(PORTTLS)|g"
 GLOBAL_SED_ARGS += -e "s|%%STATICDIR%%|%%PREFIX%%$(STATICDIR)|g"
 ifeq ($(WWWUSER)$(WWWGROUP),)
   GLOBAL_SED_ARGS += -e "s|%%USERGROUP%%||g"

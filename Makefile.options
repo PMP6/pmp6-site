@@ -58,9 +58,11 @@ WWWGROUP := www-data
 
 # Port for running the server (make run.*)
 PORT := 80
+PORTTLS := 443
 
 # Port for testing (make test.*)
 TEST_PORT := 8080
+TEST_PORTTLS := 8443
 
 # Root of installation (must end with /)
 PREFIX := /usr/local/

@@ -5,6 +5,11 @@
 <ocsigen>
   <server>
     <port>%%PORT%%</port>
+    <port>%%PORTTLS%%</port>
+    <ssl>
+      <certificate>/etc/letsencrypt/live/pmp6.fr/fullchain.pem</certificate>
+      <privatekey>/etc/letsencrypt/live/pmp6.fr/privkey.pem</privatekey>
+    </ssl>
     %%% Only set for running, not for testing
     %%USERGROUP%%
     <logdir>%%LOGDIR%%</logdir>
@@ -17,9 +22,11 @@
     <extension findlib-package="ocsigenserver.ext.ocsipersist-%%PERSISTENT_DATA_BACKEND%%"/>
     <extension findlib-package="eliom.server"/>
     <extension findlib-package="ocsigenserver.ext.deflatemod" />
+    <extension findlib-package="ocsigenserver.ext.redirectmod"/>
     %%% This will include the packages defined as SERVER_PACKAGES in your Makefile:
     %%PACKAGES%%
     <host defaulthostname="pmp6.fr" hostfilter="*">
+      <redirect fullurl="http://(.*)" dest="https://\1"/>
       <static dir="%%STATICDIR%%" />
       <static dir="%%ELIOMSTATICDIR%%" />
       <eliommodule module="%%LIBDIR%%/%%PROJECT_NAME%%.cma" />
