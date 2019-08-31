@@ -1,4 +1,4 @@
-module H = Eliom_content.Html.D
+module H = Html
 
 type t = {
   short_title : string;
@@ -14,6 +14,8 @@ let content_rentree () =
       ~path:[]
       ~meth:(Eliom_service.Get Eliom_parameter.unit)
       () in
+  let plaquette_uri =
+    Skeleton.Static.uri ["files"; "PMP6_plaquetteAS_2019-2020.pdf"] in
   let open H in
   [
     p [
@@ -58,6 +60,13 @@ let content_rentree () =
       li [H.txt "Pour les encadrants (E2 + permis bateau), la \
                  cotisation de base ne change pas, mais la cotisation \
                  supplémentaire est fixée à 65€ quel que soit votre statut."];
+    ];
+    p [
+      txt "Pour plus d'informations, vous pouvez consulter la ";
+      Raw.a ~a:[a_href plaquette_uri] [txt "plaquette"];
+      txt "de rentrée de la section, ou écrire un mail aux ";
+      mailto_a "delegues@pmp6.fr" [txt "délégués"];
+      txt ".";
     ];
     p [
       txt "À très bientôt pour de nouvelles aventures sous-marines !";
