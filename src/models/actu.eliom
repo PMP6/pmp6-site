@@ -64,8 +64,8 @@ let content_rentree () =
     p [
       txt "Pour plus d'informations, vous pouvez consulter la ";
       Raw.a ~a:[a_href plaquette_uri] [txt "plaquette"];
-      txt "de rentrée de la section, ou écrire un mail aux ";
-      mailto_a "delegues@pmp6.fr" [txt "délégués"];
+      txt " de rentrée de la section, ou écrire un mail aux délégués à l'adresse ";
+      email "delegues@pmp6.fr" ();
       txt ".";
     ];
     p [
