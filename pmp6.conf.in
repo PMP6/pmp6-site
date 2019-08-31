@@ -5,7 +5,7 @@
 <ocsigen>
   <server>
     <port>%%PORT%%</port>
-    <port>%%PORTTLS%%</port>
+    <port protocol="HTTPS">%%PORTTLS%%</port>
     <ssl>
       <certificate>/etc/letsencrypt/live/pmp6.fr/fullchain.pem</certificate>
       <privatekey>/etc/letsencrypt/live/pmp6.fr/privkey.pem</privatekey>
