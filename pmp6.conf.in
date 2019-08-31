@@ -26,6 +26,7 @@
     <extension findlib-package="eliom.server"/>
     <extension findlib-package="ocsigenserver.ext.deflatemod" />
     <extension findlib-package="ocsigenserver.ext.redirectmod"/>
+    <extension findlib-package="ocsigenserver.ext.outputfilter"/>
     %%% This will include the packages defined as SERVER_PACKAGES in your Makefile:
     %%PACKAGES%%
     <host defaulthostname="pmp6.fr" hostfilter="*">
@@ -41,5 +42,9 @@
         <extension>.css</extension>
       </deflate>
     </host>
+    <outputfilter
+        header="Strict-Transport-Security"
+        dest="max-age=31536000;includeSubDomains;preload"
+        replace="true"/>
   </server>
 </ocsigen>
