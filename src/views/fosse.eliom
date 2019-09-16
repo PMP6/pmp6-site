@@ -51,17 +51,17 @@ let fosse_page () =
              dates suivantes :";
       ];
       ul [
-        li [txt "Mercredi 30 octobre à 21 h"];
+        li [txt "Mercredi 30 octobre à 19 h"];
         li [txt "Jeudi 14 novembre à 19 h"];
-        li [txt "Lundi 25 novembre à 19 h"];
-        li [txt "Jeudi 12 décembre à 19 h"];
+        li [txt "Vendredi 29 novembre à 19 h"];
         li [txt "Lundi 20 janvier à 19 h"];
-        li [txt "Jeudi 06 février à 19 h"];
-        li [txt "Jeudi 20 février à 19 h"];
+        li [txt "Lundi 10 février à 21 h"];
+        li [txt "Jeudi 20 février à 20 h"];
         li [txt "Jeudi 5 mars à 19 h"];
         li [txt "Jeudi 19 mars à 19 h"];
-        li [txt "Jeudi 30 avril à 19 h"];
-        li [txt "Jeudi 14 mai à 19 h "];
+        li [txt "Lundi 30 mars à 19h"];
+        li [txt "Lundi 18 mai à 20 h "];
+        li [txt "Mercredi 27 mai à 21h"];
       ];
       p [
         txt "Les inscriptions se font sur le formulaire envoyé par \
