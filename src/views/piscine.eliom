@@ -37,7 +37,7 @@ let piscine_page () =
       ];
       ul [
         li [txt "Le mardi de 21h à 22h"];
-        li [txt "Le samedi de 18h à 20h"];
+        li [txt "Le samedi de 18h à 19h30"];
       ];
       p [
         txt "Selon l'encadrement, certaines séances, notamment pendant \
