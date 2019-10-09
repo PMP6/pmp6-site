@@ -84,7 +84,7 @@ let content_piscine () =
     ];
     ul [
       li [H.txt "Le mardi de 21h à 22h"];
-      li [H.txt "Le samedi de 18h à 20h"];
+      li [H.txt "Le samedi de 18h à 19h30"];
     ];
     p [
       txt "Les deux créneaux sont ouverts à tous les membres.";
