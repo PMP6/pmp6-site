@@ -1,0 +1,3 @@
+#!/bin/sh
+# Use: ./reload [conf file to load]
+echo reload $1 | sudo tee /usr/local/var/run/pmp6-cmd
