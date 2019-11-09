@@ -30,6 +30,11 @@
     <extension findlib-package="ocsigenserver.ext.accesscontrol"/>
     %%% This will include the packages defined as SERVER_PACKAGES in your Makefile:
     %%PACKAGES%%
+
+    <host defaulthostname="www.pmp6.fr" hostfilter="www.pmp6.fr">
+      <redirect suburl="(.*)" dest="https://pmp6.fr\1"/>
+    </host>
+
     <host defaulthostname="pmp6.fr" hostfilter="*">
       <redirect fullurl="http://(.*)" dest="https://\1"/>
       <static dir="%%STATICDIR%%" />
