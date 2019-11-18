@@ -7,6 +7,40 @@ type t = {
   content : Html_types.div_content_fun H.elt H.list_wrap;
 }
 
+let content_expo_photos () =
+  let affiche_uri =
+    Skeleton.Static.img_uri ["actus"; "affiche_expo_photos.png"] in
+  let open H in
+  [
+    p [
+        txt "L'exposition de photos sous-marines de PMP6 fait son \
+             grand retour !"
+      ];
+    p [
+        txt "Au programme : (re)découvrir les \
+             magnifiques créatures capturées par l'objectif de nos \
+             plongeurs, tout en en apprenant plus sur elles et leurs \
+             milieux."
+      ];
+    p [
+        txt
+          "Cette exposition se tiendra du 11 au 29 novembre 2019 \
+           à l'Atrium Café du campus Jussieu, lieu de convivialité \
+           pour de nombreux étudiants. Elle sera ensuite déplacée le \
+           temps d'une journée à la piscine Jean Taris, à l'occasion \
+           du Téléthon (7 décembre 2019), où petits et grands pourront \
+           en profiter lors de leurs baptêmes... sous l'eau ! La \
+           boucle est bouclée."
+      ];
+    p [
+        img
+          ~a:[a_class ["float-center"]]
+          ~src:affiche_uri
+          ~alt:"Affiche de l'expo photos"
+          ()
+      ]
+  ]
+
 let content_rentree () =
   let daps_service =
     Eliom_service.extern
@@ -133,10 +167,10 @@ let deploy_time = Time.now ()
 
 let get () = [
   {
-    title = "Informations rentrée";
-    short_title = "Rentrée";
+    title = "Exposition Photos";
+    short_title = "Expo photos";
     datetime = deploy_time;
-    content = content_rentree ();
+    content = content_expo_photos ();
   };
   {
     title = "Horaires de piscine";
