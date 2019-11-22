@@ -12,3 +12,6 @@ _deps
 _server
 local
 .depend
+
+# Machine-specific configuration files
+conf.d/*.conf

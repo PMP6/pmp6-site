@@ -42,6 +42,9 @@ JS_RUNTIMES := base/runtime.js core_kernel/runtime.js bin_prot/runtime.js time_n
 # Directory with files to be statically served
 LOCAL_STATIC = dist
 
+# Directory with machine specific conf files
+LOCAL_CONF = conf.d
+
 # The backend for persistent data. Can be dbm or sqlite.
 # Make sure you have the following packages installed
 # - *dbm* if you use dbm --> opam install dbm.
@@ -88,3 +91,5 @@ DATADIR := var/data/${PROJECT_NAME}
 STATICDIR := var/www/${PROJECT_NAME}/static
 # Project's JavaScript file
 ELIOMSTATICDIR := var/www/${PROJECT_NAME}/eliom
+# Copy of $(LOCAL_CONF)
+CONFDIR := ${ETCDIR}/conf.d

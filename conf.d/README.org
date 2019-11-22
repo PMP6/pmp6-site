@@ -1,0 +1,6 @@
+Directory for machine-specific ocsigen configuration. .conf files here
+are ignored by git and will be imported in the project's main
+configuration file.
+
+Files can be split in several directories: at the end they will all be
+flattened and imported at once.
