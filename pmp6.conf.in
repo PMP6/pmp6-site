@@ -25,11 +25,28 @@
     %%% This will include the packages defined as SERVER_PACKAGES in your Makefile:
     %%PACKAGES%%
 
+    <host defaulthostname="localhost" hostfilter="localhost">
+      <static dir="%%STATICDIR%%" />
+      <static dir="%%ELIOMSTATICDIR%%" />
+      <eliommodule module="%%LIBDIR%%/%%PROJECT_NAME%%.cma" />
+      <eliom>
+        <applicationscript async="true"/>
+      </eliom>
+      <deflate compress="only">
+        <extension>.js</extension>
+        <extension>.css</extension>
+      </deflate>
+    </host>
+
+    <host defaulthostname="127.0.0.1" hostfilter="127.0.0.1">
+      <redirect suburl="(.*)" dest="http://localhost\1"/>
+    </host>
+
     <host defaulthostname="www.pmp6.fr" hostfilter="www.pmp6.fr">
       <redirect suburl="(.*)" dest="https://pmp6.fr\1"/>
     </host>
 
-    <host defaulthostname="pmp6.fr" hostfilter="*">
+    <host defaulthostname="pmp6.fr" hostfilter="pmp6.fr">
       <redirect fullurl="http://(.*)" dest="https://\1"/>
       <static dir="%%STATICDIR%%" />
       <static dir="%%ELIOMSTATICDIR%%" />
