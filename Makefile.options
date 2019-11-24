@@ -91,5 +91,3 @@ DATADIR := var/data/${PROJECT_NAME}
 STATICDIR := var/www/${PROJECT_NAME}/static
 # Project's JavaScript file
 ELIOMSTATICDIR := var/www/${PROJECT_NAME}/eliom
-# Copy of $(LOCAL_CONF)
-CONFDIR := ${ETCDIR}/conf.d

@@ -6,6 +6,7 @@
 ##----------------------------------------------------------------------
 
 include Makefile.options
+include Makefile.localenv
 
 ##----------------------------------------------------------------------
 ##			      Internals
@@ -57,9 +58,9 @@ DIST_DIRS = $(ETCDIR) $(DATADIR) $(LIBDIR) $(LOGDIR) $(STATICDIR) $(ELIOMSTATICD
 DIST_FILES = $(ELIOMSTATICDIR)/$(PROJECT_NAME).js $(LIBDIR)/$(PROJECT_NAME).cma
 
 .PHONY: test.byte test.opt
-test.byte: $(addprefix $(TEST_PREFIX),$(ETCDIR)/$(PROJECT_NAME)-test.conf $(DIST_DIRS) $(CONFDIR) $(DIST_FILES))
+test.byte: $(addprefix $(TEST_PREFIX),$(ETCDIR)/$(PROJECT_NAME)-test.conf $(DIST_DIRS) $(DIST_FILES))
 	$(OCSIGENSERVER) $(RUN_DEBUG) -c $<
-test.opt: $(addprefix $(TEST_PREFIX),$(ETCDIR)/$(PROJECT_NAME)-test.conf $(DIST_DIRS) $(CONFDIR) $(patsubst %.cma,%.cmxs, $(DIST_FILES)))
+test.opt: $(addprefix $(TEST_PREFIX),$(ETCDIR)/$(PROJECT_NAME)-test.conf $(DIST_DIRS) $(patsubst %.cma,%.cmxs, $(DIST_FILES)))
 	$(OCSIGENSERVER.OPT) $(RUN_DEBUG) -c $<
 
 $(addprefix $(TEST_PREFIX), $(DIST_DIRS)):
@@ -68,10 +69,10 @@ $(addprefix $(TEST_PREFIX), $(DIST_DIRS)):
 ##----------------------------------------------------------------------
 ## Installing & Running
 
-.PHONY: install install.byte install.byte install.opt install.static install.etc install.confdir install.lib install.lib.byte install.lib.opt run.byte run.opt
+.PHONY: install install.byte install.byte install.opt install.static install.etc install.lib install.lib.byte install.lib.opt run.byte run.opt
 install: install.byte install.opt
-install.byte: install.lib.byte install.etc install.confdir install.static | $(addprefix $(PREFIX),$(DATADIR) $(LOGDIR) $(shell dirname $(CMDPIPE)))
-install.opt: install.lib.opt install.etc install.confdir install.static | $(addprefix $(PREFIX),$(DATADIR) $(LOGDIR) $(shell dirname $(CMDPIPE)))
+install.byte: install.lib.byte install.etc install.static | $(addprefix $(PREFIX),$(DATADIR) $(LOGDIR) $(shell dirname $(CMDPIPE)))
+install.opt: install.lib.opt install.etc install.static | $(addprefix $(PREFIX),$(DATADIR) $(LOGDIR) $(shell dirname $(CMDPIPE)))
 install.lib: install.lib.byte install.lib.opt
 install.lib.byte: $(TEST_PREFIX)$(LIBDIR)/$(PROJECT_NAME).cma | $(PREFIX)$(LIBDIR)
 	install $< $(PREFIX)$(LIBDIR)
@@ -83,8 +84,6 @@ install.static: $(TEST_PREFIX)$(ELIOMSTATICDIR)/$(PROJECT_NAME).js | $(PREFIX)$(
 	install $(addprefix -o ,$(WWWUSER)) $< $(PREFIX)$(ELIOMSTATICDIR)
 install.etc: $(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME).conf | $(PREFIX)$(ETCDIR)
 	install $< $(PREFIX)$(ETCDIR)/$(PROJECT_NAME).conf
-install.confdir: $(TEST_PREFIX)$(CONFDIR) | $(PREFIX)$(CONFDIR)
-	cp -r $</* $(PREFIX)$(CONFDIR)
 
 .PHONY:
 print-install-files:
@@ -92,16 +91,11 @@ print-install-files:
 	@echo $(PREFIX)$(STATICDIR)
 	@echo $(PREFIX)$(ELIOMSTATICDIR)
 	@echo $(PREFIX)$(ETCDIR)
-	@echo $(PREFIX)$(CONFDIR)
 
-$(addprefix $(PREFIX),$(ETCDIR) $(LIBDIR) $(CONFDIR)):
+$(addprefix $(PREFIX),$(ETCDIR) $(LIBDIR)):
 	install -d $@
 $(addprefix $(PREFIX),$(DATADIR) $(LOGDIR) $(STATICDIR) $(ELIOMSTATICDIR) $(shell dirname $(CMDPIPE))):
 	install $(addprefix -o ,$(WWWUSER)) -d $@
-
-$(TEST_PREFIX)${CONFDIR}: $(LOCAL_CONF)
-	install -d $@
-	find $< -name "*.conf" -exec cp {} $@ \;
 
 run.byte:
 	$(OCSIGENSERVER) $(RUN_DEBUG) -c ${PREFIX}${ETCDIR}/${PROJECT_NAME}.conf
@@ -141,8 +135,20 @@ SED_ARGS += -e "s|%%LIBDIR%%|%%PREFIX%%$(LIBDIR)|g"
 SED_ARGS += -e "s|%%WARNING%%|$(EDIT_WARNING)|g"
 SED_ARGS += -e "s|%%PACKAGES%%|$(FINDLIB_PACKAGES)|g"
 SED_ARGS += -e "s|%%ELIOMSTATICDIR%%|%%PREFIX%%$(ELIOMSTATICDIR)|g"
-SED_ARGS += -e "s|%%CONFDIR%%|%%PREFIX%%$(CONFDIR)|g"
 SED_ARGS += -e "s|%%STATICURL%%|$(STATIC_URL)|g"
+
+ifneq ($(strip $(SSLCERTIFICATE)),)
+  SED_ARGS += -e "s|%%SSLCERTIFICATE%%|<certificate>$(SSLCERTIFICATE)</certificate>|g"
+else
+  SED_ARGS += -e "s|%%SSLCERTIFICATE%%||g"
+endif
+
+ifneq ($(strip $(SSLPRIVATEKEY)),)
+  SED_ARGS += -e "s|%%SSLPRIVATEKEY%%|<privatekey>$(SSLPRIVATEKEY)</privatekey>|g"
+else
+  SED_ARGS += -e "s|%%SSLPRIVATEKEY%%||g"
+endif
+
 ifeq ($(DEBUG),yes)
   SED_ARGS += -e "s|%%DEBUGMODE%%|\<debugmode /\>|g"
 else

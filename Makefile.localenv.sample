@@ -1,0 +1,6 @@
+# Contains machine specific configuration. Rename this to
+# Makefile.localenv to have it included in Makefile. Git will ignore
+# it.
+
+SSLCERTIFICATE = /path/to/certificate.pem
+SSLPRIVATEKEY = /path/to/privkey.pem

@@ -13,5 +13,5 @@ _server
 local
 .depend
 
-# Machine-specific configuration files
-conf.d/*.conf
+# Machine-specific configuration
+Makefile.localenv

@@ -1,3 +1,4 @@
+<!-- -*-xml-*- -->
 %%% This is the template for your configuration file. The %%VALUES%% below are
 %%% taken from the Makefile to generate the actual configuration files.
 %%% This comment will disappear.
@@ -6,7 +7,13 @@
   <server>
     <port>%%PORT%%</port>
     <port protocol="HTTPS">%%PORTTLS%%</port>
-    <extconf dir="%%CONFDIR%%"/>
+    <ssl>
+      <ciphers>
+        EECDH+ECDSA+AESGCM:EECDH+aRSA+AESGCM:EECDH+ECDSA+SHA384:EECDH+ECDSA+SHA256:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH+aRSA+RC4:EECDH:EDH+aRSA:RC4:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!SRP:!DSS
+      </ciphers>
+      %%SSLCERTIFICATE%%
+      %%SSLPRIVATEKEY%%
+    </ssl>
     %%% Only set for running, not for testing
     %%USERGROUP%%
     <logdir>%%LOGDIR%%</logdir>
