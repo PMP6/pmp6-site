@@ -6,6 +6,7 @@
 ##----------------------------------------------------------------------
 
 include Makefile.options
+include Makefile.localenv
 
 ##----------------------------------------------------------------------
 ##			      Internals
@@ -135,6 +136,19 @@ SED_ARGS += -e "s|%%WARNING%%|$(EDIT_WARNING)|g"
 SED_ARGS += -e "s|%%PACKAGES%%|$(FINDLIB_PACKAGES)|g"
 SED_ARGS += -e "s|%%ELIOMSTATICDIR%%|%%PREFIX%%$(ELIOMSTATICDIR)|g"
 SED_ARGS += -e "s|%%STATICURL%%|$(STATIC_URL)|g"
+
+ifneq ($(strip $(SSLCERTIFICATE)),)
+  SED_ARGS += -e "s|%%SSLCERTIFICATE%%|<certificate>$(SSLCERTIFICATE)</certificate>|g"
+else
+  SED_ARGS += -e "s|%%SSLCERTIFICATE%%||g"
+endif
+
+ifneq ($(strip $(SSLPRIVATEKEY)),)
+  SED_ARGS += -e "s|%%SSLPRIVATEKEY%%|<privatekey>$(SSLPRIVATEKEY)</privatekey>|g"
+else
+  SED_ARGS += -e "s|%%SSLPRIVATEKEY%%||g"
+endif
+
 ifeq ($(DEBUG),yes)
   SED_ARGS += -e "s|%%DEBUGMODE%%|\<debugmode /\>|g"
 else
