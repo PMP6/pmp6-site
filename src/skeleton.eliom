@@ -97,6 +97,21 @@ module Informations = struct
       ]
 end
 
+module Espace_membre = struct
+  include SubTree (struct let path_root = "espace-membre" end)
+
+  module Services = struct
+    let boutique =
+      sub_service ["boutique"]
+  end
+
+  let hierarchy_item =
+    make_hierarchy_item "Espace membre"
+      Services.[
+        "Boutique", boutique;
+    ]
+end
+
 module Contact = struct
   include SubLeaf (struct let path_root = "contact" end)
 
@@ -134,5 +149,6 @@ let hierarchy_items =
     Plonger.hierarchy_item;
     Informations.hierarchy_item;
     (* Galerie.hierarchy_item; *)
+    Espace_membre.hierarchy_item;
     Contact.hierarchy_item;
   ]
