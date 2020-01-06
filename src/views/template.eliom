@@ -186,7 +186,7 @@ let footer =
   footer [
     div_classes ["grid-x"; "grid-padding-x"; "align-left"] [
 
-      div_classes ["cell"; "large-4"; "icons"] [
+      div_classes ["cell"; "large-4"; "small-1"; "icons"] [
         div_classes ["grid-x"; "grid-padding-x"] [
           div_classes ["cell"; "auto"] [
             a
@@ -197,13 +197,13 @@ let footer =
         ]
       ];
 
-      div_classes ["cell"; "large-4"] ~a:[a_id "immatriculation"] [
+      div_classes ["cell"; "large-4"; "small-10"] ~a:[a_id "immatriculation"] [
         txt "ASSU SIM";
         br ();
         txt "FFESSM 07750038";
       ];
 
-      div_classes ["cell"; "large-1"; "icons"; "large-offset-3"] [
+      div_classes ["cell"; "small-1"; "icons"; "large-offset-3"] [
         anchor_a
           ~anchor:"top"
           ~a:[a_user_data "smooth-scroll" ""]
