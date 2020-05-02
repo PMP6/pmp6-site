@@ -9,7 +9,7 @@ import 'what-input';
 window.jQuery = $;
 
 require('foundation-sites');
-window.moment = require('moment');
+window.moment = require('moment/moment');
 
 // If you want to pick and choose which modules to include, comment out the above and uncomment
 // the line below
