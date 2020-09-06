@@ -185,7 +185,7 @@ let autres =
           a ~service:tapsec_service
             [txt "UE de formation en plongée scientifique"]
             ();
-          txt " à laquelle certains de moniteurs participent comme \
+          txt " à laquelle certains de nos moniteurs participent comme \
                formateurs. Nous contacter pour plus d'informations."
          ];
       dt [txt "Bio, archéo..."];
