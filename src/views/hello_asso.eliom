@@ -22,3 +22,11 @@ let pay_widget item_name =
       a_src uri;
       a_style "border: none;"
     ] []
+
+let event_widget event_name =
+  let uri = make_uri ["evenements"; event_name; "widget"] in
+  let open H in
+  iframe ~a:[
+    a_src uri;
+    a_style "width: 100%; height: 750px; border: none";
+  ] []

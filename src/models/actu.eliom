@@ -149,9 +149,9 @@ let content_fosse () =
       br ();
     ];
     p [
-      txt "Les fosses reprendront le 30 octobre 2019 (à 21h). Les \
-           dates des suivantes sont d'ores et déjà prévues et \
-           disponibles sur ";
+      txt "Nous ne savons pas encore quand les séances de fosse \
+           pourront reprendre pour la saison 2020-2021. Dès qu'elles \
+           seront connues, les dates seront disponibles sur ";
       a ~service:Skeleton.Informations.Services.fosse
         [txt "la page dédiée"]
         ();
@@ -166,12 +166,6 @@ let content_fosse () =
 let deploy_time = Time.now ()
 
 let get () = [
-  {
-    title = "Exposition Photos";
-    short_title = "Expo photos";
-    datetime = deploy_time;
-    content = content_expo_photos ();
-  };
   {
     title = "Horaires de piscine";
     short_title = "Piscine";
