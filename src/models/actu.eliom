@@ -48,52 +48,64 @@ let content_rentree () =
       ~path:[]
       ~meth:(Eliom_service.Get Eliom_parameter.unit)
       () in
+  let flyer_uri =
+    Skeleton.Static.img_uri ["actus"; "Flyers_PMP6_2020.png"] in
   let plaquette_uri =
-    Skeleton.Static.uri ["files"; "PMP6_plaquetteAS_2019-2020.pdf"] in
+    Skeleton.Static.uri ["files"; "PMP6_plaquetteAS_2020-2021.pdf"] in
+  let autoquestionnaire_uri =
+    Skeleton.Static.uri ["files"; "Autoquestionnaire FFESSM.docx"] in
   let open H in
   [
     p [
       txt "C'est la rentrée ! ";
     ];
     p [
-      txt "La première séance de piscine pour les anciens aura lieu \
-           à Jean Taris le mardi 3 septembre à 21h. Pour les nouveaux \
-           arrivants, les séances de formation commenceront le mardi 1";
-      sup [txt "er"];
-      txt " octobre. Pour plus d'informations ou pour connaître les \
-           horaires, consultez ";
+      txt "Les séances de piscine ont déjà repris pour les anciens aux ";
       a ~service:Skeleton.Informations.Services.piscine
-        [txt "la page dédiée"]
+        [txt "horaires habituels"]
         ();
-      txt ".";
+      txt ". Dans ce contexte sanitaire particulier, des règles sont \
+           en place pour pratiquer en toute sécurité. En particulier, \
+           n'oubliez pas de remplir votre ";
+      Raw.a ~a:[a_href autoquestionnaire_uri] [txt "autoquestionnaire"];
+      txt " et de l'envoyer aux ";
+      mailto_a "delegues@pmp6.fr" [txt "délégués"];
+      txt " ou de venir avec à la piscine.";
     ];
     p [
       txt "Par ailleurs, une réunion de rentrée et d'information, \
            à laquelle tous les plongeurs, anciens comme nouveaux, sont \
-           conviés, se déroulera sur le campus Jussieu le 24 septembre \
-           en fin d'après-midi."
+           conviés, se déroulera sur le campus Jussieu le \
+           mercredi 7 octobre à 18 h 15."
     ];
     p [
-      txt "Enfin, n'oubliez pas de vous inscrire ! Les préinscriptions \
-           seront ouvertes à partir du 1";
-      sup [txt "er"];
-      txt " septembre sur le site du ";
+      txt "Enfin, n'oubliez pas de vous inscrire ! Vous devez d'abord \
+           vous préinscrire sur le site du ";
       a ~service:daps_service
         [txt "DAPS"]
         ();
-      txt ". Les tarifs d'inscription pour l'année comprennent la \
-           cotisation de base à l'AS (à ne payer qu'une fois pour tous \
-           les sports) ainsi qu'une cotisation supplémentaire pour \
-           financer le matériel et les séances spécifiques. Les deux \
-           montants dépendent de votre statut :";
+      txt ", puis venir régler au secrétariat. Les tarifs \
+           d'inscription pour l'année comprennent la cotisation de \
+           base à l'AS (à ne payer qu'une fois pour tous les sports, \
+           sauf pour les inscrits Splash qui ne payent pas) ainsi \
+           qu'une cotisation supplémentaire pour financer le matériel \
+           et les séances spécifiques. Les deux montants dépendent de \
+           votre statut :";
     ];
     ul [
-      li [H.txt "Pour les étudiants, 45€ de base + 65€ plongée ;"];
-      li [H.txt "Pour les membres du personnel, 65€ de base + 85€ plongée ;"];
-      li [H.txt "Pour les membres extérieurs, 85€ de base + 95€ plongée ;"];
+      li [H.txt "Si vous passez par Splash pour vous inscrire, vous ne \
+                 devrez payer que 65 € en tout (la cotisation de base \
+                 est gratuite), étudiant ou non ;"];
+      li [H.txt "Pour les étudiants du campus Jussieu, 45 € de base + \
+                 65 € plongée ;"];
+      li [H.txt "Pour les membres du personnel Jussieu, 65 € de base + \
+                 85 € plongée ;"];
+      li [H.txt "Pour les membres extérieurs anciens de la section, \
+                 85 € de base + 95 € plongée ;"];
       li [H.txt "Pour les encadrants (E2 + permis bateau), la \
                  cotisation de base ne change pas, mais la cotisation \
-                 supplémentaire est fixée à 65€ quel que soit votre statut."];
+                 supplémentaire est fixée à 65 € quel que soit votre \
+                 statut."];
     ];
     p [
       txt "Pour plus d'informations, vous pouvez consulter la ";
@@ -104,6 +116,13 @@ let content_rentree () =
     ];
     p [
       txt "À très bientôt pour de nouvelles aventures sous-marines !";
+    ];
+    p [
+      img
+        ~a:[a_class ["float-center"]]
+        ~src:flyer_uri
+        ~alt:"Flyer de la réunion de rentrée"
+        ()
     ];
   ]
 
@@ -167,15 +186,21 @@ let deploy_time = Time.now ()
 
 let get () = [
   {
+    title = "Rentrée 2020";
+    short_title = "Rentrée 2020";
+    datetime = deploy_time |> Fn.flip Time.sub Time.Span.minute;
+    content = content_rentree ();
+  };
+  {
     title = "Horaires de piscine";
     short_title = "Piscine";
-    datetime = deploy_time |> Fn.flip Time.sub Time.Span.minute;
+    datetime = deploy_time |> Fn.flip Time.sub Time.Span.hour;
     content = content_piscine ();
   };
   {
     title = "Dates des fosses";
     short_title = "Fosses";
-    datetime = Time.now () |> Fn.flip Time.sub Time.Span.hour;
+    datetime = Time.now () |> Fn.flip Time.sub Time.Span.day;
     content = content_fosse ();
   };
 ]
