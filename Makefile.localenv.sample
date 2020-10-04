@@ -2,5 +2,6 @@
 # Makefile.localenv to have it included in Makefile. Git will ignore
 # it.
 
+# Set empty to disable SSL
 SSLCERTIFICATE = /path/to/certificate.pem
 SSLPRIVATEKEY = /path/to/privkey.pem
