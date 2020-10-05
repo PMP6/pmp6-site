@@ -98,10 +98,10 @@ let content_rentree () =
                  est gratuite), étudiant ou non ;"];
       li [H.txt "Pour les étudiants du campus Jussieu, 45 € de base + \
                  65 € plongée ;"];
-      li [H.txt "Pour les membres du personnel Jussieu, 65 € de base + \
+      li [H.txt "Pour les membres du personnel Jussieu, 55 € de base + \
                  85 € plongée ;"];
       li [H.txt "Pour les membres extérieurs anciens de la section, \
-                 85 € de base + 95 € plongée ;"];
+                 65 € de base + 95 € plongée ;"];
       li [H.txt "Pour les encadrants (E2 + permis bateau), la \
                  cotisation de base ne change pas, mais la cotisation \
                  supplémentaire est fixée à 65 € quel que soit votre \
