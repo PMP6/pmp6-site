@@ -53,7 +53,7 @@ let content_rentree () =
   let plaquette_uri =
     Skeleton.Static.uri ["files"; "PMP6_plaquetteAS_2020-2021.pdf"] in
   let autoquestionnaire_uri =
-    Skeleton.Static.uri ["files"; "Autoquestionnaire FFESSM.docx"] in
+    Skeleton.Static.uri ["files"; "Autoquestionnaire_FFESSM.docx"] in
   let open H in
   [
     p [
