@@ -6,6 +6,8 @@ dist
 *.swp
 yarn-error.log
 
+*.db
+
 _opam
 _client
 _deps
