@@ -198,6 +198,7 @@ let autres =
   ]
 
 let formation_page () =
+  Lwt.return @@
   Template.make_page ~title:"Formations"
     H.[
       h1 [txt "Formations"];

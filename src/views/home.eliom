@@ -160,6 +160,7 @@ let make_actu_section actus =
 let actu_section () = make_actu_section (Actu.get ())
 
 let home_page () =
+  Lwt.return @@
   Template.make_page ~title:"PMP6" [
     presentation_section ();
     actu_section ();

@@ -1,6 +1,7 @@
 module H = Html
 
 let contact_page () =
+  Lwt.return @@
   Template.make_page ~title:"Contact" H.[
     p [
       txt "Vous voulez vous inscrire, avez des questions sur nos \

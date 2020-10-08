@@ -19,6 +19,7 @@ let caci_service =
     ()
 
 let inscription_page () =
+  Lwt.return @@
   Template.make_page ~title:"Inscription"
     H.[
       h1 [txt "Inscription au club"];
