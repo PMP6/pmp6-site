@@ -1,15 +1,24 @@
 S src/**/*
 B _server/**/*
 
+# Apparently only one ppx works at a time
+PKG lwt_ppx
+# PKG tyxml-ppx
+# PKG js_of_ocaml.ppx
+
 PKG eliom.server
-PKG eliom.ppx
+# PKG eliom.ppx.server
+
 PKG uucp
 PKG uuseg
 PKG uuseg.string
 PKG uunf
 PKG uunf.string
-PKG tyxml-ppx
-PKG lwt_ppx
 PKG core_kernel
+PKG js_of_ocaml
+PKG lwt
+
+PKG caqti-lwt
+PKG caqti-driver-sqlite3
 
 FLG -open Base -open Core_kernel -strict-formats -short-paths

@@ -31,7 +31,9 @@ COMMON_PACKAGES := \
 
 # OCamlfind packages for the server
 SERVER_PACKAGES := \
-	$(COMMON_PACKAGES)
+	$(COMMON_PACKAGES) \
+	caqti-driver-sqlite3 \
+	caqti-lwt
 
 # OCamlfind packages for the client
 CLIENT_PACKAGES := \
