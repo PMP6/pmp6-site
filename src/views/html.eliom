@@ -33,3 +33,11 @@ let js_script uri ?(a=[]) () =
   (* H.js_script generates unneeded "type=text/javascript" attribute,
      which triggers a warning on HTML validation *)
   script ~a:(a_src uri :: a) (txt "")
+
+[%%server.start]
+
+let pp_elt =
+  Eliom_content.Html.Printer.pp_elt
+
+let elt_to_string elt =
+  Fmt.str "%a" (pp_elt ()) elt
