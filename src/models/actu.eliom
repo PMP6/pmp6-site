@@ -163,9 +163,8 @@ let content_fosse () =
       br ();
     ];
     p [
-      txt "Nous ne savons pas encore quand les séances de fosse \
-           pourront reprendre pour la saison 2020-2021. Dès qu'elles \
-           seront connues, les dates seront disponibles sur ";
+      txt "Les dates des séances pour la saison 2020-2021 sont \
+           disponibles sur ";
       a ~service:Skeleton.Informations.Services.fosse
         [txt "la page dédiée"]
         ();
