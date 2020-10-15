@@ -1,4 +1,5 @@
-module%shared H = Html
+module%client H = Html
+module H = Html
 
 open%client Js_of_ocaml
 open%client Js_of_ocaml_lwt
@@ -46,14 +47,14 @@ let presentation_section () =
       ["Un mola-mola à Banyuls", "mola-mola.jpg"];
   ]
 
-let actu_slug actu_number actu =
-  Printf.sprintf "actu-%d-%s" actu_number (Utils.slugify actu.Actu.title)
+let news_slug news_number news =
+  Printf.sprintf "news-%d-%s" news_number (Utils.slugify news.News.title)
 
-let actu_tab_title ~is_active ~slug actu =
+let news_tab_title ~is_active ~slug news =
   let open H in
   li ~a:[a_class ("tabs-title" :: Utils.is_active_class is_active)] [
     anchor_a ~anchor:slug ~a:[a_user_data "tabs-target" slug]
-      [txt actu.Actu.short_title]
+      [txt news.News.short_title]
   ]
 
 let ceil_minute time =
@@ -81,21 +82,21 @@ let%client format_moment m =
   then m##format_withFormat (Js.string "[Hier à] H[h]mm")
   else m##format_withFormat (Js.string "[Le] Do MMMM Y à H[h]mm")
 
-let actu_header (actu : Actu.t) =
+let news_header (news : News.t) =
   let open H in
   (* Title and pub-time must belong to the same hn class to be
      vertically aligned *)
   let datetime =
     Time.to_string_abs_trimmed
       ~zone:(Time.Zone.of_utc_offset ~hours:2)
-      (ceil_minute actu.datetime) in
+      (ceil_minute news.pub_time) in
   let time_node = time ~a:[
     a_class ["pub-time"];
     a_datetime datetime;
   ] [txt datetime] in
   (* JS to show the time in client timezone. *)
   let time_value =
-    ms actu.datetime in
+    ms news.pub_time in
   let _ = [%client (
     let%lwt () = Lwt_js_events.domContentLoaded () in
     let _ = Moment.locale (Js.string "fr") in
@@ -106,49 +107,49 @@ let actu_header (actu : Actu.t) =
     : unit Lwt.t
   )] in
   header ~a:[a_class ["grid-x"; "align-bottom"]] [
-    h3 ~a:[a_class ["h4"; "cell"; "auto"]] [txt actu.title];
+    h3 ~a:[a_class ["h4"; "cell"; "auto"]] [txt news.title];
     div_classes ["h4"; "subheader"; "cell"; "shrink"] [
       time_node
     ]
   ]
 
-let actu_tabs_panel ~is_active ~slug actu =
+let news_tabs_panel ~is_active ~slug news =
   let open H in
   div_classes ("tabs-panel" :: Utils.is_active_class is_active) ~a:[a_id slug] [
-    article (
-      actu_header actu ::
-      actu.content
-    )
+    article [
+      news_header news;
+      news.content
+    ]
   ]
 
-let actu_elts make_elt actus =
+let news_elts make_elt all_news =
   List.mapi
     ~f:(
-      fun i actu ->
-        make_elt ~is_active:(i = 0) ~slug:(actu_slug i actu) actu
+      fun i news ->
+        make_elt ~is_active:(i = 0) ~slug:(news_slug i news) news
     )
-    actus
+    all_news
 
-let actu_tabs actus =
+let news_tabs all_news =
   let open H in
   ul
-    ~a:[a_class ["tabs"]; a_user_data "tabs" ""; a_id "tabs-actu"]
-    (actu_elts actu_tab_title actus)
+    ~a:[a_class ["tabs"]; a_user_data "tabs" ""; a_id "tabs-news"]
+    (news_elts news_tab_title all_news)
 
-let actu_tabs_content actus =
+let news_tabs_content all_news =
   let open H in
   div_class "tabs-content"
-    ~a:[a_user_data "tabs-content" "tabs-actu"]
-    (actu_elts actu_tabs_panel actus)
+    ~a:[a_user_data "tabs-content" "tabs-news"]
+    (news_elts news_tabs_panel all_news)
 
-let make_actu_section actus =
+let make_news_section all_news =
   let open H in
-  section ~a:[a_id "section-actu"] [
+  section ~a:[a_id "section-news"] [
     h2 [txt "Suivez l'actu..."];
     hr ();
     div_classes ["grid-x"; "grid-padding-x"] [
       div_classes ["large-auto"; "medium-12"; "cell"]
-        [actu_tabs actus; actu_tabs_content actus];
+        [news_tabs all_news; news_tabs_content all_news];
       div_classes ["large-shrink"; "medium-12"; "cell"; "text-center"] [
         div_class "callout" [
           Facebook.page_widget ()
@@ -157,11 +158,17 @@ let make_actu_section actus =
     ]
   ]
 
-let actu_section () = make_actu_section (Actu.get ())
+let fetch_and_make_news_section () =
+  let open Lwt.Infix in
+  News.get_all_data () >|=
+  Result.ok >|=
+  Option.value ~default:[] >|=
+  make_news_section
 
 let home_page () =
-  Lwt.return @@
+  let open Lwt.Infix in
+  fetch_and_make_news_section () >|= fun news_section ->
   Template.make_page ~title:"PMP6" [
     presentation_section ();
-    actu_section ();
+    news_section;
   ]
