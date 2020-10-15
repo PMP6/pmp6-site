@@ -47,15 +47,28 @@ let fosse_page () =
         br ();
       ];
       p [
+        txt "Pour l'année 2020-2021, les séances sont prévues aux \
+             dates suivantes :";
+      ];
+      ul [
+        li [txt "Jeudi 29 octobre à 19 h"];
+        li [txt "Lundi 9 novembre à 20 h"];
+        li [txt "Jeudi 26 novembre à 19 h"];
+        li [txt "Lundi 7 décembre à 20 h"];
+        li [txt "Jeudi 21 janvier à 20 h"];
+        li [txt "Jeudi 4 février à 19 h"];
+        li [txt "Jeudi 18 février à 20 h"];
+        li [txt "Lundi 1"; sup [txt "er"]; txt " mars à 20 h"];
+        li [txt "Lundi 15 mars à 19h"];
+        li [txt "Lundi 29 mars à 21 h "];
+        li [txt "Jeudi 6 mai à 19 h"];
+      ];
+
+      p [
         txt "Les inscriptions se font sur le formulaire envoyé par \
              mail avant chaque séance. Le rendez-vous est fixé vingt \
              minutes avant la séance, sur le côté droit du complexe \
              sportif quand on arrive.";
-      ];
-      p [
-        txt "La reprise des séances n'est pas encore prévue pour \
-             l'année 2020-2021. Les dates seront disponibles sur cette \
-             page dès qu'elles seront connues.";
       ];
       div_classes ["grid-x"; "align-center"] [
         div_classes ["cell"; "large-8"; "medium-10"; "small-12"] [

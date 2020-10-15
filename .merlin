@@ -1,0 +1,15 @@
+S src/**/*
+B _server/**/*
+
+PKG eliom.server
+PKG eliom.ppx
+PKG uucp
+PKG uuseg
+PKG uuseg.string
+PKG uunf
+PKG uunf.string
+PKG tyxml-ppx
+PKG lwt_ppx
+PKG core_kernel
+
+FLG -open Base -open Core_kernel -strict-formats -short-paths

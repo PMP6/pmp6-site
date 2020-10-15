@@ -86,16 +86,11 @@ let content_rentree () =
         ();
       txt ", puis venir régler au secrétariat. Les tarifs \
            d'inscription pour l'année comprennent la cotisation de \
-           base à l'AS (à ne payer qu'une fois pour tous les sports, \
-           sauf pour les inscrits Splash qui ne payent pas) ainsi \
-           qu'une cotisation supplémentaire pour financer le matériel \
-           et les séances spécifiques. Les deux montants dépendent de \
-           votre statut :";
+           base à l'AS ainsi qu'une cotisation supplémentaire pour \
+           financer le matériel et les séances spécifiques. Les deux \
+           montants dépendent de votre statut :";
     ];
     ul [
-      li [H.txt "Si vous passez par Splash pour vous inscrire, vous ne \
-                 devrez payer que 65 € en tout (la cotisation de base \
-                 est gratuite), étudiant ou non ;"];
       li [H.txt "Pour les étudiants du campus Jussieu, 45 € de base + \
                  65 € plongée ;"];
       li [H.txt "Pour les membres du personnel Jussieu, 55 € de base + \
@@ -168,9 +163,8 @@ let content_fosse () =
       br ();
     ];
     p [
-      txt "Nous ne savons pas encore quand les séances de fosse \
-           pourront reprendre pour la saison 2020-2021. Dès qu'elles \
-           seront connues, les dates seront disponibles sur ";
+      txt "Les dates des séances pour la saison 2020-2021 sont \
+           disponibles sur ";
       a ~service:Skeleton.Informations.Services.fosse
         [txt "la page dédiée"]
         ();
