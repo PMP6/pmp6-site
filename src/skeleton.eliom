@@ -28,17 +28,6 @@ module SubTree (Config : sig val path_root : string end) = struct
 
   let path_root = Config.path_root
 
-  let void_service subpath =
-    let open Eliom_service in
-    let service = create
-      ~path:(Path (path_root :: subpath @ [""]))
-      ~meth:(Get Eliom_parameter.unit)
-      ()
-    in
-    Eliom_registration.Html_text.register ~service
-      (fun () () -> Lwt.return @@ String.concat ~sep:"/" (path_root :: subpath));
-    service
-
   let sub_service subpath =
     let open Eliom_service in
     create
