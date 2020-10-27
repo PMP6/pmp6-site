@@ -42,7 +42,7 @@ let get_all () =
     db_unmap_with_id
     db_type_with_id
     {|
-      SELECT (id, title, short_title, pub_time, content)
+      SELECT id, title, short_title, pub_time, content
         FROM news
         ORDER BY pub_time DESC
     |}
@@ -56,7 +56,7 @@ let get_all_data () =
     db_unmap
     db_type
     {|
-      SELECT (title, short_title, pub_time, content)
+      SELECT title, short_title, pub_time, content
         FROM news
         ORDER BY pub_time DESC
     |}
@@ -68,7 +68,7 @@ let get_all_data_exn () =
 let get_one id =
   Db.get_one db_unmap Id.db_type id db_type
     {|
-        SELECT (title, short_title, pub_time, content)
+        SELECT title, short_title, pub_time, content
         FROM news
         WHERE id = ?
         LIMIT 1
