@@ -4,13 +4,13 @@ let main_page service =
   Eliom_tools.Main_page (Srv service)
 
 let hierarchy_leaf service =
-  Eliom_tools.(Site_tree (main_page service, []))
+  Eliom_tools.Site_tree (main_page service, [])
 
 module SubLeaf (Config : sig val path_root : string end) = struct
   let service =
     let open Eliom_service in
     create
-      ~path:(Path ([Config.path_root; ""]))
+      ~path:(Path [Config.path_root; ""])
       ~meth:(Get Eliom_parameter.unit)
       ()
 
