@@ -159,16 +159,16 @@ let make_news_section all_news =
   ]
 
 let fetch_and_make_news_section () =
-  let open Lwt.Infix in
+  let open Lwt_result.Infix in
   News.get_all_data () >|=
-  Result.ok >|=
-  Option.value ~default:[] >|=
   make_news_section
 
 let home_page () =
-  let open Lwt.Infix in
-  fetch_and_make_news_section () >|= fun news_section ->
-  Template.make_page ~title:"PMP6" [
-    presentation_section ();
-    news_section;
-  ]
+  match%lwt fetch_and_make_news_section () with
+  | Ok news_section ->
+    Lwt.return @@
+    Template.make_page ~title:"PMP6" [
+      presentation_section ();
+      news_section;
+    ]
+  | Error e -> failwith (Caqti_error.show e)
