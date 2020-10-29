@@ -18,7 +18,7 @@ let caci_service =
     ~meth:(Eliom_service.Get Eliom_parameter.unit)
     ()
 
-let inscription_page () =
+let inscription_page () () =
   Lwt.return @@
   Template.make_page ~title:"Inscription"
     H.[

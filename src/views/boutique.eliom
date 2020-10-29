@@ -62,7 +62,7 @@ let boutique =
     Hello_asso.event_widget "boutique-des-plongeurs";
   ]
 
-let boutique_page () =
+let boutique_page () () =
   Lwt.return @@
   Template.make_page ~title:"Boutique"
     H.[

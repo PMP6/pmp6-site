@@ -10,7 +10,7 @@ let gmaps_embed () =
      +104+Rue+Adolphe+Pajeaud%2C+92160+Antony!3m2!1d48.7431596!2d2.286931!\
      5e0!3m2!1sfr!2sfr!4v1557852774857!5m2!1sfr!2sfr\""
 
-let fosse_page () =
+let fosse_page () () =
   Lwt.return @@
   Template.make_page ~title:"Fosse"
     H.[

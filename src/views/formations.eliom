@@ -197,7 +197,7 @@ let autres =
     thumbnail ~alt:"Le pacha et l'oursin" "Alain.jpg";
   ]
 
-let formation_page () =
+let formation_page () () =
   Lwt.return @@
   Template.make_page ~title:"Formations"
     H.[

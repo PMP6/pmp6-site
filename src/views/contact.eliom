@@ -1,6 +1,6 @@
 module H = Html
 
-let contact_page () =
+let contact_page () () =
   Lwt.return @@
   Template.make_page ~title:"Contact" H.[
     p [

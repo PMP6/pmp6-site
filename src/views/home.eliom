@@ -163,7 +163,7 @@ let fetch_and_make_news_section () =
   News.get_all_data () >|=
   make_news_section
 
-let home_page () =
+let home_page () () =
   match%lwt fetch_and_make_news_section () with
   | Ok news_section ->
     Lwt.return @@

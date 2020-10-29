@@ -1,9 +1,12 @@
-let ( => ) service page =
+let register_with_foundation_init ~service page =
   Pmp6.App.register
     ~service
-    (fun () () ->
+    (fun get post ->
        let _ : unit Eliom_client_value.t = [%client (Foundation.init () : unit)] in
-       page ())
+       page get post)
+
+let ( => ) service page =
+  register_with_foundation_init ~service page
 
 let () =
   Skeleton.home_service => Home.home_page;
