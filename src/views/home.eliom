@@ -48,13 +48,13 @@ let presentation_section () =
   ]
 
 let news_slug news_number news =
-  Printf.sprintf "news-%d-%s" news_number (Utils.slugify news.News.title)
+  Printf.sprintf "news-%d-%s" news_number (Utils.slugify news.News.Model.title)
 
 let news_tab_title ~is_active ~slug news =
   let open H in
   li ~a:[a_class ("tabs-title" :: Utils.is_active_class is_active)] [
     anchor_a ~anchor:slug ~a:[a_user_data "tabs-target" slug]
-      [txt news.News.short_title]
+      [txt news.News.Model.short_title]
   ]
 
 let ceil_minute time =
@@ -82,7 +82,7 @@ let%client format_moment m =
   then m##format_withFormat (Js.string "[Hier à] H[h]mm")
   else m##format_withFormat (Js.string "[Le] Do MMMM Y à H[h]mm")
 
-let news_header (news : News.t) =
+let news_header (news : News.Model.t) =
   let open H in
   (* Title and pub-time must belong to the same hn class to be
      vertically aligned *)
@@ -160,7 +160,7 @@ let make_news_section all_news =
 
 let fetch_and_make_news_section () =
   let open Lwt_result.Infix in
-  News.get_all_data () >|=
+  News.Model.get_all_data () >|=
   make_news_section
 
 let home_page () () =
