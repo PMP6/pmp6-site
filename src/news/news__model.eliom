@@ -62,8 +62,8 @@ let get_all_data () =
     |}
 
 let get_all_data_exn () =
-    get_all_data () >|=
-    Db.or_exn
+  get_all_data () >|=
+  Db.or_exn
 
 let get_one id =
   Db.get_one db_unmap Id.db_type id db_type
