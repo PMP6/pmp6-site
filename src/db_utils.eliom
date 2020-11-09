@@ -1,11 +1,17 @@
 module type Id = sig
   type t
   val db_type : t Caqti_type.t
+  val param :
+    string ->
+    (t,
+     [ `WithoutSuffix ],
+     [ `One of t ] Eliom_parameter.param_name) Eliom_parameter.params_type
 end
 
 module Id : Id = struct
   type t = int
   let db_type = Caqti_type.int
+  let param = Eliom_parameter.int
 end
 
 module type Data = sig
