@@ -10,7 +10,8 @@ SRCDIR := src
 ALL_FILES := $(shell find $(SRCDIR) -name *.eliom -o -name *.eliomi)
 
 WARNINGS := +a-4-40-41-42-44-45-48-58-59
-CFLAGS := -open Base -open Core_kernel -strict-formats -short-paths
+OPENFLAGS := -open Base -open Core_kernel
+CFLAGS := -strict-formats -short-paths
 
 # Source files for the server
 SERVER_FILES := $(ALL_FILES)

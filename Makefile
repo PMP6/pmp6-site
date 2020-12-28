@@ -16,9 +16,9 @@ include Makefile.localenv
 JSOPT_RUNTIMES := $(addprefix -jsopt +,${JS_RUNTIMES})
 
 ## Required binaries
-ELIOMC            := eliomc -ppx -w ${WARNINGS} ${CFLAGS}
-ELIOMOPT          := eliomopt -ppx -w ${WARNINGS} ${CFLAGS}
-JS_OF_ELIOM       := js_of_eliom -ppx ${JSOPT_RUNTIMES}
+ELIOMC            := eliomc -ppx -w ${WARNINGS} ${CFLAGS} ${OPENFLAGS}
+ELIOMOPT          := eliomopt -ppx -w ${WARNINGS} ${CFLAGS} ${OPENFLAGS}
+JS_OF_ELIOM       := js_of_eliom -ppx ${JSOPT_RUNTIMES} ${OPENFLAGS}
 ELIOMDEP          := eliomdep
 OCSIGENSERVER     := ocsigenserver
 OCSIGENSERVER.OPT := ocsigenserver.opt
