@@ -47,9 +47,6 @@ let presentation_section () =
       ["Un mola-mola à Banyuls", "mola-mola.jpg"];
   ]
 
-let news_slug news_number news =
-  Printf.sprintf "news-%d-%s" news_number (Utils.slugify news.News.Model.title)
-
 let news_tab_title ~is_active ~slug news =
   let open H in
   li ~a:[a_class ("tabs-title" :: Utils.is_active_class is_active)] [
@@ -81,7 +78,7 @@ let news_elts make_elt all_news =
   List.mapi
     ~f:(
       fun i news ->
-        make_elt ~is_active:(i = 0) ~slug:(news_slug i news) news
+        make_elt ~is_active:(i = 0) ~slug:(News.Model.slug news) (News.Model.data news)
     )
     all_news
 
@@ -115,7 +112,7 @@ let make_news_section all_news =
 
 let fetch_and_make_news_section () =
   let open Lwt_result.Infix in
-  News.Model.get_all_data () >|=
+  News.Model.get_all () >|=
   make_news_section
 
 let home_page () () =

@@ -34,6 +34,11 @@ end
 include Data
 include Db_utils.With_id (Data)
 
+let slug news_with_id =
+  let id = id news_with_id in
+  let { title; _ } = data news_with_id in
+  Fmt.str "news-%a-%s" Id.pp id (Utils.slugify title)
+
 let create ~title ~short_title ~content =
   { title; short_title; content; pub_time = Time.now (); }
 

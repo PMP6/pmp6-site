@@ -1,6 +1,7 @@
 module type Id = sig
   type t
   val db_type : t Caqti_type.t
+  val pp : t Fmt.t
   val param :
     string ->
     (t,
@@ -12,6 +13,7 @@ module Id : Id = struct
   type t = int
   let db_type = Caqti_type.int
   let param = Eliom_parameter.int
+  let pp = Fmt.int
 end
 
 module type Data = sig
