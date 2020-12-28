@@ -57,59 +57,14 @@ let news_tab_title ~is_active ~slug news =
       [txt news.News.Model.short_title]
   ]
 
-let ceil_minute time =
-  Time.prev_multiple
-    ~before:time
-    ~base:Time.epoch
-    ~interval:Time.Span.minute
-    ~can_equal_before:true (* For good measure, only useful is s=ms=ns=0 *)
-    ()
-
-let ms time =
-  (* Returns the number of seconds since epoch, as an int. *)
-  time
-  |> Time.to_span_since_epoch
-  |> Time.Span.to_ms
-
-let%client format_moment m =
-  let open Moment in
-  let today = new%js moment in
-  let yesterday = new%js moment in yesterday##subtract 1. (Js.string "days");
-  let isSameDay m1 m2 = Js.to_bool (m1##isSame_withUnit m2 (Js.string "day")) in
-  if isSameDay m today
-  then m##fromNow |> Js.to_string |> String.capitalize_ascii |> Js.string
-  else if isSameDay m yesterday
-  then m##format_withFormat (Js.string "[Hier à] H[h]mm")
-  else m##format_withFormat (Js.string "[Le] Do MMMM Y à H[h]mm")
-
 let news_header (news : News.Model.t) =
   let open H in
   (* Title and pub-time must belong to the same hn class to be
      vertically aligned *)
-  let datetime =
-    Time.to_string_abs_trimmed
-      ~zone:(Time.Zone.of_utc_offset ~hours:2)
-      (ceil_minute news.pub_time) in
-  let time_node = time ~a:[
-    a_class ["pub-time"];
-    a_datetime datetime;
-  ] [txt datetime] in
-  (* JS to show the time in client timezone. *)
-  let time_value =
-    ms news.pub_time in
-  let _ = [%client (
-    let%lwt () = Lwt_js_events.domContentLoaded () in
-    let _ = Moment.locale (Js.string "fr") in
-    let moment = new%js Moment.moment_fromTimeValue ~%time_value in
-    let timenode = Eliom_content.Html.To_dom.of_time ~%time_node in
-    timenode##.textContent := Js.some (format_moment moment);
-    Lwt.return ()
-    : unit Lwt.t
-  )] in
   header ~a:[a_class ["grid-x"; "align-bottom"]] [
     h3 ~a:[a_class ["h4"; "cell"; "auto"]] [txt news.title];
     div_classes ["h4"; "subheader"; "cell"; "shrink"] [
-      time_node
+      time_ ~a:[a_class ["pub-time"]] news.pub_time
     ]
   ]
 
