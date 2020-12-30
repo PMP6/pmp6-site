@@ -1,10 +1,14 @@
 S src/**/*
 B _server/**/*
+# B _client/**/*
 
 # Apparently only one ppx works at a time
 PKG lwt_ppx
 # PKG tyxml-ppx
 # PKG js_of_ocaml.ppx
+
+# PKG eliom.client
+# PKG eliom.ppx.client
 
 PKG eliom.server
 # PKG eliom.ppx.server
