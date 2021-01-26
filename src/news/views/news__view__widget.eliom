@@ -3,7 +3,7 @@ module Model = News__model
 
 let news_tab_title ~is_active ~slug news =
   let open H in
-  li ~a:[a_class ("tabs-title" :: Utils.is_active_class is_active)] [
+  li ~a:[a_class @@ Utils.with_is_active is_active ["tabs-title"]] [
     anchor_a ~anchor:slug ~a:[a_user_data "tabs-target" slug]
       [txt news.Model.short_title]
   ]
@@ -21,7 +21,7 @@ let news_header (news : Model.t) =
 
 let news_tabs_panel ~is_active ~slug news =
   let open H in
-  div_classes ("tabs-panel" :: Utils.is_active_class is_active) ~a:[a_id slug] [
+  div_classes (Utils.with_is_active is_active ["tabs-panel"]) ~a:[a_id slug] [
     article [
       news_header news;
       news.content

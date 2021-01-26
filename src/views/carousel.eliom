@@ -25,7 +25,7 @@ let slide ~is_active ~src ~caption =
         ~a:[H.a_class ["orbit-caption"]]
         [H.txt caption]
     ) in
-  H.li ~a:[H.a_class ("orbit-slide" :: Utils.is_active_class is_active)] [
+  H.li ~a:[H.a_class @@ Utils.with_is_active is_active ["orbit-slide"]] [
     H.figure
       ~a:[H.a_class ["orbit-figure"]]
       (* ~figcaption *)
@@ -41,8 +41,8 @@ let slides =
 
 let bullet ~is_active ~caption ~slide_number =
   H.button
-    ~a:(H.a_user_data "slide" (Int.to_string slide_number) ::
-        Utils.is_active_attrib is_active)
+    ~a:(Utils.with_is_active_attrib is_active @@
+        [H.a_user_data "slide" (Int.to_string slide_number)])
     (H.span ~a:[H.a_class ["show-for-sr"]] [H.txt caption] ::
      if is_active
      then [H.span ~a:[H.a_class ["show-for-sr"]] [H.txt "Photo en cours"]]

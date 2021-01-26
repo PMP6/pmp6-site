@@ -54,12 +54,15 @@ let slugify string =
   |> List.rev
   |> String.concat ~sep:"-"
 
-let is_active_class is_active =
-  if is_active
-  then ["is-active"]
-  else []
+let with_if boolean class_ classes =
+  if boolean
+  then class_ :: classes
+  else classes
 
-let is_active_attrib is_active =
+let with_is_active is_active classes =
+  with_if is_active "is-active" classes
+
+let with_is_active_attrib is_active attribs =
   if is_active
-  then [H.a_class (is_active_class is_active)]
-  else []
+  then H.a_class (with_is_active is_active []) :: attribs
+  else attribs
