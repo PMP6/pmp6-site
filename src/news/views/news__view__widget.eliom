@@ -6,7 +6,7 @@ let news_tab_title i ~slug news =
   let open H in
   li ~a:[a_class @@ Utils.with_is_active is_active ["tabs-title"]] [
     anchor_a ~anchor:slug ~a:[a_user_data "tabs-target" slug]
-      [txt news.Model.short_title]
+      [txt @@ Model.short_title news]
   ]
 
 let news_header (news : Model.t) =
@@ -14,9 +14,9 @@ let news_header (news : Model.t) =
     (* Title and pub-time must belong to the same hn class to be
        vertically aligned *)
   header ~a:[a_class ["grid-x"; "align-bottom"]] [
-    h3 ~a:[a_class ["h4"; "cell"; "auto"]] [txt news.title];
+    h3 ~a:[a_class ["h4"; "cell"; "auto"]] [txt @@ Model.title news];
     div_classes ["h4"; "subheader"; "cell"; "shrink"] [
-      time_ ~a:[a_class ["pub-time"]] news.pub_time
+      time_ ~a:[a_class ["pub-time"]] @@ Model.pub_time news
     ]
   ]
 
@@ -26,7 +26,7 @@ let news_tabs_panel i ~slug news =
   div_classes (Utils.with_is_active is_active ["tabs-panel"]) ~a:[a_id slug] [
     article [
       news_header news;
-      news.content
+      Model.content news;
     ]
   ]
 

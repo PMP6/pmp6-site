@@ -13,6 +13,11 @@ module Data = struct
 
   type mapping = string * (string * (Time.t * string))
 
+  let title { title; _ } = title
+  let short_title { short_title; _ } = short_title
+  let pub_time { pub_time; _ } = pub_time
+  let content { content; _ } = content
+
   let db_type =
     Db.Type.(string & string & time & string)
 
