@@ -38,14 +38,23 @@ let news_tabs_panel i news =
     ]
     [article_ news]
 
-let news_tabs all_news =
+let news_tabs ?(vertical=false) all_news =
   let open H in
   ul
-    ~a:[a_class ["tabs"]; a_user_data "tabs" ""; a_id "tabs-news"]
+    ~a:[
+      a_class @@ Utils.with_vertical vertical ["tabs"];
+      a_user_data "tabs" ""; a_id "tabs-news"
+    ]
     (List.mapi ~f:news_tab_title all_news)
 
-let news_tabs_content all_news =
+let news_tabs_content ?(vertical=false) all_news =
   let open H in
-  div_class "tabs-content"
-    ~a:[a_user_data "tabs-content" "tabs-news"]
+   div
+     ~a:[
+       a_class @@
+       Utils.with_vertical vertical @@
+       Utils.with_if vertical "gapped" @@
+       ["tabs-content"];
+       a_user_data "tabs-content" "tabs-news";
+    ]
     (List.mapi ~f:news_tabs_panel all_news)

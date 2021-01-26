@@ -1,3 +1,30 @@
+.tabs-content.vertical.gapped {
+
+    /*
+      This fixes a Foundation quirk on vertical tabs, where the border
+      between the tabs and the content is only defined as the right
+      border of the tabs.
+
+      This has two drawbacks:
+
+      1. When the tabs content is taller than the tabs, the bottom of
+      the tabs content has no left border.
+
+      2. When there is a gap between the tabs and the content (using
+      grid-margin-x for instance on the wrapping container), the
+      content itself has no left border at all.
+
+      As the first point is not aesthetic anyway (having a different
+      size between the tabs and the content makes the unified border
+      odd anyway -- which does not happen on horizontal modes where
+      the sizes are always the same), we solve this by using a .gapped
+      class that forces the left border on the content. This is
+      supposed to be used within a wrapping margin-x grid.
+     */
+
+    border-left: solid 1px $tab-content-border;
+}
+
 html {
     height: 100%;
     min-height: 100%;

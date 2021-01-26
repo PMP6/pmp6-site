@@ -59,6 +59,9 @@ let with_if boolean class_ classes =
   then class_ :: classes
   else classes
 
+let with_vertical is_vertical classes =
+  with_if is_vertical "vertical" classes
+
 let with_is_active is_active classes =
   with_if is_active "is-active" classes
 
