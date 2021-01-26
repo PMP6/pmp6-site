@@ -47,6 +47,18 @@ let slug news_with_id =
 let create ~title ~short_title ~content =
   { title; short_title; content; pub_time = Time.now (); }
 
+let title =
+  lift Data.title
+
+let short_title =
+  lift Data.short_title
+
+let content =
+  lift Data.content
+
+let pub_time =
+  lift Data.pub_time
+
 let get_all () =
   Db.get_all
     db_unmap_with_id

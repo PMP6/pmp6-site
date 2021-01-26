@@ -34,6 +34,8 @@ module With_id (Data : Data) : sig
   val data : with_id -> Data.t
   val with_id : Id.t -> Data.t -> with_id
 
+  val lift : (Data.t -> 'a) -> with_id -> 'a
+
   val db_type_with_id : mapping_with_id Caqti_type.t
   val db_map_with_id : with_id -> mapping_with_id
   val db_unmap_with_id : mapping_with_id -> with_id
@@ -57,6 +59,9 @@ struct
 
   let with_id id data =
     (id, data)
+
+  let lift f =
+    Fn.compose f data
 
   let db_unmap_with_id (id, data_repr) =
     (id, Data.db_unmap data_repr)

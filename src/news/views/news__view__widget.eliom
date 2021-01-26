@@ -1,15 +1,16 @@
 module H = Html
 module Model = News__model
 
-let news_tab_title i ~slug news =
+let news_tab_title i news =
   let is_active = i = 0 in
   let open H in
+  let slug = Model.slug news in
   li ~a:[a_class @@ Utils.with_is_active is_active ["tabs-title"]] [
     anchor_a ~anchor:slug ~a:[a_user_data "tabs-target" slug]
       [txt @@ Model.short_title news]
   ]
 
-let header_ (news : Model.t) =
+let header_ news =
   let open H in
   (* Title and pub-time must belong to the same hn class to be
      vertically aligned *)
@@ -26,9 +27,10 @@ let article_ news =
     Model.content news;
   ]
 
-let news_tabs_panel i ~slug news =
+let news_tabs_panel i news =
   let is_active = i = 0 in
   let open H in
+  let slug = Model.slug news in
   div
     ~a:[
       a_id slug;
@@ -36,22 +38,14 @@ let news_tabs_panel i ~slug news =
     ]
     [article_ news]
 
-let news_elts make_elt all_news =
-  List.mapi
-    ~f:(
-      fun i news ->
-        make_elt i ~slug:(Model.slug news) (Model.data news)
-    )
-    all_news
-
 let news_tabs all_news =
   let open H in
   ul
     ~a:[a_class ["tabs"]; a_user_data "tabs" ""; a_id "tabs-news"]
-    (news_elts news_tab_title all_news)
+    (List.mapi ~f:news_tab_title all_news)
 
 let news_tabs_content all_news =
   let open H in
   div_class "tabs-content"
     ~a:[a_user_data "tabs-content" "tabs-news"]
-    (news_elts news_tabs_panel all_news)
+    (List.mapi ~f:news_tabs_panel all_news)
