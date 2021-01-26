@@ -1,7 +1,8 @@
 module H = Html
 module Model = News__model
 
-let news_tab_title ~is_active ~slug news =
+let news_tab_title i ~slug news =
+  let is_active = i = 0 in
   let open H in
   li ~a:[a_class @@ Utils.with_is_active is_active ["tabs-title"]] [
     anchor_a ~anchor:slug ~a:[a_user_data "tabs-target" slug]
@@ -19,7 +20,8 @@ let news_header (news : Model.t) =
     ]
   ]
 
-let news_tabs_panel ~is_active ~slug news =
+let news_tabs_panel i ~slug news =
+  let is_active = i = 0 in
   let open H in
   div_classes (Utils.with_is_active is_active ["tabs-panel"]) ~a:[a_id slug] [
     article [
@@ -32,7 +34,7 @@ let news_elts make_elt all_news =
   List.mapi
     ~f:(
       fun i news ->
-        make_elt ~is_active:(i = 0) ~slug:(Model.slug news) (Model.data news)
+        make_elt i ~slug:(Model.slug news) (Model.data news)
     )
     all_news
 
