@@ -180,6 +180,12 @@ dd + dt {
             @include xy-gutters($gutter-position:top bottom);
         }
     }
+
+    .action-icons i {
+        font-size: xx-large;
+        text-align: center;
+    }
+
 }
 
 footer {

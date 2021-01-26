@@ -27,7 +27,24 @@ let article_ news =
     Model.content news;
   ]
 
-let news_tabs_panel i news =
+let action_icons_callout _news =
+  let open H in
+  div_classes ["callout"; "action-icons"] [
+    div_classes ["grid-x"] [
+      div_classes ["cell"; "text-center"] [p [Raw.a [Icon.solid "fa-edit" ()]]];
+      div_classes ["cell"; "text-center"] [p [Raw.a [Icon.solid "fa-trash" ()]]];
+      div_classes ["cell"; "text-center"] [p [Raw.a [Icon.solid "fa-eye-slash" ()]]];
+    ]
+  ]
+
+let article_with_action_icons news =
+  let open H in
+  div_classes ["grid-x"; "grid-margin-x"; "news"] [
+    div_classes ["cell"; "large-auto"] [article_ news];
+    div_classes ["cell"; "large-2"] [action_icons_callout news];
+  ]
+
+let news_tabs_panel ~display_action_icons i news =
   let is_active = i = 0 in
   let open H in
   let slug = Model.slug news in
@@ -36,7 +53,11 @@ let news_tabs_panel i news =
       a_id slug;
       a_class @@ Utils.with_is_active is_active @@ ["tabs-panel"];
     ]
-    [article_ news]
+    [
+      if display_action_icons
+      then article_with_action_icons news
+      else article_ news
+    ]
 
 let news_tabs ?(vertical=false) all_news =
   let open H in
@@ -47,7 +68,7 @@ let news_tabs ?(vertical=false) all_news =
     ]
     (List.mapi ~f:news_tab_title all_news)
 
-let news_tabs_content ?(vertical=false) all_news =
+let news_tabs_content ?(vertical=false) ?(display_action_icons=false) all_news =
   let open H in
    div
      ~a:[
@@ -57,4 +78,4 @@ let news_tabs_content ?(vertical=false) all_news =
        ["tabs-content"];
        a_user_data "tabs-content" "tabs-news";
     ]
-    (List.mapi ~f:news_tabs_panel all_news)
+    (List.mapi ~f:(news_tabs_panel ~display_action_icons) all_news)
