@@ -96,7 +96,7 @@ let news_tabs_content all_news =
 
 let make_news_section all_news =
   let open H in
-  section ~a:[a_id "section-news"] [
+  section ~a:[a_id "section-news"; a_class ["news"]] [
     h2 [txt "Suivez l'actu..."];
     hr ();
     div_classes ["grid-x"; "grid-padding-x"] [
