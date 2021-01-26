@@ -9,10 +9,10 @@ let news_tab_title i ~slug news =
       [txt @@ Model.short_title news]
   ]
 
-let news_header (news : Model.t) =
+let header_ (news : Model.t) =
   let open H in
-    (* Title and pub-time must belong to the same hn class to be
-       vertically aligned *)
+  (* Title and pub-time must belong to the same hn class to be
+     vertically aligned *)
   header ~a:[a_class ["grid-x"; "align-bottom"]] [
     h3 ~a:[a_class ["h4"; "cell"; "auto"]] [txt @@ Model.title news];
     div_classes ["h4"; "subheader"; "cell"; "shrink"] [
@@ -20,15 +20,21 @@ let news_header (news : Model.t) =
     ]
   ]
 
+let article_ news =
+  H.article [
+    header_ news;
+    Model.content news;
+  ]
+
 let news_tabs_panel i ~slug news =
   let is_active = i = 0 in
   let open H in
-  div_classes (Utils.with_is_active is_active ["tabs-panel"]) ~a:[a_id slug] [
-    article [
-      news_header news;
-      Model.content news;
+  div
+    ~a:[
+      a_id slug;
+      a_class @@ Utils.with_is_active is_active @@ ["tabs-panel"];
     ]
-  ]
+    [article_ news]
 
 let news_elts make_elt all_news =
   List.mapi
