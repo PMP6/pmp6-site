@@ -223,6 +223,7 @@ let make_body content =
   ]
 
 let make_page ?(other_head=[]) ~title content =
+  let _ : unit Eliom_client_value.t = [%client (Foundation.init () : unit)] in
   H.html
     ~a:[H.a_lang "fr"; H.a_class ["no-js"]]
     (head ~other_head ~title ())
