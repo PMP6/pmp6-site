@@ -204,12 +204,19 @@ let footer =
       ];
 
       div_classes ["cell"; "small-1"; "icons"; "large-offset-3"] [
-        anchor_a
-          ~anchor:"top"
-          ~a:[a_user_data "smooth-scroll" ""]
-          [Icon.solid "fa-chevron-up" ()];
-      ];
-
+        div_classes ["grid-x"] [
+          div_classes ["cell"; "large-6"] [
+            a ~service:News__service.main [
+              Icon.solid "fa-tools" ()
+            ] ()
+          ];
+          div_classes ["cell"; "large-6"] [
+            anchor_a ~anchor:"top" ~a:[a_user_data "smooth-scroll" ""] [
+              Icon.solid "fa-chevron-up" ()
+            ]
+          ];
+        ]
+      ]
     ]
   ]
 

@@ -12,6 +12,7 @@ let () =
   Skeleton.Informations.Services.inscription => Inscription.inscription_page;
   Skeleton.Espace_membre.Services.boutique => Boutique.boutique_page;
   Skeleton.Contact.service => Contact.contact_page;
+  News.Registration.register_with (module Pmp6.App) ();
   ()
 
 let () =
