@@ -18,6 +18,9 @@ module Data = struct
   let pub_time { pub_time; _ } = pub_time
   let content { content; _ } = content
 
+  let slug news =
+    Utils.slugify @@ title news
+
   let db_type =
     Db.Type.(string & string & time & string)
 
@@ -39,11 +42,6 @@ end
 include Data
 include Db_utils.With_id (Data)
 
-let slug news_with_id =
-  let id = id news_with_id in
-  let { title; _ } = data news_with_id in
-  Fmt.str "news-%a-%s" Id.pp id (Utils.slugify title)
-
 let create ~title ~short_title ~content =
   { title; short_title; content; pub_time = Time.now (); }
 
@@ -58,6 +56,18 @@ let content =
 
 let pub_time =
   lift Data.pub_time
+
+let slug =
+  lift Data.slug
+
+let unique_slug ?prefix news_with_id =
+  let prefix = match prefix with
+    | None -> ""
+    | Some prefix -> prefix ^ "-" in
+  Fmt.str "%s%a-%s"
+    prefix
+    Id.pp (id news_with_id)
+    (slug news_with_id)
 
 let get_all () =
   Db.get_all

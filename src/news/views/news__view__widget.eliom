@@ -1,10 +1,13 @@
 module H = Html
 module Model = News__model
 
+let tab_slug news =
+  Model.unique_slug ~prefix:"news" news
+
 let news_tab_title i news =
   let is_active = i = 0 in
   let open H in
-  let slug = Model.slug news in
+  let slug = tab_slug news in
   li ~a:[a_class @@ Utils.with_is_active is_active ["tabs-title"]] [
     anchor_a ~anchor:slug ~a:[a_user_data "tabs-target" slug]
       [txt @@ Model.short_title news]
@@ -47,7 +50,7 @@ let article_with_action_icons news =
 let news_tabs_panel ~display_action_icons i news =
   let is_active = i = 0 in
   let open H in
-  let slug = Model.slug news in
+  let slug = tab_slug news in
   div
     ~a:[
       a_id slug;
