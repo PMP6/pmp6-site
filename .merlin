@@ -1,3 +1,5 @@
+SUFFIX .eliom .eliomi
+
 S src/**/*
 B _server/**/*
 # B _client/**/*
