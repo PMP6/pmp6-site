@@ -1,1 +1,2 @@
+rm -f /usr/local/var/data/pmp6/ocsipersist/socket # Otherwise sometimes ocsidbm won't work
 sudo PATH=$PATH OCAMLPATH=$OCAMLPATH LD_LIBRARY_PATH=$LD_LIBRARY_PATH make run.opt
