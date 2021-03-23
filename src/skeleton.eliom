@@ -130,6 +130,12 @@ module Static = struct
     H.js_script (js_uri path)
 end
 
+let current_service () =
+  Eliom_service.create
+    ~path:Eliom_service.No_path
+    ~meth:(Eliom_service.Get Eliom_parameter.unit)
+    ()
+
 let home_service =
   Eliom_service.create
     ~path:(Eliom_service.Path [""])
