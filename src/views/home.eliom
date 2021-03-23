@@ -71,8 +71,7 @@ let fetch_and_make_news_section () =
 let home_page () () =
   match%lwt fetch_and_make_news_section () with
   | Ok news_section ->
-    Lwt.return @@
-    Template.make_page ~title:"PMP6" [
+    Template.return_page ~title:"PMP6" [
       presentation_section ();
       news_section;
     ]

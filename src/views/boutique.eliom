@@ -63,8 +63,7 @@ let boutique =
   ]
 
 let boutique_page () () =
-  Lwt.return @@
-  Template.make_page ~title:"Boutique"
+  Template.return_page ~title:"Boutique"
     H.[
       h1 [txt "Boutique"];
       section intro;

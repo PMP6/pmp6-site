@@ -193,8 +193,7 @@ let provence =
   ]
 
 let stage_page () () =
-  Lwt.return @@
-  Template.make_page ~title:"Stages"
+  Template.return_page ~title:"Stages"
     H.[
       h1 [txt "Stages"];
       intro;

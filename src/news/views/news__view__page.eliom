@@ -1,7 +1,7 @@
 module Widget = News__view__widget
 
 let list_all all_news =
-  Template.make_page
+  Template.return_page
     ~title:"Toutes les actus"
     [
       Html.div_classes ["grid-x"; "grid-margin-x"; "news"]

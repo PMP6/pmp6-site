@@ -175,11 +175,11 @@ let header =
 let carousel =
   Carousel.elt ()
 
-let main ~content =
+let main ~toasts ~content =
   let open H in
   H.main
     ~a:[a_class ["grid-container"; "content"]]
-    content
+    (toasts @ content)
 
 let footer =
   let open H in
@@ -220,18 +220,20 @@ let footer =
     ]
   ]
 
-let make_body content =
+let make_body toasts content =
   (* empty anchor does not work for smooth scroll *)
   H.body ~a:[H.a_id "top"] [
     header;
     carousel;
-    main ~content;
+    main ~toasts ~content;
     footer;
   ]
 
-let make_page ?(other_head=[]) ~title content =
+let return_page ?(other_head=[]) ~title content =
   let _ : unit Eliom_client_value.t = [%client (Foundation.init () : unit)] in
+  let%lwt toasts = Toast.render_all () in
+  Lwt.return @@
   H.html
     ~a:[H.a_lang "fr"; H.a_class ["no-js"]]
     (head ~other_head ~title ())
-    (make_body content)
+    (make_body toasts content)
