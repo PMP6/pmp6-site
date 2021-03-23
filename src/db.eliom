@@ -66,6 +66,14 @@ let get_all make_item output_type query =
 
 let get_one make_item input_type input output_type query =
   let request =
+    Caqti_request.find input_type output_type query in
+  let execute_request (module C : Caqti_lwt.CONNECTION) =
+    C.find request input in
+  run execute_request
+  |> Lwt_result.map make_item
+
+let get_one_opt make_item input_type input output_type query =
+  let request =
     Caqti_request.find_opt input_type output_type query in
   let execute_request (module C : Caqti_lwt.CONNECTION) =
     C.find_opt request input in

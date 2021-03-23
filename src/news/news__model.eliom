@@ -98,9 +98,9 @@ let get_all_data_exn () =
   Db.or_exn
 
 let get_one id =
-  Db.get_one db_unmap Id.db_type id db_type
+  Db.get_one db_unmap_with_id Id.db_type id db_type_with_id
     {|
-        SELECT title, short_title, pub_time, content
+        SELECT id, title, short_title, pub_time, content
         FROM news
         WHERE id = ?
         LIMIT 1
