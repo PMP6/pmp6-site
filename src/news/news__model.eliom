@@ -97,14 +97,16 @@ let get_all_data_exn () =
   get_all_data () >|=
   Db.or_exn
 
-let get_one id =
-  Db.get_one db_unmap_with_id Id.db_type id db_type_with_id
+let get_one_sql =
     {|
         SELECT id, title, short_title, pub_time, content
         FROM news
         WHERE id = ?
         LIMIT 1
       |}
+
+let get_one id =
+  Db.get_one db_unmap_with_id Id.db_type id db_type_with_id get_one_sql
 
 let get_one_exn id =
   get_one id >|=
@@ -140,10 +142,33 @@ let update_exn news_with_id =
   update news_with_id >|=
   Db.or_exn
 
+let delete_sql =
+  {| DELETE FROM news WHERE id = ? |}
+
 let delete id =
-  Db.exec Id.db_type id
-    {| DELETE FROM news WHERE id = ? |}
+  Db.exec Id.db_type id delete_sql
 
 let delete_exn id =
   delete id >|=
   Db.or_exn
+
+let delete_and_return id =
+  (* TODO: this shows that the above abstraction for requests is not
+     flexible enough. *)
+  (* Also TODO: some helpers for transactions *)
+  let open Lwt_result.Infix in
+  let exec (module C : Caqti_lwt.CONNECTION) =
+    C.start () >>= fun () ->
+    let%lwt result =
+      C.find (Caqti_request.find Id.db_type db_type_with_id get_one_sql) id >>= fun news ->
+      C.exec (Caqti_request.exec Id.db_type delete_sql) id >|= fun () ->
+      news in
+    match result with
+    | Ok news ->
+      C.commit () >>= fun () ->
+      Lwt_result.return (db_unmap_with_id news)
+    | Error e ->
+      C.rollback () >>= fun () ->
+      Lwt_result.fail e
+  in
+  Db.run exec

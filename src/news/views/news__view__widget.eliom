@@ -1,5 +1,6 @@
 module H = Html
 module Model = News__model
+module Service = News__service
 
 let tab_slug news =
   Model.unique_slug ~prefix:"news" news
@@ -30,12 +31,52 @@ let article_ news =
     Model.content news;
   ]
 
-let action_icons_callout _news =
+module Deletion_toast = struct
+
+  let success news =
+    [
+      H.p [
+        H.txt "L'actu ";
+        H.em [H.txt @@ Model.short_title news];
+        H.txt " a bien été supprimée !";
+      ]
+    ]
+
+  let error (_e : Caqti_error.t) =
+    [
+      H.p [
+        H.txt "Une erreur est survenue lors de la suppression de \
+               l'actu. Si cette situation se reproduit, contactez \
+               l'administrateur."
+      ]
+    ]
+
+end
+
+let deletion_icon_and_modal news =
+  let open H in
+  let modal_text =
+    "Voulez-vous vraiment supprimer l'actu " ^ Model.short_title news ^ " ?" in
+  Confirmation_modal.with_modal
+    ~service:Service.delete
+    modal_text
+    (fun ~opens_modal modal ->
+       div_classes ["cell"; "text-center"] [
+         p [
+           Raw.a
+             ~a:[opens_modal]
+             [Icon.solid "fa-trash" ()]
+         ];
+         modal;
+       ])
+    (Model.id news)
+
+let action_icons_callout news =
   let open H in
   div_classes ["callout"; "action-icons"] [
-    div_classes ["grid-x"] [
+    div_classes ["grid-y"] [
       div_classes ["cell"; "text-center"] [p [Raw.a [Icon.solid "fa-edit" ()]]];
-      div_classes ["cell"; "text-center"] [p [Raw.a [Icon.solid "fa-trash" ()]]];
+      deletion_icon_and_modal news;
       div_classes ["cell"; "text-center"] [p [Raw.a [Icon.solid "fa-eye-slash" ()]]];
     ]
   ]
