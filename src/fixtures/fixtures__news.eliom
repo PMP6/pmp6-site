@@ -6,32 +6,32 @@ let content_expo_photos () =
   let open H in
   [
     p [
-        txt "L'exposition de photos sous-marines de PMP6 fait son \
-             grand retour !"
-      ];
+      txt "L'exposition de photos sous-marines de PMP6 fait son \
+           grand retour !"
+    ];
     p [
-        txt "Au programme : (re)découvrir les \
-             magnifiques créatures capturées par l'objectif de nos \
-             plongeurs, tout en en apprenant plus sur elles et leurs \
-             milieux."
-      ];
+      txt "Au programme : (re)découvrir les \
+           magnifiques créatures capturées par l'objectif de nos \
+           plongeurs, tout en en apprenant plus sur elles et leurs \
+           milieux."
+    ];
     p [
-        txt
-          "Cette exposition se tiendra du 11 au 29 novembre 2019 \
-           à l'Atrium Café du campus Jussieu, lieu de convivialité \
-           pour de nombreux étudiants. Elle sera ensuite déplacée le \
-           temps d'une journée à la piscine Jean Taris, à l'occasion \
-           du Téléthon (7 décembre 2019), où petits et grands pourront \
-           en profiter lors de leurs baptêmes... sous l'eau ! La \
-           boucle est bouclée."
-      ];
+      txt
+        "Cette exposition se tiendra du 11 au 29 novembre 2019 \
+         à l'Atrium Café du campus Jussieu, lieu de convivialité \
+         pour de nombreux étudiants. Elle sera ensuite déplacée le \
+         temps d'une journée à la piscine Jean Taris, à l'occasion \
+         du Téléthon (7 décembre 2019), où petits et grands pourront \
+         en profiter lors de leurs baptêmes... sous l'eau ! La \
+         boucle est bouclée."
+    ];
     p [
-        img
-          ~a:[a_class ["float-center"]]
-          ~src:affiche_uri
-          ~alt:"Affiche de l'expo photos"
-          ()
-      ]
+      img
+        ~a:[a_class ["float-center"]]
+        ~src:affiche_uri
+        ~alt:"Affiche de l'expo photos"
+        ()
+    ]
   ]
 
 let content_rentree () =
@@ -57,7 +57,9 @@ let content_rentree () =
     ];
     p [
       txt "Les séances de piscine ont déjà repris pour les anciens aux ";
-      a ~service:Skeleton.Informations.Services.piscine
+      a
+        ~absolute_path:true
+        ~service:Skeleton.Informations.Services.piscine
         [txt "horaires habituels"]
         ();
       txt ". Dans ce contexte sanitaire particulier, des règles sont \
@@ -77,7 +79,9 @@ let content_rentree () =
     p [
       txt "Enfin, n'oubliez pas de vous inscrire ! Vous devez d'abord \
            vous préinscrire sur le site du ";
-      a ~service:daps_service
+      a
+        ~absolute_path:true
+        ~service:daps_service
         [txt "DAPS"]
         ();
       txt ", puis venir régler au secrétariat. Les tarifs \
@@ -167,7 +171,8 @@ let content_fosse () =
       txt "Nous ne savons pas encore quand les séances de fosse \
            pourront reprendre pour la saison 2020-2021. Dès qu'elles \
            seront connues, les dates seront disponibles sur ";
-      a ~service:Skeleton.Informations.Services.fosse
+      a ~absolute_path:true
+        ~service:Skeleton.Informations.Services.fosse
         [txt "la page dédiée"]
         ();
       txt ".";
@@ -180,8 +185,8 @@ let content_fosse () =
 
 let deploy_time = Time.now ()
 
-let news () =
-  News.Model.[
+let news_items () =
+  News.Model.Item.[
     {
       title = "Rentrée 2020";
       short_title = "Rentrée 2020";
@@ -205,4 +210,4 @@ let news () =
   ]
 
 let run () =
-  Lwt_list.iter_s News.Model.insert_exn (news ())
+  Lwt_list.iter_s News.Model.add_item_exn (news_items ())

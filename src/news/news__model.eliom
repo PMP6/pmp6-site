@@ -3,7 +3,7 @@ open Lwt.Infix
 
 let ( & ) x y = (x, y)
 
-module Data = struct
+module Item = struct
   type t = {
     title : string;
     short_title : string;
@@ -17,6 +17,9 @@ module Data = struct
   let short_title { short_title; _ } = short_title
   let pub_time { pub_time; _ } = pub_time
   let content { content; _ } = content
+
+  let create_now ~title ~short_title ~content =
+    { title; short_title; content; pub_time = Time.now () }
 
   let slug news =
     Utils.slugify @@ title news
@@ -39,40 +42,36 @@ module Data = struct
     Html.elt_to_string content
 end
 
-include Data
-include Db_utils.With_id (Data)
-
-let create ~title ~short_title ~content =
-  { title; short_title; content; pub_time = Time.now (); }
+include Db_utils.With_id (Item)
 
 let title =
-  lift Data.title
+  lift Item.title
 
 let short_title =
-  lift Data.short_title
+  lift Item.short_title
 
 let content =
-  lift Data.content
+  lift Item.content
 
 let pub_time =
-  lift Data.pub_time
+  lift Item.pub_time
 
 let slug =
-  lift Data.slug
+  lift Item.slug
 
-let unique_slug ?prefix news_with_id =
+let unique_slug ?prefix model =
   let prefix = match prefix with
     | None -> ""
     | Some prefix -> prefix ^ "-" in
   Fmt.str "%s%a-%s"
     prefix
-    Id.pp (id news_with_id)
-    (slug news_with_id)
+    Id.pp (id model)
+    (slug model)
 
 let get_all () =
   Db.get_all
-    db_unmap_with_id
-    db_type_with_id
+    db_unmap
+    db_type
     {|
       SELECT id, title, short_title, pub_time, content
         FROM news
@@ -106,29 +105,36 @@ let get_one_sql =
       |}
 
 let get_one id =
-  Db.get_one db_unmap_with_id Id.db_type id db_type_with_id get_one_sql
+  Db.get_one db_unmap Id.db_type id db_type get_one_sql
 
 let get_one_exn id =
   get_one id >|=
   Db.or_exn
 
-let insert news =
+let add_item item =
   Db.exec
-    db_type
-    (db_map news)
+    Item.db_type
+    (Item.db_map item)
     {|
       INSERT INTO news (title, short_title, pub_time, content)
       VALUES (?, ?, ?, ?)
     |}
 
-let insert_exn news =
-  insert news >|=
+let add_item_exn item =
+  add_item item >|=
   Db.or_exn
 
-let update news_with_id =
+let add ~title ~short_title ~content =
+  add_item (Item.create_now ~title ~short_title ~content)
+
+let add_exn ~title ~short_title ~content =
+  add ~title ~short_title ~content >|=
+  Db.or_exn
+
+let update model =
   Db.exec
-    db_type_with_id
-    (db_map_with_id news_with_id)
+    db_type
+    (db_map model)
     {|
       UPDATE news
       SET title = $2,
@@ -138,8 +144,8 @@ let update news_with_id =
       WHERE id = $1
     |}
 
-let update_exn news_with_id =
-  update news_with_id >|=
+let update_exn model =
+  update model >|=
   Db.or_exn
 
 let delete_sql =
@@ -160,13 +166,13 @@ let delete_and_return id =
   let exec (module C : Caqti_lwt.CONNECTION) =
     C.start () >>= fun () ->
     let%lwt result =
-      C.find (Caqti_request.find Id.db_type db_type_with_id get_one_sql) id >>= fun news ->
+      C.find (Caqti_request.find Id.db_type db_type get_one_sql) id >>= fun model ->
       C.exec (Caqti_request.exec Id.db_type delete_sql) id >|= fun () ->
-      news in
+      model in
     match result with
-    | Ok news ->
+    | Ok model ->
       C.commit () >>= fun () ->
-      Lwt_result.return (db_unmap_with_id news)
+      Lwt_result.return (db_unmap model)
     | Error e ->
       C.rollback () >>= fun () ->
       Lwt_result.fail e

@@ -9,13 +9,6 @@ module type Id = sig
      [ `One of t ] Eliom_parameter.param_name) Eliom_parameter.params_type
 end
 
-module Id : Id = struct
-  type t = int
-  let db_type = Caqti_type.int
-  let param = Eliom_parameter.int
-  let pp = Fmt.int
-end
-
 module type Data = sig
   type t
   type mapping
@@ -25,47 +18,46 @@ module type Data = sig
   val db_unmap : mapping -> t
 end
 
-module With_id (Data : Data) : sig
+module With_id (Item : Data) : sig
+  include Data
+
   module Id : Id
-  type with_id
-  type mapping_with_id
 
-  val id : with_id -> Id.t
-  val data : with_id -> Data.t
-  val with_id : Id.t -> Data.t -> with_id
+  val id : t -> Id.t
+  val item : t -> Item.t
 
-  val lift : (Data.t -> 'a) -> with_id -> 'a
-
-  val db_type_with_id : mapping_with_id Caqti_type.t
-  val db_map_with_id : with_id -> mapping_with_id
-  val db_unmap_with_id : mapping_with_id -> with_id
+  val lift : (Item.t -> 'a) -> t -> 'a
 end
 =
 struct
-  module Id = Id
 
-  type with_id = Id.t * Data.t
+  module Id = struct
+    type t = int
+    let db_type = Caqti_type.int
+    let param = Eliom_parameter.int
+    let pp = Fmt.int
+  end
 
-  type mapping_with_id = Id.t * Data.mapping
+  type t = Id.t * Item.t
 
-  let db_type_with_id =
-    Db.Type.(Id.db_type & Data.db_type)
+  type mapping = Id.t * Item.mapping
+
+  let db_type =
+    Db.Type.(Id.db_type & Item.db_type)
 
   let id (id, _) =
     id
 
-  let data (_, data) =
-    data
-
-  let with_id id data =
-    (id, data)
+  let item (_, item) =
+    item
 
   let lift f =
-    Fn.compose f data
+    Fn.compose f item
 
-  let db_unmap_with_id (id, data_repr) =
-    (id, Data.db_unmap data_repr)
+  let db_map (id, item) =
+    (id, Item.db_map item)
 
-  let db_map_with_id (id, data) =
-    (id, Data.db_map data)
+  let db_unmap (id, item_repr) =
+    (id, Item.db_unmap item_repr)
+
 end
