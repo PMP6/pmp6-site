@@ -92,12 +92,12 @@ let news_tabs ?(vertical=false) all_news =
 
 let news_tabs_content ?(vertical=false) ?(display_action_icons=false) all_news =
   let open H in
-   div
-     ~a:[
-       a_class @@
-       Utils.with_vertical vertical @@
-       Utils.with_if vertical "gapped" @@
-       ["tabs-content"];
-       a_user_data "tabs-content" "tabs-news";
+  div
+    ~a:[
+      a_class @@
+      Utils.with_vertical vertical @@
+      Utils.with_if vertical "gapped" @@
+      ["tabs-content"];
+      a_user_data "tabs-content" "tabs-news";
     ]
     (List.mapi ~f:(news_tabs_panel ~display_action_icons) all_news)
