@@ -39,7 +39,7 @@ let deletion_icon_and_modal news =
     ~service:Service.delete
     modal_text
     (fun ~opens_modal modal ->
-       div_classes ["cell"; "text-center"] [
+       div_classes ["cell"; "text-center"; "large-12"; "small-4"] [
          p [
            Raw.a
              ~a:[opens_modal]
@@ -52,18 +52,26 @@ let deletion_icon_and_modal news =
 let action_icons_callout news =
   let open H in
   div_classes ["callout"; "action-icons"] [
-    div_classes ["grid-y"] [
-      div_classes ["cell"; "text-center"] [p [Raw.a [Icon.solid "fa-edit" ()]]];
+    div_classes ["grid-x"] [
+      div_classes
+        ["cell"; "text-center"; "large-12"; "small-4"]
+        [p [Raw.a [Icon.solid "fa-edit" ()]]];
       deletion_icon_and_modal news;
-      div_classes ["cell"; "text-center"] [p [Raw.a [Icon.solid "fa-eye-slash" ()]]];
+      div_classes
+        ["cell"; "text-center"; "large-12"; "small-4"]
+        [p [Raw.a [Icon.solid "fa-eye-slash" ()]]];
     ]
   ]
 
 let article_with_action_icons news =
   let open H in
   div_classes ["grid-x"; "grid-margin-x"; "news"] [
-    div_classes ["cell"; "large-auto"] [article_ news];
-    div_classes ["cell"; "large-2"] [action_icons_callout news];
+    div_classes
+      ["cell"; "large-auto"; "large-order-1"; "small-order-2"]
+      [article_ news];
+    div_classes
+      ["cell"; "large-2"; "large-order-2"; "small-order-1"]
+      [action_icons_callout news];
   ]
 
 let news_tabs_panel ~display_action_icons i news =
