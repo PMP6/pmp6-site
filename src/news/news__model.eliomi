@@ -55,13 +55,13 @@ val get_one_exn : Id.t -> t Lwt.t
 val create_with_item : Item.t -> unit Db.request_result
 val create_with_item_exn : Item.t -> unit Lwt.t
 
-val create :
+val create_now :
   title:string ->
   short_title:string ->
   content:Html_types.div_content_fun Html.elt ->
   unit Db.request_result
 
-val create_exn :
+val create_now_exn :
   title:string ->
   short_title:string ->
   content:Html_types.div_content_fun Html.elt ->

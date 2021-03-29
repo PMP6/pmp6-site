@@ -127,11 +127,11 @@ let create_with_item_exn item =
   create_with_item item >|=
   Db.or_exn
 
-let create ~title ~short_title ~content =
+let create_now ~title ~short_title ~content =
   create_with_item (Item.build_now ~title ~short_title ~content)
 
-let create_exn ~title ~short_title ~content =
-  create ~title ~short_title ~content >|=
+let create_now_exn ~title ~short_title ~content =
+  create_now ~title ~short_title ~content >|=
   Db.or_exn
 
 let update_with_item id item =
