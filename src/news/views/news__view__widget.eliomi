@@ -3,6 +3,11 @@ module H = Html
 
 val article_ : Model.t -> [> Html_types.article ] H.elt
 
+val redaction_form : unit -> [> Html_types.form ] H.elt
+
+val button_to_redaction :
+  ?expanded:bool -> unit -> [> [> Html_types.txt ] Html_types.a ] H.elt
+
 val news_tabs :
   ?vertical:bool ->
   Model.t list ->

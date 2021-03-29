@@ -81,6 +81,18 @@ let news_tabs_panel ~display_action_icons i news =
       else article_ news
     ]
 
+let button_to_redaction ?(expanded=false) () =
+  let open H in
+  a
+    ~service:Service.redaction
+    ~a:[
+      a_class @@
+      Utils.with_if expanded "expanded" @@
+      ["button"]
+    ]
+    [txt "Rédiger une actu"]
+    ()
+
 let news_tabs ?(vertical=false) all_news =
   let open H in
   ul
@@ -101,3 +113,68 @@ let news_tabs_content ?(vertical=false) ?(display_action_icons=false) all_news =
       a_user_data "tabs-content" "tabs-news";
     ]
     (List.mapi ~f:(news_tabs_panel ~display_action_icons) all_news)
+
+let redaction_form () =
+  let open H in
+  let span_form_error text =
+    H.span ~a:[H.a_class ["form-error"]] [H.txt text]
+  in
+  let help_text text =
+    H.p ~a:[H.a_class ["help-text"]] [H.txt text]
+  in
+  Form.post_form
+    ~xhr:false (* Mandatory to go through Abide form validation *)
+    ~a:[
+      a_user_data "abide" "";
+      a_novalidate ();
+    ]
+    ~service:Service.create_into_main
+    (fun (title, (short_title, content)) ->
+       [
+
+         div
+           ~a:[
+             a_class ["alert"; "callout"];
+             a_user_data "abide-error" "";
+             a_style "display: none;"
+           ]
+           [H.txt "Le formulaire contient des erreurs."];
+
+         label [
+           txt "Titre";
+           Form.input
+             ~input_type:`Text
+             ~name:title
+             ~a:[a_required ()]
+             Form.string;
+           span_form_error "Vous devez renseigner le titre.";
+         ];
+         help_text "Le titre principal, affiché en haut de l'actu.";
+
+         label [
+           txt "Titre court";
+           Form.input
+             ~input_type:`Text
+             ~name:short_title
+             ~a:[a_required ()]
+             Form.string;
+           span_form_error "Vous devez renseigner le titre court.";
+         ];
+         help_text "Un titre plus court pour les onglets.";
+
+         label [
+           txt "Contenu";
+           Form.textarea
+             ~name:content
+             ~a:[a_required ()]
+             ();
+           span_form_error "Vous devez renseigner le contenu.";
+         ];
+         help_text "Le contenu de la news. HTML autorisé.";
+
+         Form.button_no_value
+           ~button_type:`Submit
+           ~a:[a_class ["button"]]
+           [txt "Valider"];
+       ])
+    ()
