@@ -134,6 +134,23 @@ let create_now_exn ~title ~short_title ~content =
   create_now ~title ~short_title ~content >|=
   Db.or_exn
 
+let create_now_and_return ~title ~short_title ~content =
+  let item = Item.build_now ~title ~short_title ~content in
+  Db.get_one
+    db_unmap
+    Item.db_type
+    (Item.db_map item)
+    db_type
+    {|
+      INSERT INTO news (title, short_title, pub_time, content)
+      VALUES (?, ?, ?, ?)
+      RETURNING id, title, short_title, pub_time, content
+    |}
+
+let create_now_and_return_exn ~title ~short_title ~content =
+  create_now_and_return ~title ~short_title ~content >|=
+  Db.or_exn
+
 let update_with_item id item =
   Db.exec
     Product.db_type
@@ -165,6 +182,7 @@ let delete_and_return id =
   (* TODO: this shows that the above abstraction for requests is not
      flexible enough. *)
   (* Also TODO: some helpers for transactions *)
+  (* TODO 3: sqlite supports RETURNING on delete *)
   let open Lwt_result.Infix in
   let exec (module C : Caqti_lwt.CONNECTION) =
     C.start () >>= fun () ->
