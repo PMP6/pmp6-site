@@ -186,28 +186,32 @@ let content_fosse () =
 let deploy_time = Time.now ()
 
 let news_items () =
-  News.Model.Item.[
-    {
-      title = "Rentrée 2020";
-      short_title = "Rentrée 2020";
-      pub_time = deploy_time |> Fn.flip Time.sub Time.Span.minute;
-      content = Html.div @@ content_rentree ();
-    };
+  List.map
+    ~f:(fun (title, short_title, pub_time, content) ->
+      News.Model.Item.build ~title ~short_title ~pub_time ~content)
+  [
+    (
+      "Rentrée 2020",
+      "Rentrée 2020",
+      deploy_time |> Fn.flip Time.sub Time.Span.minute,
+      Html.div @@ content_rentree ()
+    );
 
-    {
-      title = "Horaires de piscine";
-      short_title = "Piscine";
-      pub_time = deploy_time |> Fn.flip Time.sub Time.Span.hour;
-      content = Html.div @@ content_piscine ();
-    };
+    (
+      "Horaires de piscine",
+      "Piscine",
+      deploy_time |> Fn.flip Time.sub Time.Span.hour,
+      Html.div @@ content_piscine ()
+    );
 
-    {
-      title = "Dates des fosses";
-      short_title = "Fosses";
-      pub_time = Time.now () |> Fn.flip Time.sub Time.Span.day;
-      content = Html.div @@ content_fosse ();
-    };
+    (
+      "Dates des fosses",
+      "Fosses",
+      Time.now () |> Fn.flip Time.sub Time.Span.day,
+      Html.div @@ content_fosse ()
+    );
   ]
 
+
 let run () =
-  Lwt_list.iter_s News.Model.add_item_exn (news_items ())
+  Lwt_list.iter_s News.Model.create_with_item_exn (news_items ())

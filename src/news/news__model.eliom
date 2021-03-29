@@ -18,8 +18,11 @@ module Item = struct
   let pub_time { pub_time; _ } = pub_time
   let content { content; _ } = content
 
-  let create_now ~title ~short_title ~content =
-    { title; short_title; content; pub_time = Time.now () }
+  let build ~title ~short_title ~content ~pub_time =
+    { title; short_title; content; pub_time }
+
+  let build_now =
+    build ~pub_time:(Time.now ())
 
   let slug news =
     Utils.slugify @@ title news
@@ -82,18 +85,18 @@ let get_all_exn () =
   get_all () >|=
   Db.or_exn
 
-let get_all_data () =
+let get_all_items () =
   Db.get_all
-    db_unmap
-    db_type
+    Item.db_unmap
+    Item.db_type
     {|
       SELECT title, short_title, pub_time, content
         FROM news
         ORDER BY pub_time DESC
     |}
 
-let get_all_data_exn () =
-  get_all_data () >|=
+let get_all_items_exn () =
+  get_all_items () >|=
   Db.or_exn
 
 let get_one_sql =
@@ -111,7 +114,7 @@ let get_one_exn id =
   get_one id >|=
   Db.or_exn
 
-let add_item item =
+let create_with_item item =
   Db.exec
     Item.db_type
     (Item.db_map item)
@@ -120,21 +123,21 @@ let add_item item =
       VALUES (?, ?, ?, ?)
     |}
 
-let add_item_exn item =
-  add_item item >|=
+let create_with_item_exn item =
+  create_with_item item >|=
   Db.or_exn
 
-let add ~title ~short_title ~content =
-  add_item (Item.create_now ~title ~short_title ~content)
+let create ~title ~short_title ~content =
+  create_with_item (Item.build_now ~title ~short_title ~content)
 
-let add_exn ~title ~short_title ~content =
-  add ~title ~short_title ~content >|=
+let create_exn ~title ~short_title ~content =
+  create ~title ~short_title ~content >|=
   Db.or_exn
 
-let update model =
+let update_with_item id item =
   Db.exec
-    db_type
-    (db_map model)
+    Product.db_type
+    (Product.db_map (id, item))
     {|
       UPDATE news
       SET title = $2,
@@ -144,8 +147,8 @@ let update model =
       WHERE id = $1
     |}
 
-let update_exn model =
-  update model >|=
+let update_with_item_exn id item =
+  update_with_item id item >|=
   Db.or_exn
 
 let delete_sql =
@@ -172,9 +175,13 @@ let delete_and_return id =
     match result with
     | Ok model ->
       C.commit () >>= fun () ->
-      Lwt_result.return (db_unmap model)
+      Lwt_result.return @@ item @@ db_unmap model
     | Error e ->
       C.rollback () >>= fun () ->
       Lwt_result.fail e
   in
   Db.run exec
+
+let delete_and_return_exn id =
+  delete_and_return id >|=
+  Db.or_exn

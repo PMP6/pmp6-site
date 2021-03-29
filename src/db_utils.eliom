@@ -18,16 +18,22 @@ module type Data = sig
   val db_unmap : mapping -> t
 end
 
-module With_id (Item : Data) : sig
-  include Data
-
+module type Data_with_id = sig
   module Id : Id
 
-  val id : t -> Id.t
-  val item : t -> Item.t
+  type item
 
-  val lift : (Item.t -> 'a) -> t -> 'a
+  include Data
+
+  module Product : Data with type t = Id.t * item
+
+  val id : t -> Id.t
+  val item : t -> item
+
+  val lift : (item -> 'a) -> t -> 'a
 end
+
+module With_id (Item : Data) : Data_with_id with type item := Item.t
 =
 struct
 
@@ -38,12 +44,22 @@ struct
     let pp = Fmt.int
   end
 
-  type t = Id.t * Item.t
+  module Product = struct
+    type t = Id.t * Item.t
 
-  type mapping = Id.t * Item.mapping
+    type mapping = Id.t * Item.mapping
 
-  let db_type =
-    Db.Type.(Id.db_type & Item.db_type)
+    let db_type =
+      Db.Type.(Id.db_type & Item.db_type)
+
+    let db_map (id, item) =
+      (id, Item.db_map item)
+
+    let db_unmap (id, item_repr) =
+      (id, Item.db_unmap item_repr)
+  end
+
+  include Product
 
   let id (id, _) =
     id
@@ -53,11 +69,4 @@ struct
 
   let lift f =
     Fn.compose f item
-
-  let db_map (id, item) =
-    (id, Item.db_map item)
-
-  let db_unmap (id, item_repr) =
-    (id, Item.db_unmap item_repr)
-
 end

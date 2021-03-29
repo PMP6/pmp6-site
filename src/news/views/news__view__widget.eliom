@@ -37,7 +37,7 @@ module Deletion_toast = struct
     [
       H.p [
         H.txt "L'actu ";
-        H.em [H.txt @@ Model.short_title news];
+        H.em [H.txt @@ Model.Item.short_title news];
         H.txt " a bien été supprimée !";
       ]
     ]
