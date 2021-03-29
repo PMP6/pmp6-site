@@ -31,28 +31,6 @@ let article_ news =
     Model.content news;
   ]
 
-module Deletion_toast = struct
-
-  let success news =
-    [
-      H.p [
-        H.txt "L'actu ";
-        H.em [H.txt @@ Model.Item.short_title news];
-        H.txt " a bien été supprimée !";
-      ]
-    ]
-
-  let error (_e : Caqti_error.t) =
-    [
-      H.p [
-        H.txt "Une erreur est survenue lors de la suppression de \
-               l'actu. Si cette situation se reproduit, contactez \
-               l'administrateur."
-      ]
-    ]
-
-end
-
 let deletion_icon_and_modal news =
   let open H in
   let modal_text =

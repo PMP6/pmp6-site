@@ -10,8 +10,8 @@ let list_all () () =
 let delete id () =
   match%lwt Model.delete_and_return id with
   | Ok news ->
-    let%lwt () = Toast.push Toast.Success (View.Widget.Deletion_toast.success news) in
+    let%lwt () = Toast.push Toast.Success (View.Toast.Deletion.success news) in
     Lwt.return ()
   | Error e ->
-    let%lwt () = Toast.push Toast.Alert (View.Widget.Deletion_toast.error e) in
+    let%lwt () = Toast.push Toast.Alert (View.Toast.Deletion.error e) in
     Lwt.return ()
