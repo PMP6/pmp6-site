@@ -186,7 +186,7 @@ let footer =
   footer [
     div_classes ["grid-x"; "grid-padding-x"; "align-left"] [
 
-      div_classes ["cell"; "large-4"; "small-1"; "icons"] [
+      div_classes ["cell"; "small-1"; "medium-2"; "large-4"; "icons"] [
         div_classes ["grid-x"; "grid-padding-x"] [
           div_classes ["cell"; "auto"] [
             a
@@ -197,20 +197,24 @@ let footer =
         ]
       ];
 
-      div_classes ["cell"; "large-4"; "small-10"] ~a:[a_id "immatriculation"] [
+      div_classes
+        ["cell"; "small-6"; "small-offset-2"; "medium-8"; "medium-offset-0"; "large-4"]
+        ~a:[a_id "immatriculation"] [
         txt "ASSU SIM";
         br ();
         txt "FFESSM 07750038";
       ];
 
-      div_classes ["cell"; "small-1"; "icons"; "large-offset-3"] [
-        div_classes ["grid-x"] [
-          div_classes ["cell"; "large-6"] [
+      div_classes ["cell"; "small-3"; "medium-2"; "large-4"; "icons"] [
+
+        div_classes ["grid-x"; "grid-padding-x"; "align-right"] [
+          div_classes ["cell"; "small-6"; "medium-shrink"] [
             a ~service:News__service.main [
               Icon.solid "fa-tools" ()
             ] ()
           ];
-          div_classes ["cell"; "large-6"] [
+
+          div_classes ["cell"; "small-6"; "medium-shrink"] [
             anchor_a ~anchor:"top" ~a:[a_user_data "smooth-scroll" ""] [
               Icon.solid "fa-chevron-up" ()
             ]

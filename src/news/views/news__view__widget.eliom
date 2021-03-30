@@ -182,7 +182,7 @@ let redaction_form () =
 
          Form.button_no_value
            ~button_type:`Submit
-           ~a:[a_class ["button"]]
+           ~a:[a_class ["button"; "small-only-expanded"]]
            [txt "Valider"];
        ])
     ()
