@@ -21,6 +21,7 @@ module Item : sig
     t
 
   val slug : t -> string
+  val content_as_string : t -> string
 end
 
 include Db_utils.Data_with_id with type item := Item.t
@@ -35,6 +36,7 @@ val pub_time : t -> Time.t
 val content : t -> Html_types.div_content_fun Html.elt
 
 val slug : t -> string
+val content_as_string : t -> string
 
 (** {2 Misc } *)
 

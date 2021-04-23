@@ -27,6 +27,9 @@ module Item = struct
   let slug news =
     Utils.slugify @@ title news
 
+  let content_as_string item =
+    Html.elt_to_string (content item)
+
   let db_type =
     Db.Type.(string & string & time & string)
 
@@ -58,6 +61,9 @@ let content =
 
 let pub_time =
   lift Item.pub_time
+
+let content_as_string =
+  lift Item.content_as_string
 
 let slug =
   lift Item.slug
