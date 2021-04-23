@@ -144,7 +144,7 @@ let redaction_form () =
            ~a:[
              a_class ["alert"; "callout"];
              a_user_data "abide-error" "";
-             a_style "display: none;"
+             a_style "display: none";
            ]
            [H.txt "Le formulaire contient des erreurs."];
 
