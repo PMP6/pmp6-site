@@ -28,5 +28,5 @@ let create_into_main =
 let delete =
   Eliom_service.create
     ~path:Eliom_service.No_path
-    ~meth:(Eliom_service.Get (Model.Id.param "id"))
+    ~meth:(Eliom_service.Post (Eliom_parameter.unit, Model.Id.param "id"))
     ()

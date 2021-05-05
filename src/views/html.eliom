@@ -49,17 +49,20 @@ let close_button () =
 module Confirmation_modal : sig
 
   (** Build elements that go through a confirmation modal to trigger
-      some (action) service.
+      Some (action) service.
 
-      [with_modal ~service text f params] will generate a modal
-      displaying [text], that upon confirmation will trigger the
-      action registered at [service]. It will use [f] to return its
-      result -- typically, an element or a list of elements. [f] has
-      access to the modal element itself, and should add it at the
-      proper place (see Foundation's documentation). It also has
-      access to a [opens_modal] HTML attribute that can be used on the
-      elements that should trigger the modal -- typically, links or
-      buttons.
+      [with_modal ~service text f gp pp pp_form_param] will generate
+      a modal displaying [text], that upon confirmation will trigger
+      the action registered at the [POST] [service]. The service may
+      accept some GET parameters [gp] and one POST parameter [pp] that
+      will be passed to it; [pp] will be passed through an hidden
+      [input] and typed using [pp_form_param]. The function will use
+      [f] to build its result -- typically, an element or a list of
+      elements. [f] has access to the modal element itself, and should
+      add it at the proper place (see Foundation's documentation). It
+      also has access to a [opens_modal] HTML attribute that can be
+      used on the elements that should trigger the modal -- typically,
+      links or buttons.
 
       For instance, one could use a modal to delete an element by writing:
 
@@ -76,7 +79,9 @@ module Confirmation_modal : sig
                  ];
                  modal;
                ])
-            (get_id_of the_element)
+            () (* get delete service parameter *)
+            id_of_the_element (* post delete service parameter *)
+            (Form.user id_to_string)
       ]}
 
       The building function mechanism, similarly to Forms, allows here to have
@@ -85,13 +90,14 @@ module Confirmation_modal : sig
   *)
 
   val with_modal :
-    service:('gp, unit, Eliom_service.get, 'b, 'c, 'd, 'e,
-             [< `WithSuffix | `WithoutSuffix ], 'f, unit, Eliom_service.non_ocaml)
+    service:('gp, 'pp, Eliom_service.post, _, _, _, _,
+             [< `WithSuffix | `WithoutSuffix ], _,
+             [< 'pp Eliom_parameter.setoneradio ] Eliom_parameter.param_name,
+             Eliom_service.non_ocaml)
         Eliom_service.t ->
     string ->
-    (opens_modal:[> `User_data] attrib -> [> Html_types.div ] elt -> 'result) ->
-    'gp ->
-    'result
+    (opens_modal:[> `User_data ] attrib -> [> Html_types.div ] elt -> 'result) ->
+    'gp -> 'pp -> 'pp Form.param -> 'result
 
 end
 =
@@ -102,7 +108,7 @@ struct
       let id = Id.create () in
       "confirmation-modal__" ^ Id.to_string id
 
-  let modal_elt target_srv srv_param text modal_id =
+  let modal_elt target_srv gp pp pp_form_param text modal_id =
     div
       ~a:[
         a_class ["reveal"];
@@ -111,7 +117,9 @@ struct
       ]
       [
         p [txt text];
+
         div_classes ["button-group"; "align-spaced"] [
+
           button
             ~a:[
               a_button_type `Button;
@@ -120,22 +128,33 @@ struct
               a_aria "label" ["Annuler"];
             ]
             [txt "Annuler"];
-          a
-            ~a:[
-              a_class ["button"];
-              a_aria "label" ["Confirmer"];
-            ]
+
+          Form.post_form
             ~service:target_srv
-            [txt "Confirmer"]
-            srv_param;
+            (fun pp_name ->
+               [
+                 Form.input
+                   ~input_type:`Hidden
+                   ~name:pp_name
+                   ~value:pp
+                   pp_form_param;
+
+                 button ~a:[
+                   a_class ["button"];
+                   a_aria "label" ["Confirmer"];
+                   a_button_type `Submit;
+                 ] [txt "Confirmer"];
+               ])
+            gp;
+
         ];
         close_button ();
       ]
 
-  let with_modal ~service text make_elem srv_param =
+  let with_modal ~service text make_elem gp pp pp_form_param =
     let modal_id = create_id () in
     let opens_modal = a_user_data "open" modal_id in
-    make_elem ~opens_modal (modal_elt service srv_param text modal_id)
+    make_elem ~opens_modal (modal_elt service gp pp pp_form_param text modal_id)
 end
 
 let%client format_datetime time =

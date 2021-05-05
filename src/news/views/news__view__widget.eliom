@@ -47,7 +47,9 @@ let deletion_icon_and_modal news =
          ];
          modal;
        ])
+    ()
     (Model.id news)
+    Model.Id.form_param
 
 let action_icons_callout news =
   let open H in

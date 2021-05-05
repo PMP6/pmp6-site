@@ -18,7 +18,7 @@ let create () (title, (short_title, content)) =
   | Error e ->
     Lwt.fail (Caqti_error.Exn e)
 
-let delete id () =
+let delete () id =
   match%lwt Model.delete_and_return id with
   | Ok item ->
     let%lwt () = Toast.push Toast.Success (View.Toast.Deletion.success item) in

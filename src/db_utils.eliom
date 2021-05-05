@@ -7,6 +7,7 @@ module type Id = sig
     (t,
      [ `WithoutSuffix ],
      [ `One of t ] Eliom_parameter.param_name) Eliom_parameter.params_type
+  val form_param : t Html.Form.param
 end
 
 module type Data = sig
@@ -42,6 +43,7 @@ struct
     let db_type = Caqti_type.int
     let param = Eliom_parameter.int
     let pp = Fmt.int
+    let form_param = Html.Form.int
   end
 
   module Product = struct
