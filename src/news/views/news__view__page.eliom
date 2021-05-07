@@ -29,3 +29,8 @@ let redaction () =
   Template.return_page
     ~title:"Rédiger une actu"
     [Widget.redaction_form ()]
+
+let edition news =
+  Template.return_page
+    ~title:"Éditer une actu"
+    [Widget.redaction_form ~news ()]

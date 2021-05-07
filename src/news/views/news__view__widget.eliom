@@ -57,7 +57,14 @@ let action_icons_callout news =
     div_classes ["grid-x"] [
       div_classes
         ["cell"; "text-center"; "large-12"; "small-4"]
-        [p [Raw.a [Icon.solid "fa-edit" ()]]];
+        [
+          p [
+            a
+              ~service:Service.edition
+              [Icon.solid "fa-edit" ()]
+              (Model.id news)
+          ]
+        ];
       deletion_icon_and_modal news;
       div_classes
         ["cell"; "text-center"; "large-12"; "small-4"]
@@ -124,7 +131,8 @@ let news_tabs_content ?(vertical=false) ?(display_action_icons=false) all_news =
     ]
     (List.mapi ~f:(news_tabs_panel ~display_action_icons) all_news)
 
-let redaction_form () =
+let redaction_form ?news () =
+  (* If news is passed, edition form. Otherwise, redaction. *)
   let open H in
   let span_form_error text =
     H.span ~a:[H.a_class ["form-error"]] [H.txt text]
@@ -132,59 +140,77 @@ let redaction_form () =
   let help_text text =
     H.p ~a:[H.a_class ["help-text"]] [H.txt text]
   in
-  Form.post_form
-    ~xhr:false (* Mandatory to go through Abide form validation *)
-    ~a:[
-      a_user_data "abide" "";
-      a_novalidate ();
-    ]
-    ~service:Service.create_into_main
-    (fun (title, (short_title, content)) ->
-       [
+  let prefilled_with f =
+    Option.value_map ~default:"" ~f news in
+  let make_form_without_hidden_input (title, (short_title, content)) =
+    [
+      div
+        ~a:[
+          a_class ["alert"; "callout"];
+          a_user_data "abide-error" "";
+          a_style "display: none";
+        ]
+        [H.txt "Le formulaire contient des erreurs."];
 
-         div
-           ~a:[
-             a_class ["alert"; "callout"];
-             a_user_data "abide-error" "";
-             a_style "display: none";
-           ]
-           [H.txt "Le formulaire contient des erreurs."];
+      label [
+        txt "Titre";
+        Form.input
+          ~input_type:`Text
+          ~name:title
+          ~a:[a_required ()]
+          ~value:(prefilled_with Model.title)
+          Form.string;
+        span_form_error "Vous devez renseigner le titre.";
+      ];
+      help_text "Le titre principal, affiché en haut de l'actu.";
 
-         label [
-           txt "Titre";
-           Form.input
-             ~input_type:`Text
-             ~name:title
-             ~a:[a_required ()]
-             Form.string;
-           span_form_error "Vous devez renseigner le titre.";
-         ];
-         help_text "Le titre principal, affiché en haut de l'actu.";
+      label [
+        txt "Titre court";
+        Form.input
+          ~input_type:`Text
+          ~name:short_title
+          ~a:[a_required ()]
+          ~value:(prefilled_with Model.short_title)
+          Form.string;
+        span_form_error "Vous devez renseigner le titre court.";
+      ];
+      help_text "Un titre plus court pour les onglets.";
 
-         label [
-           txt "Titre court";
-           Form.input
-             ~input_type:`Text
-             ~name:short_title
-             ~a:[a_required ()]
-             Form.string;
-           span_form_error "Vous devez renseigner le titre court.";
-         ];
-         help_text "Un titre plus court pour les onglets.";
+      label [
+        txt "Contenu";
+        Form.textarea
+          ~name:content
+          ~a:[a_required (); a_rows 10]
+          ~value:(prefilled_with Model.content_as_string)
+          ();
+        span_form_error "Vous devez renseigner le contenu.";
+      ];
+      help_text "Le contenu de la news. HTML autorisé.";
 
-         label [
-           txt "Contenu";
-           Form.textarea
-             ~name:content
-             ~a:[a_required ()]
-             ();
-           span_form_error "Vous devez renseigner le contenu.";
-         ];
-         help_text "Le contenu de la news. HTML autorisé.";
-
-         Form.button_no_value
-           ~button_type:`Submit
-           ~a:[a_class ["button"; "small-only-expanded"]]
-           [txt "Valider"];
-       ])
-    ()
+      Form.button_no_value
+        ~button_type:`Submit
+        ~a:[a_class ["button"; "small-only-expanded"]]
+        [txt "Valider"];
+    ] in
+  let make_form_with_hidden_input placeholder (id, other) =
+    Form.input
+      ~input_type:`Hidden
+      ~name:id
+      ~value:(Model.id placeholder)
+      Model.Id.form_param ::
+    make_form_without_hidden_input other in
+  let post_form ~service make_form =
+    Form.post_form
+      ~xhr:false (* Mandatory to go through Abide form validation *)
+      ~a:[
+        a_user_data "abide" "";
+        a_novalidate ();
+      ]
+      ~service
+      make_form
+      () in
+  match news with
+  | Some news ->
+    post_form ~service:Service.update_into_main (make_form_with_hidden_input news)
+  | None ->
+    post_form ~service:Service.create_into_main make_form_without_hidden_input

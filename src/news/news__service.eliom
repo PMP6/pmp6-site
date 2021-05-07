@@ -14,11 +14,29 @@ let redaction =
     ~meth:(Eliom_service.Get Eliom_parameter.unit)
     ()
 
+let edition =
+  Eliom_service.create
+    ~path:(path_under_news ["edition"])
+    ~meth:(Eliom_service.Get (Eliom_parameter.suffix @@ Model.Id.param "id"))
+    ()
+
 let create_into_main =
   Eliom_service.create_attached_post
     ~fallback:main
     ~post_params:
       Eliom_parameter.(
+        string "title" **
+        string "short_title" **
+        string "content"
+      )
+    ()
+
+let update_into_main =
+  Eliom_service.create_attached_post
+    ~fallback:main
+    ~post_params:
+      Eliom_parameter.(
+        Model.Id.param "id" **
         string "title" **
         string "short_title" **
         string "content"

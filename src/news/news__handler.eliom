@@ -18,6 +18,18 @@ let create () (title, (short_title, content)) =
   | Error e ->
     Lwt.fail (Caqti_error.Exn e)
 
+let edition id () =
+  let%lwt news = Model.get_one_exn id in
+  View.Page.edition news
+
+let update () (id, (title, (short_title, content))) =
+  let content = Html.Unsafe.data content in
+  match%lwt Model.update_now_and_return id ~title ~short_title ~content with
+  | Ok model ->
+    Toast.push Toast.Success (View.Toast.Update.success model)
+  | Error e ->
+    Lwt.fail (Caqti_error.Exn e)
+
 let delete () id =
   match%lwt Model.delete_and_return id with
   | Ok item ->

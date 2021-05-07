@@ -42,3 +42,23 @@ module Deletion = struct
       ]
     ]
 end
+
+module Update = struct
+  let success news =
+    [
+      H.p [
+        H.txt "L'actu ";
+        H.em [H.txt @@ Model.short_title news];
+        H.txt " a bien été mise à jour !";
+      ]
+    ]
+
+  let error (_e : Caqti_error.t) =
+    [
+      H.p [
+        H.txt "Une erreur est survenue lors de la mise à jour de \
+               l'actu. Si cette situation se reproduit, contactez \
+               l'administrateur."
+      ]
+    ]
+end
