@@ -81,8 +81,22 @@ val create_now_and_return_exn :
   content:Html_types.div_content_fun Html.elt ->
   t Lwt.t
 
-val update_with_item : Id.t -> Item.t -> unit Db.request_result
-val update_with_item_exn : Id.t -> Item.t -> unit Lwt.t
+val update_with_item_and_return : Id.t -> Item.t -> t Db.request_result
+val update_with_item_and_return_exn : Id.t -> Item.t -> t Lwt.t
+
+val update_now_and_return :
+  Id.t ->
+  title:string ->
+  short_title:string ->
+  content:Html_types.div_content_fun Html.elt ->
+  t Db.request_result
+
+val update_now_and_return_exn :
+  Id.t ->
+  title:string ->
+  short_title:string ->
+  content:Html_types.div_content_fun Html.elt ->
+  t Lwt.t
 
 val delete : Id.t -> unit Db.request_result
 val delete_exn : Id.t -> unit Lwt.t

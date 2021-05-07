@@ -157,10 +157,12 @@ let create_now_and_return_exn ~title ~short_title ~content =
   create_now_and_return ~title ~short_title ~content >|=
   Db.or_exn
 
-let update_with_item id item =
-  Db.exec
+let update_with_item_and_return id item =
+  Db.get_one
+    db_unmap
     Product.db_type
     (Product.db_map (id, item))
+    db_type
     {|
       UPDATE news
       SET title = $2,
@@ -168,10 +170,19 @@ let update_with_item id item =
           pub_time = $4,
           content = $5
       WHERE id = $1
+      RETURNING id, title, short_title, pub_time, content
     |}
 
-let update_with_item_exn id item =
-  update_with_item id item >|=
+let update_with_item_and_return_exn id item =
+  update_with_item_and_return id item >|=
+  Db.or_exn
+
+let update_now_and_return id ~title ~short_title ~content =
+  let item = Item.build_now ~title ~short_title ~content in
+  update_with_item_and_return id item
+
+let update_now_and_return_exn id ~title ~short_title ~content =
+  update_now_and_return id ~title ~short_title ~content >|=
   Db.or_exn
 
 let delete_sql =
