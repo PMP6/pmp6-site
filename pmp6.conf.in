@@ -32,48 +32,46 @@
     %%% This will include the packages defined as SERVER_PACKAGES in your Makefile:
     %%PACKAGES%%
 
-    <host defaulthostname="localhost" hostfilter="localhost 192.168.*.*">
-      <static dir="%%STATICDIR%%" />
-      <static dir="%%ELIOMSTATICDIR%%" />
-      <eliommodule module="%%LIBDIR%%/%%PROJECT_NAME%%.cma" />
-      <eliom>
-        <applicationscript async="true"/>
-      </eliom>
-      <deflate compress="only">
-        <extension>.js</extension>
-        <extension>.css</extension>
-      </deflate>
-    </host>
-
-    <host defaulthostname="127.0.0.1" hostfilter="127.0.0.1">
-      <redirect suburl="(.*)" dest="http://localhost\1"/>
-    </host>
-
-    <host defaulthostname="www.pmp6.fr" hostfilter="www.pmp6.fr">
-      <redirect suburl="(.*)" dest="https://pmp6.fr\1"/>
-    </host>
-
-    <host defaulthostname="pmp6.fr" hostfilter="pmp6.fr">
-      <redirect fullurl="http://(.*)" dest="https://\1"/>
-      <static dir="%%STATICDIR%%" />
-      <static dir="%%ELIOMSTATICDIR%%" />
-      <eliommodule module="%%LIBDIR%%/%%PROJECT_NAME%%.cma" />
-      <eliom>
-        <applicationscript async="true"/>
-      </eliom>
-      <deflate compress="only">
-        <extension>.js</extension>
-        <extension>.css</extension>
-      </deflate>
+    <host defaulthostname="www.%%HOSTNAME%%" hostfilter="www.%%HOSTNAME%%">
       <if>
         <ssl />
         <then>
-          <outputfilter
-              header="Strict-Transport-Security"
-              dest="max-age=31536000;includeSubDomains;preload"
-              replace="true" />
+          <redirect suburl="(.*)" dest="https://%%HOSTNAME%%:%%PORTTLS%%\1"/>
+        </then>
+        <else>
+          <redirect suburl="(.*)" dest="http://%%HOSTNAME%%:%%PORT%%\1"/>
+        </else>
+      </if>
+    </host>
+
+    <host defaulthostname="%%HOSTNAME%%" hostfilter="*">
+      <static dir="%%STATICDIR%%" />
+      <static dir="%%ELIOMSTATICDIR%%" />
+      <eliommodule module="%%LIBDIR%%/%%PROJECT_NAME%%.cma" />
+      <eliom>
+        <applicationscript async="true"/>
+      </eliom>
+      <deflate compress="only">
+        <extension>.js</extension>
+        <extension>.css</extension>
+      </deflate>
+
+      <if>
+        %%REQUIRESSL%%
+        <then>
+          <redirect fullurl="http://(.*)" dest="https://\1"/>
+          <if>
+            <ssl />
+            <then>
+              <outputfilter
+                  header="Strict-Transport-Security"
+                  dest="max-age=31536000;includeSubDomains;preload"
+                  replace="true" />
+            </then>
+          </if>
         </then>
       </if>
+
     </host>
   </server>
 </ocsigen>
