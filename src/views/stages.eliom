@@ -19,7 +19,7 @@ let banyuls =
       h2 [txt "Banyuls-sur-mer"];
     ];
     p [
-      txt "Au cœur de la côte vermeille, au pied du massif des \
+      txt "En plein cœur de la côte vermeille, au pied du massif des \
            Albères, réside une station marine à laquelle est rattaché \
            un observatoire océanologique : le laboratoire Arago. C'est \
            aussi le lieu d'accueil d'un fragile paradis sous-marin, la \
