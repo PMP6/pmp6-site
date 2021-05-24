@@ -1,0 +1,8 @@
+#use "topfind";;
+#thread;;
+#require "core_kernel";;
+#require "caqti-lwt";;
+#require "caqti-driver-sqlite3";;
+
+open Core_kernel;;
+open Lwt.Infix;;
