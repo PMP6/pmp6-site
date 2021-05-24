@@ -5,3 +5,4 @@
 # Set empty to disable SSL
 SSLCERTIFICATE = /path/to/certificate.pem
 SSLPRIVATEKEY = /path/to/privkey.pem
+HOSTNAME = localhost # or myhostname.com

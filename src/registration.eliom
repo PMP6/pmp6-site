@@ -1,11 +1,5 @@
-module Pmp6_app =
-  Eliom_registration.App (struct
-    let application_name = "pmp6"
-    let global_data_path = None
-  end)
-
 let ( => ) service page =
-  Pmp6_app.register
+  Pmp6.App.register
     ~service
     (fun () () ->
        let _ = [%client (Foundation.init () : unit)] in

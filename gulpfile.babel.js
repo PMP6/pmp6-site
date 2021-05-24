@@ -11,9 +11,13 @@ import webpackStream from 'webpack-stream';
 import webpack2      from 'webpack';
 import named         from 'vinyl-named';
 import autoprefixer  from 'autoprefixer';
+import dartCompiler  from 'sass';
 
 // Load all Gulp plugins into one variable
 const $ = plugins();
+
+// Use (dart-)sass compiler
+$.sass.compiler = dartCompiler;
 
 // Check for --production flag
 const PRODUCTION = !!(yargs.argv.production);
