@@ -35,7 +35,7 @@ DEPSDIR := _deps
 
 ifeq ($(DEBUG),yes)
   GENERATE_DEBUG ?= -g
-  RUN_DEBUG ?= "-v"
+  RUN_DEBUG ?= "-vvv"
   DEBUG_JS ?= -jsopt --pretty -jsopt --noinline -jsopt --debuginfo
 endif
 
@@ -136,11 +136,18 @@ SED_ARGS += -e "s|%%WARNING%%|$(EDIT_WARNING)|g"
 SED_ARGS += -e "s|%%PACKAGES%%|$(FINDLIB_PACKAGES)|g"
 SED_ARGS += -e "s|%%ELIOMSTATICDIR%%|%%PREFIX%%$(ELIOMSTATICDIR)|g"
 SED_ARGS += -e "s|%%STATICURL%%|$(STATIC_URL)|g"
+SED_ARGS += -e "s|%%HOSTNAME%%|$(HOSTNAME)|g"
+
+# Workaroung accesscontrol having no true/false constants
+OCSIGEN_CONF_TRUE := <or><ssl/><not><ssl/></not></or>
+OCSIGEN_CONF_FALSE := <and><ssl/><not><ssl/></not></and>
 
 ifneq ($(strip $(SSLCERTIFICATE)),)
   SED_ARGS += -e "s|%%SSLCERTIFICATE%%|<certificate>$(SSLCERTIFICATE)</certificate>|g"
+  SED_ARGS += -e "s|%%REQUIRESSL%%|$(OCSIGEN_CONF_TRUE)|g"
 else
   SED_ARGS += -e "s|%%SSLCERTIFICATE%%||g"
+  SED_ARGS += -e "s|%%REQUIRESSL%%|$(OCSIGEN_CONF_FALSE)|g"
 endif
 
 ifneq ($(strip $(SSLPRIVATEKEY)),)

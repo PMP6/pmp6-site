@@ -19,7 +19,8 @@ CLIENT_FILES := $(ALL_FILES)
 
 # OCamlfind packages used for both server and client
 COMMON_PACKAGES := \
-	eliom \
+	base \
+	core_kernel \
 	uucp \
 	uuseg \
 	uuseg.string \
@@ -29,12 +30,13 @@ COMMON_PACKAGES := \
 	lwt_ppx
 
 # OCamlfind packages for the server
-SERVER_PACKAGES := $(COMMON_PACKAGES) base core_kernel eliom.server js_of_ocaml-ppx.deriving
-#ptime.clock.os
+SERVER_PACKAGES := \
+	$(COMMON_PACKAGES)
 
 # OCamlfind packages for the client
-CLIENT_PACKAGES := $(COMMON_PACKAGES) base core_kernel eliom.client js_of_ocaml-ppx.deriving js_of_ocaml-ppx
-#ptime.clock.jsoo
+CLIENT_PACKAGES := \
+	$(COMMON_PACKAGES) \
+	js_of_ocaml-ppx
 
 # A list of runtimes providing functions for js_of_ocaml
 JS_RUNTIMES := base/runtime.js core_kernel/runtime.js bin_prot/runtime.js time_now/runtime.js
