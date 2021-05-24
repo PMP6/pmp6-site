@@ -35,7 +35,7 @@ DEPSDIR := _deps
 
 ifeq ($(DEBUG),yes)
   GENERATE_DEBUG ?= -g
-  RUN_DEBUG ?= "-v"
+  RUN_DEBUG ?= "-vvv"
   DEBUG_JS ?= -jsopt --pretty -jsopt --noinline -jsopt --debuginfo
 endif
 
