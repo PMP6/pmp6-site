@@ -1,5 +1,5 @@
-module Model = News__model
-module View = News__view
+module Model = Model__news
+module View = View__news
 
 open Lwt.Infix
 

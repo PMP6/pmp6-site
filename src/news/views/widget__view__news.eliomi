@@ -1,4 +1,4 @@
-module Model = News__model
+module Model = Model__news
 module H = Html
 
 val article_ : Model.t -> [> Html_types.article ] H.elt

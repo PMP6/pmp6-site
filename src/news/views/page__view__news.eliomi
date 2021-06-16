@@ -1,4 +1,4 @@
-module Model = News__model
+module Model = Model__news
 
 val list_all : Model.t list -> Html.doc Lwt.t
 

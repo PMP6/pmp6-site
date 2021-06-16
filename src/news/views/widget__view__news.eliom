@@ -1,6 +1,6 @@
 module H = Html
-module Model = News__model
-module Service = News__service
+module Model = Model__news
+module Service = Service__news
 
 let tab_slug news =
   Model.unique_slug ~prefix:"news" news

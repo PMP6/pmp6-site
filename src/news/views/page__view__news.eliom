@@ -1,5 +1,5 @@
-module Model = News__model
-module Widget = News__view__widget
+module Model = Model__news
+module Widget = Widget__view__news
 
 let list_all all_news =
   Template.return_page

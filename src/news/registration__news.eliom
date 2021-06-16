@@ -1,5 +1,5 @@
-module Handler = News__handler
-module Service = News__service
+module Handler = Handler__news
+module Service = Service__news
 
 let register_with (module App : Eliom_registration.APP) () =
   let ( => ) service page =

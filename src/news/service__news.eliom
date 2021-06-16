@@ -1,4 +1,4 @@
-module Model = News__model
+module Model = Model__news
 
 let path_under_news path = Eliom_service.Path ("news" :: path @ [""])
 
