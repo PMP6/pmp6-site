@@ -4,19 +4,25 @@
 
 PROJECT_NAME := pmp6
 
-# Root dir for source files.
-SRCDIR := src
+# Name of the mock eliom module for fixtures installation
+PROJECT_FIXTURES_NAME := $(PROJECT_NAME)__fixtures
 
-ALL_FILES := $(shell find $(SRCDIR) -name *.eliom -o -name *.eliomi)
+# Root dir for source files.
+SRC_DIR := src
+FIXTURES_DIR := fixtures
+
+SRC_FILES := $(shell find $(SRC_DIR) -name *.eliom -o -name *.eliomi)
+
+FIXTURES_FILES := $(shell find $(FIXTURES_DIR) -name *.eliom -o -name *.eliomi)
 
 WARNINGS := +a-4-40-41-42-44-45-48-58-59
 OPENFLAGS := -open Base -open Core_kernel
 CFLAGS := -strict-formats -short-paths
 
 # Source files for the server
-SERVER_FILES := $(ALL_FILES)
+SERVER_FILES := $(SRC_FILES)
 # Source files for the client
-CLIENT_FILES := $(ALL_FILES)
+CLIENT_FILES := $(SRC_FILES)
 
 # OCamlfind packages used for both server and client
 COMMON_PACKAGES := \
@@ -88,6 +94,7 @@ ETCDIR := etc/${PROJECT_NAME}
 LIBDIR := lib/${PROJECT_NAME}
 # Command pipe, eg. $ echo reload > $(INSTALL_PREFIX)$(CMDPIPE)
 CMDPIPE := var/run/${PROJECT_NAME}-cmd
+FIXTURESCMDPIPE := var/run/${PROJECT_FIXTURES_NAME}-cmd
 # Ocsigenserver's logging files
 LOGDIR := var/log/${PROJECT_NAME}
 # Ocsigenserver's persistent data files

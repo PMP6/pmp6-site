@@ -11,11 +11,12 @@ include Makefile.localenv
 ##----------------------------------------------------------------------
 ##			      Internals
 
-
 ## Generate js_of_eliom runtime options
 JSOPT_RUNTIMES := $(addprefix -jsopt +,${JS_RUNTIMES})
 
 ## Required binaries
+OCAMLC		  := ocamlc -w ${WARNINGS} ${CFLAGS} ${OPENFLAGS}
+OCAMLOPT	  := ocamlopt -w ${WARNINGS} ${CFLAGS} ${OPENFLAGS}
 ELIOMC            := eliomc -ppx -w ${WARNINGS} ${CFLAGS} ${OPENFLAGS}
 ELIOMOPT          := eliomopt -ppx -w ${WARNINGS} ${CFLAGS} ${OPENFLAGS}
 JS_OF_ELIOM       := js_of_eliom -ppx ${JSOPT_RUNTIMES} ${OPENFLAGS}
@@ -31,6 +32,7 @@ OCSIGENSERVER.OPT := ocsigenserver.opt
 export ELIOM_SERVER_DIR := _server
 export ELIOM_CLIENT_DIR := _client
 export ELIOM_TYPE_DIR   := _server
+
 DEPSDIR := _deps
 
 ifeq ($(DEBUG),yes)
@@ -128,6 +130,7 @@ SED_ARGS += -e "s|%%PROJECT_NAME%%|$(PROJECT_NAME)|g"
 SED_ARGS += -e "s|%%DATABASE_NAME%%|$(DATABASE_NAME)|g"
 SED_ARGS += -e "s|%%DATABASE_USER%%|$(DATABASE_USER)|g"
 SED_ARGS += -e "s|%%CMDPIPE%%|%%PREFIX%%$(CMDPIPE)|g"
+SED_ARGS += -e "s|%%FIXTURESCMDPIPE%%|%%PREFIX%%$(FIXTURESCMDPIPE)|g"
 SED_ARGS += -e "s|%%LOGDIR%%|%%PREFIX%%$(LOGDIR)|g"
 SED_ARGS += -e "s|%%DATADIR%%|%%PREFIX%%$(DATADIR)|g"
 SED_ARGS += -e "s|%%PERSISTENT_DATA_BACKEND%%|$(PERSISTENT_DATA_BACKEND)|g"
@@ -137,6 +140,7 @@ SED_ARGS += -e "s|%%PACKAGES%%|$(FINDLIB_PACKAGES)|g"
 SED_ARGS += -e "s|%%ELIOMSTATICDIR%%|%%PREFIX%%$(ELIOMSTATICDIR)|g"
 SED_ARGS += -e "s|%%STATICURL%%|$(STATIC_URL)|g"
 SED_ARGS += -e "s|%%HOSTNAME%%|$(HOSTNAME)|g"
+SED_ARGS += -e "s|%%PROJECT_FIXTURES_NAME%%|$(PROJECT_FIXTURES_NAME)|g"
 
 # Workaroung accesscontrol having no true/false constants
 OCSIGEN_CONF_TRUE := <or><ssl/><not><ssl/></not></or>
@@ -180,6 +184,9 @@ $(TEST_PREFIX)${ETCDIR}/${PROJECT_NAME}.conf: ${PROJECT_NAME}.conf.in Makefile.o
 $(TEST_PREFIX)${ETCDIR}/${PROJECT_NAME}-test.conf: ${PROJECT_NAME}.conf.in Makefile.options | $(TEST_PREFIX)$(ETCDIR)
 	sed $(SED_ARGS) $(LOCAL_SED_ARGS) $< | sed -e "s|%%PREFIX%%|$(TEST_PREFIX)|g" > $@
 
+$(TEST_PREFIX)${ETCDIR}/${PROJECT_FIXTURES_NAME}.conf: ${PROJECT_FIXTURES_NAME}.conf.in Makefile.options | $(TEST_PREFIX)$(ETCDIR)
+	sed $(SED_ARGS) $(LOCAL_SED_ARGS) $< | sed -e "s|%%PREFIX%%|$(TEST_PREFIX)|g" > $@
+
 ##----------------------------------------------------------------------
 ## Server side compilation
 
@@ -190,7 +197,7 @@ SERVER_INC_DIRS := ${addprefix -I $(ELIOM_SERVER_DIR)/, ${SERVER_DIRS}}
 
 SERVER_INC  := ${addprefix -package ,${SERVER_PACKAGES}}
 
-${ELIOM_TYPE_DIR}/%.type_mli: %.eliom
+${ELIOM_TYPE_DIR}/${SRC_DIR}/%.type_mli: ${SRC_DIR}/%.eliom
 	${ELIOMC} -infer ${SERVER_INC} ${SERVER_INC_DIRS} $<
 
 $(TEST_PREFIX)$(LIBDIR)/$(PROJECT_NAME).cma: $(call objs,$(ELIOM_SERVER_DIR),cmo,$(SERVER_FILES)) | $(TEST_PREFIX)$(LIBDIR)
@@ -204,21 +211,47 @@ $(TEST_PREFIX)$(LIBDIR)/$(PROJECT_NAME).cmxa: $(call objs,$(ELIOM_SERVER_DIR),cm
 %.cmxs: %.cmxa
 	$(ELIOMOPT) -shared -linkall -o $@ $(GENERATE_DEBUG) $<
 
-${ELIOM_SERVER_DIR}/%.cmi: %.mli
+${ELIOM_SERVER_DIR}/${SRC_DIR}/%.cmi: ${SRC_DIR}/%.eliomi
 	${ELIOMC} -c ${SERVER_INC} ${SERVER_INC_DIRS} $(GENERATE_DEBUG) $<
 
-${ELIOM_SERVER_DIR}/%.cmi: %.eliomi
+${ELIOM_SERVER_DIR}/${SRC_DIR}/%.cmo: ${SRC_DIR}/%.eliom
 	${ELIOMC} -c ${SERVER_INC} ${SERVER_INC_DIRS} $(GENERATE_DEBUG) $<
 
-${ELIOM_SERVER_DIR}/%.cmo: %.ml
-	${ELIOMC} -c ${SERVER_INC} ${SERVER_INC_DIRS} $(GENERATE_DEBUG) $<
-${ELIOM_SERVER_DIR}/%.cmo: %.eliom
-	${ELIOMC} -c ${SERVER_INC} ${SERVER_INC_DIRS} $(GENERATE_DEBUG) $<
-
-${ELIOM_SERVER_DIR}/%.cmx: %.ml
+${ELIOM_SERVER_DIR}/${SRC_DIR}/%.cmx: ${SRC_DIR}/%.eliom
 	${ELIOMOPT} -c ${SERVER_INC} ${SERVER_INC_DIRS} $(GENERATE_DEBUG) $<
-${ELIOM_SERVER_DIR}/%.cmx: %.eliom
-	${ELIOMOPT} -c ${SERVER_INC} ${SERVER_INC_DIRS} $(GENERATE_DEBUG) $<
+
+##----------------------------------------------------------------------
+## Fixtures mock project specific compilation
+
+# Use sort to get subdir uniqueness
+FIXTURES_DIRS := $(sort $(dir $(FIXTURES_FILES)))
+FIXTURES_DEP_DIRS := ${addprefix -eliom-inc ,${FIXTURES_DIRS}}
+FIXTURES_INC_DIRS := ${addprefix -I $(ELIOM_SERVER_DIR)/, ${FIXTURES_DIRS}}
+
+SERVER_INC  := ${addprefix -package ,${SERVER_PACKAGES}}
+
+${ELIOM_TYPE_DIR}/${FIXTURES_DIR}/%.type_mli: ${FIXTURES_DIR}/%.eliom
+	${ELIOMC} -infer ${SERVER_INC} ${SERVER_INC_DIRS} ${FIXTURES_INC_DIRS} $<
+
+$(TEST_PREFIX)$(LIBDIR)/$(PROJECT_FIXTURES_NAME).cma: $(call objs,$(ELIOM_SERVER_DIR),cmo,$(FIXTURES_FILES)) $(call objs,$(ELIOM_SERVER_DIR),cmo,$(SERVER_FILES)) $(TEST_PREFIX)$(LIBDIR)/$(PROJECT_NAME).cma | $(TEST_PREFIX)$(LIBDIR)
+	${ELIOMC} -a -o $@ $(GENERATE_DEBUG) \
+	  $(call depsort,$(ELIOM_SERVER_DIR),cmo,-server,$(SERVER_INC),$(FIXTURES_FILES) $(SERVER_FILES))
+
+.PHONY: fixtures.byte fixtures
+
+fixtures: fixtures.byte
+
+fixtures.byte: $(addprefix $(TEST_PREFIX),$(ETCDIR)/$(PROJECT_FIXTURES_NAME).conf $(DIST_DIRS) $(LIBDIR)/$(PROJECT_FIXTURES_NAME).cma)
+	$(OCSIGENSERVER) $(RUN_DEBUG) -c $<
+
+${ELIOM_SERVER_DIR}/${FIXTURES_DIR}/%.cmi: ${FIXTURES_DIR}/%.eliomi
+	${ELIOMC} -c ${SERVER_INC} ${SERVER_INC_DIRS} ${FIXTURES_INC_DIRS} $(GENERATE_DEBUG) $<
+
+${ELIOM_SERVER_DIR}/${FIXTURES_DIR}/%.cmo: ${FIXTURES_DIR}/%.eliom
+	${ELIOMC} -c ${SERVER_INC} ${SERVER_INC_DIRS} ${FIXTURES_INC_DIRS} $(GENERATE_DEBUG) $<
+
+${ELIOM_SERVER_DIR}/${FIXTURES_DIR}/%.cmx: ${FIXTURES_DIR}/%.eliom
+	${ELIOMOPT} -c ${SERVER_INC} ${SERVER_INC_DIRS} ${FIXTURES_INC_DIRS} $(GENERATE_DEBUG) $<
 
 
 ##----------------------------------------------------------------------
@@ -256,7 +289,7 @@ ${ELIOM_CLIENT_DIR}/%.cmi: %.eliomi
 
 include .depend
 
-.depend: $(patsubst %,$(DEPSDIR)/%.server,$(SERVER_FILES)) $(patsubst %,$(DEPSDIR)/%.client,$(CLIENT_FILES))
+.depend: $(patsubst %,$(DEPSDIR)/%.server,$(SERVER_FILES)) $(patsubst %,$(DEPSDIR)/%.client,$(CLIENT_FILES)) $(patsubst %,$(DEPSDIR)/%.fixtures,$(FIXTURES_FILES))
 	cat $^ > $@
 
 $(DEPSDIR)/%.server: % | $(DEPSDIR)
@@ -265,10 +298,14 @@ $(DEPSDIR)/%.server: % | $(DEPSDIR)
 $(DEPSDIR)/%.client: % | $(DEPSDIR)
 	$(ELIOMDEP) -client -ppx $(CLIENT_INC) $(CLIENT_DEP_DIRS) $< > $@
 
+$(DEPSDIR)/%.fixtures: % | $(DEPSDIR)
+	$(ELIOMDEP) -server -ppx $(SERVER_INC) $(SERVER_DEP_DIRS) $(FIXTURES_DEP_DIRS) $< > $@
+
 $(DEPSDIR):
 	mkdir $@
 	mkdir -p $(addprefix $@/, $(SERVER_DIRS))
 	mkdir -p $(addprefix $@/, $(CLIENT_DIRS))
+	mkdir -p $(addprefix $@/, $(FIXTURES_DIRS))
 
 ##----------------------------------------------------------------------
 ## Clean up
