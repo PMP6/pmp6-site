@@ -11,15 +11,6 @@ module Creation = struct
         H.txt " a bien été créée !";
       ]
     ]
-
-  let error (_e : Caqti_error.t) =
-    [
-      H.p [
-        H.txt "Une erreur est survenue lors de la création de \
-               l'actu. Si cette situation se reproduit, contactez \
-               l'administrateur."
-      ]
-    ]
 end
 
 module Deletion = struct
@@ -32,15 +23,6 @@ module Deletion = struct
         H.Raw.a [H.txt "TODO: Annuler."];
       ]
     ]
-
-  let error (_e : Caqti_error.t) =
-    [
-      H.p [
-        H.txt "Une erreur est survenue lors de la suppression de \
-               l'actu. Si cette situation se reproduit, contactez \
-               l'administrateur."
-      ]
-    ]
 end
 
 module Update = struct
@@ -50,15 +32,6 @@ module Update = struct
         H.txt "L'actu ";
         H.em [H.txt @@ Model.short_title news];
         H.txt " a bien été mise à jour !";
-      ]
-    ]
-
-  let error (_e : Caqti_error.t) =
-    [
-      H.p [
-        H.txt "Une erreur est survenue lors de la mise à jour de \
-               l'actu. Si cette situation se reproduit, contactez \
-               l'administrateur."
       ]
     ]
 end

@@ -1,5 +1,4 @@
 module H = Html
-open Lwt.Infix
 
 let ( & ) x y = (x, y)
 
@@ -18,11 +17,14 @@ module Item = struct
   let pub_time { pub_time; _ } = pub_time
   let content { content; _ } = content
 
-  let build ~title ~short_title ~content ~pub_time =
-    { title; short_title; content; pub_time }
+  module Private = struct
+    let build ~title ~short_title ~content ~pub_time =
+      { title; short_title; content; pub_time }
+  end
 
-  let build_now =
-    build ~pub_time:(Time.now ())
+  let build_new ~title ~short_title ~content =
+    let pub_time = Time.now () in
+    Private.build ~title ~short_title ~content ~pub_time
 
   let slug news =
     Utils.slugify @@ title news
@@ -77,146 +79,89 @@ let unique_slug ?prefix model =
     Id.pp (id model)
     (slug model)
 
-let get_all () =
-  Db.get_all
-    db_unmap
-    db_type
-    {|
-      SELECT id, title, short_title, pub_time, content
-        FROM news
-        ORDER BY pub_time DESC
-    |}
+module Request = struct
 
-let get_all_exn () =
-  get_all () >|=
-  Db.or_exn
+  let get_all =
+    Db.collect
+      ~out:(db_type, db_unmap)
+      {|
+        SELECT id, title, short_title, pub_time, content
+          FROM news
+          ORDER BY pub_time DESC
+      |}
 
-let get_all_items () =
-  Db.get_all
-    Item.db_unmap
-    Item.db_type
-    {|
-      SELECT title, short_title, pub_time, content
-        FROM news
-        ORDER BY pub_time DESC
-    |}
-
-let get_all_items_exn () =
-  get_all_items () >|=
-  Db.or_exn
-
-let get_one_sql =
-    {|
+  let get id =
+    Db.find
+      ~in_:(Id.db_type, id)
+      ~out:(db_type, db_unmap)
+      {|
         SELECT id, title, short_title, pub_time, content
         FROM news
         WHERE id = ?
         LIMIT 1
       |}
 
-let get_one id =
-  Db.get_one db_unmap Id.db_type id db_type get_one_sql
+  let create_from_item item =
+    Db.find
+      ~in_:(Item.db_type, Item.db_map item)
+      ~out:(db_type, db_unmap)
+      {|
+        INSERT INTO news (title, short_title, pub_time, content)
+        VALUES (?, ?, ?, ?)
+        RETURNING id, title, short_title, pub_time, content
+      |}
 
-let get_one_exn id =
-  get_one id >|=
-  Db.or_exn
+  let create ~title ~short_title ~content =
+    create_from_item @@
+    Item.build_new ~title ~short_title ~content
 
-let create_with_item item =
-  Db.exec
-    Item.db_type
-    (Item.db_map item)
-    {|
-      INSERT INTO news (title, short_title, pub_time, content)
-      VALUES (?, ?, ?, ?)
-    |}
+  let update_with_item id item =
+    Db.find
+      ~in_:(Product.db_type, Product.db_map (id, item))
+      ~out:(db_type, db_unmap)
+      {|
+        UPDATE news
+        SET title = $2,
+            short_title = $3,
+            pub_time = $4,
+            content = $5
+        WHERE id = $1
+        RETURNING id, title, short_title, pub_time, content
+      |}
 
-let create_with_item_exn item =
-  create_with_item item >|=
-  Db.or_exn
+  let update_as_new id ~title ~short_title ~content =
+    let item = Item.build_new ~title ~short_title ~content in
+    update_with_item id item
 
-let create_now ~title ~short_title ~content =
-  create_with_item (Item.build_now ~title ~short_title ~content)
+  let delete id =
+    Db.find
+      ~in_:(Id.db_type, id)
+      ~out:(Item.db_type, Item.db_unmap)
+      {|
+        DELETE FROM news
+        WHERE id = ?
+        RETURNING title, short_title, pub_time, content
+      |}
 
-let create_now_exn ~title ~short_title ~content =
-  create_now ~title ~short_title ~content >|=
-  Db.or_exn
+end
 
-let create_now_and_return ~title ~short_title ~content =
-  let item = Item.build_now ~title ~short_title ~content in
-  Db.get_one
-    db_unmap
-    Item.db_type
-    (Item.db_map item)
-    db_type
-    {|
-      INSERT INTO news (title, short_title, pub_time, content)
-      VALUES (?, ?, ?, ?)
-      RETURNING id, title, short_title, pub_time, content
-    |}
+let get_all () =
+  Db.run Request.get_all
 
-let create_now_and_return_exn ~title ~short_title ~content =
-  create_now_and_return ~title ~short_title ~content >|=
-  Db.or_exn
+let get id =
+  Db.run (Request.get id)
 
-let update_with_item_and_return id item =
-  Db.get_one
-    db_unmap
-    Product.db_type
-    (Product.db_map (id, item))
-    db_type
-    {|
-      UPDATE news
-      SET title = $2,
-          short_title = $3,
-          pub_time = $4,
-          content = $5
-      WHERE id = $1
-      RETURNING id, title, short_title, pub_time, content
-    |}
+let create_from_item item =
+  Db.run (Request.create_from_item item)
 
-let update_with_item_and_return_exn id item =
-  update_with_item_and_return id item >|=
-  Db.or_exn
+let create ~title ~short_title ~content =
+  Db.run (Request.create ~title ~short_title ~content)
 
-let update_now_and_return id ~title ~short_title ~content =
-  let item = Item.build_now ~title ~short_title ~content in
-  update_with_item_and_return id item
+let update_with_item id item =
+  Db.run (Request.update_with_item id item)
 
-let update_now_and_return_exn id ~title ~short_title ~content =
-  update_now_and_return id ~title ~short_title ~content >|=
-  Db.or_exn
-
-let delete_sql =
-  {| DELETE FROM news WHERE id = ? |}
+let update_as_new id ~title ~short_title ~content =
+  Db.run (Request.update_as_new id ~title ~short_title ~content)
 
 let delete id =
-  Db.exec Id.db_type id delete_sql
-
-let delete_exn id =
-  delete id >|=
-  Db.or_exn
-
-let delete_and_return id =
-  (* TODO: this shows that the above abstraction for requests is not
-     flexible enough. *)
-  (* Also TODO: some helpers for transactions *)
-  (* TODO 3: sqlite supports RETURNING on delete *)
-  let open Lwt_result.Infix in
-  let exec (module C : Caqti_lwt.CONNECTION) =
-    C.start () >>= fun () ->
-    let%lwt result =
-      C.find (Caqti_request.find Id.db_type db_type get_one_sql) id >>= fun model ->
-      C.exec (Caqti_request.exec Id.db_type delete_sql) id >|= fun () ->
-      model in
-    match result with
-    | Ok model ->
-      C.commit () >>= fun () ->
-      Lwt_result.return @@ item @@ db_unmap model
-    | Error e ->
-      C.rollback () >>= fun () ->
-      Lwt_result.fail e
-  in
-  Db.run exec
-
-let delete_and_return_exn id =
-  delete_and_return id >|=
-  Db.or_exn
+  Db.run (Request.delete id)

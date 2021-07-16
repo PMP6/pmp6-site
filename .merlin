@@ -8,6 +8,7 @@ B _server/**/*
 PKG lwt_ppx
 # PKG tyxml-ppx
 # PKG js_of_ocaml.ppx
+PKG ppx_jane
 
 # PKG eliom.client
 # PKG eliom.ppx.client

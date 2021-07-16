@@ -188,7 +188,7 @@ let deploy_time = Time.now ()
 let news_items () =
   List.map
     ~f:(fun (title, short_title, pub_time, content) ->
-      News.Model.Item.build ~title ~short_title ~pub_time ~content)
+      News.Model.Item.Private.build ~title ~short_title ~pub_time ~content)
   [
     (
       "Rentrée 2020",

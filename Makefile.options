@@ -34,7 +34,8 @@ COMMON_PACKAGES := \
 	uunf \
 	uunf.string \
 	tyxml-ppx \
-	lwt_ppx
+	lwt_ppx \
+	ppx_let
 
 # OCamlfind packages for the server
 SERVER_PACKAGES := \

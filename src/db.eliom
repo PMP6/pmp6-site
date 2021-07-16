@@ -1,3 +1,11 @@
+module type C = Caqti_lwt.CONNECTION
+
+let caqti_exn caqti_error =
+  Caqti_error.Exn caqti_error
+
+let connection_uri =
+  "sqlite3:/home/thibault/pmp6-site/pmp6_test.db"
+
 module Type = struct
   (* Utilities over Caqti_type *)
   include Caqti_type
@@ -37,52 +45,78 @@ module Type = struct
 
 end
 
-type 'a request_result = ('a, Caqti_error.t) result Lwt.t
+type +'a m = (module C) -> ('a, Caqti_error.t) result Lwt.t
 
-let exn caqti_error =
-  Caqti_error.Exn caqti_error
+module R = Lwt_result
 
-let or_exn result =
-  Result.ok_exn @@
-  Result.map_error ~f:exn result
+include Monad.Make (struct
+    type 'a t = 'a m
 
-let connection_uri =
-  "sqlite3:/home/thibault/pmp6-site/pmp6_test.db"
+    let return x =
+      fun (module C : C) ->
+      Lwt_result.return x
+    (* Must give a name to `C` because `_` is too recent for some ppx *)
+    [@@ocaml.warning "-unused-module"]
+
+    let bind x ~f =
+      fun (module C : C) ->
+      let%bind.R r = x (module C : C) in
+      f r (module C : C)
+
+    let map x ~f =
+      fun (module C : C) ->
+      let%map.R r = x (module C : C) in
+      f r
+
+    let map = `Custom map
+  end)
 
 let pool =
   Caqti_lwt.connect_pool ~max_size:10 (Uri.of_string connection_uri)
-  |> Result.map_error ~f:Caqti_error.show
-  |> Result.ok_or_failwith
+  |> Result.map_error ~f:caqti_exn
+  |> Result.ok_exn
 
 let run request =
-  Caqti_lwt.Pool.use request pool
+  let%lwt result = Caqti_lwt.Pool.use request pool in
+  Caqti_lwt.or_fail result
 
-let get_all make_item output_type query =
-  let request =
-    Caqti_request.collect Caqti_type.unit output_type query in
-  let execute_request (module C : Caqti_lwt.CONNECTION) =
-    C.fold request (fun result acc -> make_item result :: acc) () [] in
-  run execute_request
+let collect ~out:(output_type, make_item) query =
+  fun (module C : C) ->
+  C.fold
+    (Caqti_request.collect Caqti_type.unit output_type query)
+    (fun result acc -> make_item result :: acc)
+    () []
 
-let get_one make_item input_type input output_type query =
-  let request =
-    Caqti_request.find input_type output_type query in
-  let execute_request (module C : Caqti_lwt.CONNECTION) =
-    C.find request input in
-  run execute_request
-  |> Lwt_result.map make_item
+let find ~in_:(input_type, input) ~out:(output_type, make_item) query =
+  fun (module C : C) ->
+  let%map.R result =
+    C.find
+      (Caqti_request.find input_type output_type query)
+      input in
+  make_item result
 
-let get_one_opt make_item input_type input output_type query =
-  let request =
-    Caqti_request.find_opt input_type output_type query in
-  let execute_request (module C : Caqti_lwt.CONNECTION) =
-    C.find_opt request input in
-  run execute_request
-  |> Lwt_result.map (Option.map ~f:make_item)
+let find_opt ~in_:(input_type, input) ~out:(output_type, make_item) query =
+  fun (module C : C) ->
+  let%map.R result =
+    C.find_opt
+      (Caqti_request.find_opt input_type output_type query)
+      input in
+  Option.map ~f:make_item result
 
-let exec input_type input query =
-  let request =
-    Caqti_request.exec input_type query in
-  let execute_request (module C : Caqti_lwt.CONNECTION) =
-    C.exec request input in
-  run execute_request
+let exec ~in_:(input_type, input) query =
+  fun (module C : C) ->
+  C.exec
+    (Caqti_request.exec input_type query)
+    input
+
+let transaction request =
+  fun (module C : C) ->
+  let%bind.R () = C.start () in
+  let%lwt result = request (module C : C) in
+  match result with
+  | Ok answer ->
+    let%bind.R () = C.commit () in
+    Lwt_result.return answer
+  | Error e ->
+    let%bind.R () = C.rollback () in
+    Lwt_result.fail e
