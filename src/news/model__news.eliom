@@ -81,7 +81,7 @@ let unique_slug ?prefix model =
 
 module Request = struct
 
-  let get_all =
+  let all =
     Db.collect
       ~out:(db_type, db_unmap)
       {|
@@ -90,7 +90,7 @@ module Request = struct
           ORDER BY pub_time DESC
       |}
 
-  let get id =
+  let find id =
     Db.find
       ~in_:(Id.db_type, id)
       ~out:(db_type, db_unmap)
@@ -133,7 +133,7 @@ module Request = struct
     let item = Item.build_new ~title ~short_title ~content in
     update_with_item id item
 
-  let delete id =
+  let find_and_delete id =
     Db.find
       ~in_:(Id.db_type, id)
       ~out:(Item.db_type, Item.db_unmap)
@@ -145,11 +145,11 @@ module Request = struct
 
 end
 
-let get_all () =
-  Db.run Request.get_all
+let all () =
+  Db.run Request.all
 
-let get id =
-  Db.run (Request.get id)
+let find id =
+  Db.run (Request.find id)
 
 let create_from_item item =
   Db.run (Request.create_from_item item)
@@ -163,5 +163,6 @@ let update_with_item id item =
 let update_as_new id ~title ~short_title ~content =
   Db.run (Request.update_as_new id ~title ~short_title ~content)
 
-let delete id =
-  Db.run (Request.delete id)
+let find_and_delete id =
+  Db.run (Request.find_and_delete id)
+

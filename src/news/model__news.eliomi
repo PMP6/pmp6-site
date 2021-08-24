@@ -46,9 +46,9 @@ val unique_slug : ?prefix:string -> t -> string
 
 (** {2 Database-related functions } *)
 
-val get_all : unit -> t list Lwt.t
+val all : unit -> t list Lwt.t
 
-val get : Id.t -> t Lwt.t
+val find : Id.t -> t Lwt.t
 
 val create_from_item : Item.t -> t Lwt.t
 
@@ -67,4 +67,4 @@ val update_as_new :
   content:Html_types.div_content_fun Html.elt ->
   t Lwt.t
 
-val delete : Id.t -> Item.t Lwt.t
+val find_and_delete : Id.t -> Item.t Lwt.t

@@ -64,7 +64,7 @@ let make_news_section all_news =
   ]
 
 let fetch_and_make_news_section () =
-  let%map.Lwt news = News.Model.get_all () in
+  let%map.Lwt news = News.Model.all () in
   make_news_section news
 
 let home_page () () =
