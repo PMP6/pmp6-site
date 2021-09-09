@@ -40,6 +40,7 @@ COMMON_PACKAGES := \
 # OCamlfind packages for the server
 SERVER_PACKAGES := \
 	$(COMMON_PACKAGES) \
+	argon2 \
 	caqti-driver-sqlite3 \
 	caqti-lwt
 

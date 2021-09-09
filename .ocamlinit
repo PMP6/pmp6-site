@@ -1,5 +1,6 @@
 #use "topfind";;
 #thread;;
+#require "argon2";;
 #require "core_kernel";;
 #require "caqti-lwt";;
 #require "caqti-driver-sqlite3";;

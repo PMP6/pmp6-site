@@ -16,6 +16,7 @@ PKG ppx_jane
 PKG eliom.server
 # PKG eliom.ppx.server
 
+PKG argon2
 PKG uucp
 PKG uuseg
 PKG uuseg.string
