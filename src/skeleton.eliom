@@ -113,7 +113,7 @@ module Static = struct
     H.make_uri
       ~absolute_path:true
       ~service:(Eliom_service.static_dir ())
-      path
+      ("static" :: path)
 
   let subdir_uri subdir path =
     uri (subdir :: path)
