@@ -14,6 +14,13 @@ let fosse_page () =
   Template.make_page ~title:"Fosse"
     H.[
       h1 [txt "Fosse"];
+      p ~a:[a_class["callout"; "alert"]] [
+        txt "L'espace plongée d'Antony est en travaux jusqu'à une date \
+             indéterminée, ce qui nous empêche actuellement de \
+             proposer des séances de fosse. Nous travaillons à une \
+             solution alternative qui sera proposée aux adhérents dès \
+             que possible !";
+      ];
       p [
         txt "La fosse nous permet de pratiquer, jusqu'à 20m de \
              profondeur, les gestes techniques de la plongée. Les \
@@ -46,23 +53,23 @@ let fosse_page () =
              min à pieds";
         br ();
       ];
-      p [
-        txt "Pour l'année 2020-2021, les séances sont prévues aux \
-             dates suivantes :";
-      ];
-      ul [
-        li [txt "Jeudi 29 octobre à 19 h"];
-        li [txt "Lundi 9 novembre à 20 h"];
-        li [txt "Jeudi 26 novembre à 19 h"];
-        li [txt "Lundi 7 décembre à 20 h"];
-        li [txt "Jeudi 21 janvier à 20 h"];
-        li [txt "Jeudi 4 février à 19 h"];
-        li [txt "Jeudi 18 février à 20 h"];
-        li [txt "Lundi 1"; sup [txt "er"]; txt " mars à 20 h"];
-        li [txt "Lundi 15 mars à 19h"];
-        li [txt "Lundi 29 mars à 21 h "];
-        li [txt "Jeudi 6 mai à 19 h"];
-      ];
+      (* p [
+       *   txt "Pour l'année 2020-2021, les séances sont prévues aux \
+       *        dates suivantes :";
+       * ];
+       * ul [
+       *   li [txt "Jeudi 29 octobre à 19 h"];
+       *   li [txt "Lundi 9 novembre à 20 h"];
+       *   li [txt "Jeudi 26 novembre à 19 h"];
+       *   li [txt "Lundi 7 décembre à 20 h"];
+       *   li [txt "Jeudi 21 janvier à 20 h"];
+       *   li [txt "Jeudi 4 février à 19 h"];
+       *   li [txt "Jeudi 18 février à 20 h"];
+       *   li [txt "Lundi 1"; sup [txt "er"]; txt " mars à 20 h"];
+       *   li [txt "Lundi 15 mars à 19h"];
+       *   li [txt "Lundi 29 mars à 21 h "];
+       *   li [txt "Jeudi 6 mai à 19 h"];
+       * ]; *)
 
       p [
         txt "Les inscriptions se font sur le formulaire envoyé par \

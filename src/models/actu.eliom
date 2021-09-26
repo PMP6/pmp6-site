@@ -7,40 +7,6 @@ type t = {
   content : Html_types.div_content_fun H.elt H.list_wrap;
 }
 
-let content_expo_photos () =
-  let affiche_uri =
-    Skeleton.Static.img_uri ["actus"; "affiche_expo_photos.png"] in
-  let open H in
-  [
-    p [
-        txt "L'exposition de photos sous-marines de PMP6 fait son \
-             grand retour !"
-      ];
-    p [
-        txt "Au programme : (re)découvrir les \
-             magnifiques créatures capturées par l'objectif de nos \
-             plongeurs, tout en en apprenant plus sur elles et leurs \
-             milieux."
-      ];
-    p [
-        txt
-          "Cette exposition se tiendra du 11 au 29 novembre 2019 \
-           à l'Atrium Café du campus Jussieu, lieu de convivialité \
-           pour de nombreux étudiants. Elle sera ensuite déplacée le \
-           temps d'une journée à la piscine Jean Taris, à l'occasion \
-           du Téléthon (7 décembre 2019), où petits et grands pourront \
-           en profiter lors de leurs baptêmes... sous l'eau ! La \
-           boucle est bouclée."
-      ];
-    p [
-        img
-          ~a:[a_class ["float-center"]]
-          ~src:affiche_uri
-          ~alt:"Affiche de l'expo photos"
-          ()
-      ]
-  ]
-
 let content_rentree () =
   let daps_service =
     Eliom_service.extern
@@ -49,11 +15,9 @@ let content_rentree () =
       ~meth:(Eliom_service.Get Eliom_parameter.unit)
       () in
   let flyer_uri =
-    Skeleton.Static.img_uri ["actus"; "Flyers_PMP6_2020.png"] in
+    Skeleton.Static.img_uri ["actus"; "Flyers_PMP6_2021.jpg"] in
   let plaquette_uri =
-    Skeleton.Static.uri ["files"; "PMP6_plaquetteAS_2020-2021.pdf"] in
-  let autoquestionnaire_uri =
-    Skeleton.Static.uri ["files"; "Autoquestionnaire_FFESSM.docx"] in
+    Skeleton.Static.uri ["files"; "PMP6_plaquetteAS_2021-2022.jpg"] in
   let open H in
   [
     p [
@@ -66,17 +30,14 @@ let content_rentree () =
         ();
       txt ". Dans ce contexte sanitaire particulier, des règles sont \
            en place pour pratiquer en toute sécurité. En particulier, \
-           n'oubliez pas de remplir votre ";
-      Raw.a ~a:[a_href autoquestionnaire_uri] [txt "autoquestionnaire"];
-      txt " et de l'envoyer aux ";
-      mailto_a "delegues@pmp6.fr" [txt "délégués"];
-      txt " ou de venir avec à la piscine.";
+           vous aurez besoin d'un pass sanitaire pour accéder à la \
+           piscine.";
     ];
     p [
       txt "Par ailleurs, une réunion de rentrée et d'information, \
            à laquelle tous les plongeurs, anciens comme nouveaux, sont \
-           conviés, se déroulera sur le campus Jussieu le \
-           mercredi 7 octobre à 18 h 15."
+           conviés, se déroulera dans l'amphi 45 A du campus Jussieu \
+           le jeudi 30 septembre à 18 h 30."
     ];
     p [
       txt "Enfin, n'oubliez pas de vous inscrire ! Vous devez d'abord \
@@ -139,49 +100,12 @@ let content_piscine () =
     ]
   ]
 
-let content_fosse () =
-  let open H in
-  [
-    p [
-      txt "Les séances de fosse permettent de travailler jusqu'à 20m \
-           de profondeur. Ils sont ouverts à tous, avec accord \
-           préalable d'un moniteur pour les préparants Niveau 1.";
-    ];
-    p [
-      txt "Elles se déroulent à l'Espace Plongée d'Antony, à l'adresse \
-           suivante :";
-    ];
-    p [
-      txt "Centre Aquatique Pajeaud";
-      br ();
-      txt "104 rue Adolphe Pajeaud";
-      br ();
-      txt "92160 ANTONY";
-      br ();
-      txt "RER B, direction St Rémy, station Les Baconnets puis 5-10 \
-           min à pieds";
-      br ();
-    ];
-    p [
-      txt "Les dates des séances pour la saison 2020-2021 sont \
-           disponibles sur ";
-      a ~service:Skeleton.Informations.Services.fosse
-        [txt "la page dédiée"]
-        ();
-      txt ".";
-    ];
-    p [
-      txt "Les inscriptions se feront comme d'habitude en remplissant \
-           le formulaire envoyé par mail avant chaque séance.";
-    ];
-  ]
-
 let deploy_time = Time.now ()
 
 let get () = [
   {
-    title = "Rentrée 2020";
-    short_title = "Rentrée 2020";
+    title = "Rentrée 2021";
+    short_title = "Rentrée 2021";
     datetime = deploy_time |> Fn.flip Time.sub Time.Span.minute;
     content = content_rentree ();
   };
@@ -190,11 +114,5 @@ let get () = [
     short_title = "Piscine";
     datetime = deploy_time |> Fn.flip Time.sub Time.Span.hour;
     content = content_piscine ();
-  };
-  {
-    title = "Dates des fosses";
-    short_title = "Fosses";
-    datetime = Time.now () |> Fn.flip Time.sub Time.Span.day;
-    content = content_fosse ();
   };
 ]
