@@ -76,8 +76,11 @@ let pool =
   |> Result.map_error ~f:caqti_exn
   |> Result.ok_exn
 
+let run_keep_errors request =
+  Caqti_lwt.Pool.use request pool
+
 let run request =
-  let%lwt result = Caqti_lwt.Pool.use request pool in
+  let%lwt result = run_keep_errors request in
   Caqti_lwt.or_fail result
 
 let collect ~out:(output_type, make_item) query =
