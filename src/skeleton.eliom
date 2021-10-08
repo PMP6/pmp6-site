@@ -108,6 +108,14 @@ module Contact = struct
     make_hierarchy_item "Nous contacter" []
 end
 
+module Media = struct
+  let uri path =
+    Html.make_uri
+      ~absolute_path:true
+      ~service:(Eliom_service.static_dir ())
+      ("media" :: path)
+end
+
 module Static = struct
   let uri path =
     H.make_uri

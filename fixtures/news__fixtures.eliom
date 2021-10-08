@@ -2,7 +2,7 @@ module H = Html
 
 let content_expo_photos () =
   let affiche_uri =
-    Skeleton.Static.img_uri ["actus"; "affiche_expo_photos.png"] in
+    Skeleton.Media.uri ["affiche_expo_photos.png"] in
   let open H in
   [
     p [
@@ -42,11 +42,11 @@ let content_rentree () =
       ~meth:(Eliom_service.Get Eliom_parameter.unit)
       () in
   let flyer_uri =
-    Skeleton.Static.img_uri ["actus"; "Flyers_PMP6_2020.png"] in
+    Skeleton.Media.uri ["Flyers_PMP6_2020.png"] in
   let plaquette_uri =
-    Skeleton.Static.uri ["files"; "PMP6_plaquetteAS_2020-2021.pdf"] in
+    Skeleton.Media.uri ["PMP6_plaquetteAS_2020-2021.pdf"] in
   let autoquestionnaire_uri =
-    Skeleton.Static.uri ["files"; "Autoquestionnaire_FFESSM.docx"] in
+    Skeleton.Media.uri ["Autoquestionnaire_FFESSM.docx"] in
   let open H in
   [
     p ~a:[a_class["callout"; "alert"]] [
@@ -185,33 +185,36 @@ let content_fosse () =
 
 let deploy_time = Time.now ()
 
-let news_items () =
-  List.map
-    ~f:(fun (title, short_title, pub_time, content) ->
-      News.Model.Item.Private.build ~title ~short_title ~pub_time ~content)
-  [
-    (
-      "Rentrée 2020",
-      "Rentrée 2020",
-      deploy_time |> Fn.flip Time.sub Time.Span.minute,
-      Html.div @@ content_rentree ()
-    );
+let rentree () =
+  News.Model.Item.Private.build
+    ~title:"Rentrée 2020"
+    ~short_title:"Rentrée 2020"
+    ~pub_time:(deploy_time |> Fn.flip Time.sub Time.Span.minute)
+    ~content:(Html.div @@ content_rentree ())
 
-    (
-      "Horaires de piscine",
-      "Piscine",
-      deploy_time |> Fn.flip Time.sub Time.Span.hour,
-      Html.div @@ content_piscine ()
-    );
+let piscine () =
+  News.Model.Item.Private.build
+    ~title:"Horaires de piscine"
+    ~short_title:"Piscine"
+    ~pub_time:(deploy_time |> Fn.flip Time.sub Time.Span.hour)
+    ~content:(Html.div @@ content_piscine ())
 
-    (
-      "Dates des fosses",
-      "Fosses",
-      Time.now () |> Fn.flip Time.sub Time.Span.day,
-      Html.div @@ content_fosse ()
-    );
-  ]
+let fosses () =
+  News.Model.Item.Private.build
+    ~title:"Dates des fosses"
+    ~short_title:"Fosses"
+    ~pub_time:(Time.now () |> Fn.flip Time.sub Time.Span.day)
+    ~content:(Html.div @@ content_fosse ())
 
+let flush () =
+  Fixture_utils.delete_all (module News.Model)
 
-let run () =
-  Lwt_list.iter_s News.Model.create_with_item_exn (news_items ())
+let load () =
+  let%lwt rentree = News.Model.create_from_item @@ rentree () in
+  let%lwt piscine = News.Model.create_from_item @@ piscine () in
+  let%lwt fosses = News.Model.create_from_item @@ fosses () in
+  Lwt.return @@ object
+    method rentree = rentree
+    method piscine = piscine
+    method fosses = fosses
+  end

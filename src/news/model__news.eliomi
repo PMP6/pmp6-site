@@ -68,3 +68,5 @@ val update_as_new :
   t Lwt.t
 
 val find_and_delete : Id.t -> Item.t Lwt.t
+
+val delete : Id.t -> unit Lwt.t

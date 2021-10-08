@@ -143,6 +143,13 @@ module Request = struct
         RETURNING title, short_title, pub_time, content
       |}
 
+  let delete id =
+    Db.exec
+      ~in_:(Id.db_type, id)
+      {|
+        DELETE FROM news
+        WHERE id = ?
+      |}
 end
 
 let all () =
@@ -166,3 +173,5 @@ let update_as_new id ~title ~short_title ~content =
 let find_and_delete id =
   Db.run (Request.find_and_delete id)
 
+let delete id =
+  Db.run (Request.delete id)

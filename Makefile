@@ -239,7 +239,11 @@ $(TEST_PREFIX)$(LIBDIR)/$(PROJECT_FIXTURES_NAME).cma: $(call objs,$(ELIOM_SERVER
 
 .PHONY: fixtures.byte fixtures
 
-fixtures: fixtures.byte
+fixtures-media: $(FIXTURES_DIR)/media
+	mkdir -p $(LOCAL_STATIC)/media
+	cp -r $(FIXTURES_DIR)/media/* $(LOCAL_STATIC)/media
+
+fixtures: fixtures-media fixtures.byte
 
 fixtures.byte: $(addprefix $(TEST_PREFIX),$(ETCDIR)/$(PROJECT_FIXTURES_NAME).conf $(DIST_DIRS) $(LIBDIR)/$(PROJECT_FIXTURES_NAME).cma)
 	$(OCSIGENSERVER) $(RUN_DEBUG) -c $<
