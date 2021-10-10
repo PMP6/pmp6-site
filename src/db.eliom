@@ -85,10 +85,12 @@ let run request =
 
 let collect ~out:(output_type, make_item) query =
   fun (module C : C) ->
-  C.fold
-    (Caqti_request.collect Caqti_type.unit output_type query)
-    (fun result acc -> make_item result :: acc)
-    () []
+  let%map.R items =
+    C.fold
+      (Caqti_request.collect Caqti_type.unit output_type query)
+      (fun result acc -> make_item result :: acc)
+      () [] in
+  List.rev items
 
 let find ~in_:(input_type, input) ~out:(output_type, make_item) query =
   fun (module C : C) ->
