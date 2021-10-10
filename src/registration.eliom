@@ -1,18 +1,17 @@
-let ( => ) service page =
-  Pmp6.App.register
-    ~service
-    page
+let skeleton_pages = Registration_lib.[
+  Skeleton.home_service, Home.home_page;
+  Skeleton.Plonger.Services.formations, Formations.formation_page;
+  Skeleton.Plonger.Services.stages, Stages.stage_page;
+  Skeleton.Informations.Services.piscine, Piscine.piscine_page;
+  Skeleton.Informations.Services.fosse, Fosse.fosse_page;
+  Skeleton.Informations.Services.inscription, Inscription.inscription_page;
+  Skeleton.Espace_membre.Services.boutique, Boutique.boutique_page;
+  Skeleton.Contact.service, Contact.contact_page;
+]
 
 let () =
-  Skeleton.home_service => Home.home_page;
-  Skeleton.Plonger.Services.formations => Formations.formation_page;
-  Skeleton.Plonger.Services.stages => Stages.stage_page;
-  Skeleton.Informations.Services.piscine => Piscine.piscine_page;
-  Skeleton.Informations.Services.fosse => Fosse.fosse_page;
-  Skeleton.Informations.Services.inscription => Inscription.inscription_page;
-  Skeleton.Espace_membre.Services.boutique => Boutique.boutique_page;
-  Skeleton.Contact.service => Contact.contact_page;
-  News.Registration.register_with (module Pmp6.App) ();
+  Registration_lib.register_pages Template.return_page skeleton_pages;
+  Registration_lib.register_module Template.return_page (module News.Registration);
   ()
 
 let () =

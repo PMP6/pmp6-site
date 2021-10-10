@@ -233,11 +233,11 @@ let make_body toasts content =
     footer;
   ]
 
-let return_page ?(other_head=[]) ~title content =
+let return_page { Template_lib.title; in_head; in_body } =
   let _ : unit Eliom_client_value.t = [%client (Foundation.init () : unit)] in
   let%lwt toasts = Toast.render_all () in
   Lwt.return @@
   H.html
     ~a:[H.a_lang "fr"; H.a_class ["no-js"]]
-    (head ~other_head ~title ())
-    (make_body toasts content)
+    (head ~other_head:in_head ~title ())
+    (make_body toasts in_body)

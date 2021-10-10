@@ -198,7 +198,7 @@ let autres =
   ]
 
 let formation_page () () =
-  Template.return_page ~title:"Formations"
+  Template_lib.page ~title:"Formations"
     H.[
       h1 [txt "Formations"];
       intro;

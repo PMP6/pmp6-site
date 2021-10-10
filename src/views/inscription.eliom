@@ -19,7 +19,7 @@ let caci_service =
     ()
 
 let inscription_page () () =
-  Template.return_page ~title:"Inscription"
+  Template_lib.page ~title:"Inscription"
     H.[
       h1 [txt "Inscription au club"];
       h2 [txt "Qui ?"];

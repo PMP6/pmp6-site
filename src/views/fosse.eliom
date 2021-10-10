@@ -11,7 +11,7 @@ let gmaps_embed () =
      5e0!3m2!1sfr!2sfr!4v1557852774857!5m2!1sfr!2sfr\""
 
 let fosse_page () () =
-  Template.return_page ~title:"Fosse"
+  Template_lib.page ~title:"Fosse"
     H.[
       h1 [txt "Fosse"];
       p ~a:[a_class["callout"; "alert"]] [
