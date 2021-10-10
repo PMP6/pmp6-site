@@ -9,7 +9,9 @@ CREATE TABLE auth_user (
     password TEXT NOT NULL,
     is_superuser INTEGER NOT NULL,
     is_staff INTEGER NOT NULL,
-    joined_time INTEGER NOT NULL
+    joined_time INTEGER NOT NULL,
+    UNIQUE (email COLLATE NOCASE),
+    UNIQUE (username COLLATE NOCASE)
 );
 
 COMMIT;
