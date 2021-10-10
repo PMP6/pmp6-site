@@ -3,8 +3,8 @@ let clean_load (flush, load) load_input =
   Lwt.return result
 
 let clean_load_all () =
-  let%lwt _auth = clean_load Auth__fixtures.(flush, load) () in
-  let%lwt _news = clean_load News__fixtures.(flush, load) () in
+  let%lwt auth = clean_load Auth__fixtures.(flush, load) () in
+  let%lwt _news = clean_load News__fixtures.(flush, load) auth in
   Lwt.return ()
 
 [@@@warning "-5"]

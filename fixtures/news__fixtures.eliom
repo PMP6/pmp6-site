@@ -185,34 +185,37 @@ let content_fosse () =
 
 let deploy_time = Time.now ()
 
-let rentree () =
+let rentree auth =
   News.Model.Item.Private.build
     ~title:"Rentrée 2020"
     ~short_title:"Rentrée 2020"
     ~pub_time:(deploy_time |> Fn.flip Time.sub Time.Span.minute)
     ~content:(Html.div @@ content_rentree ())
+    ~author:(Auth.Model.User.id auth#poulpe)
 
-let piscine () =
+let piscine auth =
   News.Model.Item.Private.build
     ~title:"Horaires de piscine"
     ~short_title:"Piscine"
     ~pub_time:(deploy_time |> Fn.flip Time.sub Time.Span.hour)
     ~content:(Html.div @@ content_piscine ())
+    ~author:(Auth.Model.User.id auth#staff)
 
-let fosses () =
+let fosses auth =
   News.Model.Item.Private.build
     ~title:"Dates des fosses"
     ~short_title:"Fosses"
     ~pub_time:(Time.now () |> Fn.flip Time.sub Time.Span.day)
     ~content:(Html.div @@ content_fosse ())
+    ~author:(Auth.Model.User.id auth#staff)
 
 let flush () =
   Fixture_utils.delete_all (module News.Model)
 
-let load () =
-  let%lwt rentree = News.Model.create_from_item @@ rentree () in
-  let%lwt piscine = News.Model.create_from_item @@ piscine () in
-  let%lwt fosses = News.Model.create_from_item @@ fosses () in
+let load auth =
+  let%lwt rentree = News.Model.create_from_item @@ rentree auth in
+  let%lwt piscine = News.Model.create_from_item @@ piscine auth in
+  let%lwt fosses = News.Model.create_from_item @@ fosses auth in
   Lwt.return @@ object
     method rentree = rentree
     method piscine = piscine

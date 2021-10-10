@@ -1,3 +1,6 @@
+(* module User : sig module Id : sig type t val db_type : 'a end end *)
+module User := Auth.Model.User
+
 module Item : sig
   include Db_utils.Data
 
@@ -5,11 +8,13 @@ module Item : sig
   val short_title : t -> string
   val pub_time : t -> Time.t
   val content : t -> Html_types.div_content_fun Html.elt
+  val author : t -> User.Id.t
 
   val build_new :
     title:string ->
     short_title:string ->
     content:Html_types.div_content_fun Html.elt ->
+    author:User.Id.t ->
     t
 
   val slug : t -> string
@@ -21,6 +26,7 @@ module Item : sig
       short_title:string ->
       content:Html_types.div_content_fun Html.elt ->
       pub_time:Time.t ->
+      author:User.Id.t ->
       t
   end
 end
@@ -35,6 +41,7 @@ val title : t -> string
 val short_title : t -> string
 val pub_time : t -> Time.t
 val content : t -> Html_types.div_content_fun Html.elt
+val author : t -> User.Id.t
 
 val slug : t -> string
 val content_as_string : t -> string
@@ -56,6 +63,7 @@ val create :
   title:string ->
   short_title:string ->
   content:Html_types.div_content_fun Html.elt ->
+  author:User.Id.t ->
   t Lwt.t
 
 val update_with_item : Id.t -> Item.t -> t Lwt.t
@@ -65,6 +73,7 @@ val update_as_new :
   title:string ->
   short_title:string ->
   content:Html_types.div_content_fun Html.elt ->
+  author:User.Id.t ->
   t Lwt.t
 
 val find_and_delete : Id.t -> Item.t Lwt.t

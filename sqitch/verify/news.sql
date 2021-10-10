@@ -2,7 +2,7 @@
 
 BEGIN;
 
-SELECT id, short_title, title, pub_time, content
+SELECT id, short_title, title, pub_time, content, author
     FROM news
     WHERE 0;
 

@@ -1,5 +1,7 @@
 module H = Html
 
+module User = Auth.Model.User
+
 let ( & ) x y = (x, y)
 
 module Item = struct
@@ -8,23 +10,23 @@ module Item = struct
     short_title : string;
     pub_time : Time.t;
     content : Html_types.div_content_fun H.elt;
+    author : User.Id.t;
   }
-
-  type mapping = string * (string * (Time.t * string))
 
   let title { title; _ } = title
   let short_title { short_title; _ } = short_title
   let pub_time { pub_time; _ } = pub_time
   let content { content; _ } = content
+  let author { author; _ } = author
 
   module Private = struct
-    let build ~title ~short_title ~content ~pub_time =
-      { title; short_title; content; pub_time }
+    let build ~title ~short_title ~content ~pub_time ~author =
+      { title; short_title; content; pub_time; author }
   end
 
-  let build_new ~title ~short_title ~content =
+  let build_new ~title ~short_title ~content ~author =
     let pub_time = Time.now () in
-    Private.build ~title ~short_title ~content ~pub_time
+    Private.build ~title ~short_title ~content ~pub_time ~author
 
   let slug news =
     Utils.slugify @@ title news
@@ -32,22 +34,26 @@ module Item = struct
   let content_as_string item =
     Html.elt_to_string (content item)
 
-  let db_type =
-    Db.Type.(string & string & time & string)
+  type mapping = string * (string * (Time.t * (string * (User.Id.t))))
 
-  let db_unmap (title, (short_title, (pub_time, (content)))) =
+  let db_type =
+    Db.Type.(string & string & time & string & User.Id.db_type)
+
+  let db_unmap (title, (short_title, (pub_time, (content, (author))))) =
     {
       title;
       short_title;
       pub_time;
       content = Html.Unsafe.data content;
+      author;
     }
 
-  let db_map { title; short_title; pub_time; content } =
+  let db_map { title; short_title; pub_time; content; author } =
     title &
     short_title &
     pub_time &
-    Html.elt_to_string content
+    Html.elt_to_string content &
+    author
 end
 
 include Db_utils.With_id (Item)
@@ -63,6 +69,9 @@ let content =
 
 let pub_time =
   lift Item.pub_time
+
+let author =
+  lift Item.author
 
 let content_as_string =
   lift Item.content_as_string
@@ -85,7 +94,7 @@ module Request = struct
     Db.collect
       ~out:(db_type, db_unmap)
       {|
-        SELECT id, title, short_title, pub_time, content
+        SELECT id, title, short_title, pub_time, content, author
           FROM news
           ORDER BY pub_time DESC
       |}
@@ -95,7 +104,7 @@ module Request = struct
       ~in_:(Id.db_type, id)
       ~out:(db_type, db_unmap)
       {|
-        SELECT id, title, short_title, pub_time, content
+        SELECT id, title, short_title, pub_time, content, author
         FROM news
         WHERE id = ?
         LIMIT 1
@@ -106,14 +115,14 @@ module Request = struct
       ~in_:(Item.db_type, Item.db_map item)
       ~out:(db_type, db_unmap)
       {|
-        INSERT INTO news (title, short_title, pub_time, content)
-        VALUES (?, ?, ?, ?)
-        RETURNING id, title, short_title, pub_time, content
+        INSERT INTO news (title, short_title, pub_time, content, author)
+        VALUES (?, ?, ?, ?, ?)
+        RETURNING id, title, short_title, pub_time, content, author
       |}
 
-  let create ~title ~short_title ~content =
+  let create ~title ~short_title ~content ~author =
     create_from_item @@
-    Item.build_new ~title ~short_title ~content
+    Item.build_new ~title ~short_title ~content ~author
 
   let update_with_item id item =
     Db.find
@@ -124,13 +133,14 @@ module Request = struct
         SET title = $2,
             short_title = $3,
             pub_time = $4,
-            content = $5
+            content = $5,
+            author = $6
         WHERE id = $1
-        RETURNING id, title, short_title, pub_time, content
+        RETURNING id, title, short_title, pub_time, content, author
       |}
 
-  let update_as_new id ~title ~short_title ~content =
-    let item = Item.build_new ~title ~short_title ~content in
+  let update_as_new id ~title ~short_title ~content ~author =
+    let item = Item.build_new ~title ~short_title ~content ~author in
     update_with_item id item
 
   let find_and_delete id =
@@ -140,7 +150,7 @@ module Request = struct
       {|
         DELETE FROM news
         WHERE id = ?
-        RETURNING title, short_title, pub_time, content
+        RETURNING title, short_title, pub_time, content, author
       |}
 
   let delete id =
@@ -161,14 +171,14 @@ let find id =
 let create_from_item item =
   Db.run (Request.create_from_item item)
 
-let create ~title ~short_title ~content =
-  Db.run (Request.create ~title ~short_title ~content)
+let create ~title ~short_title ~content ~author =
+  Db.run (Request.create ~title ~short_title ~content ~author)
 
 let update_with_item id item =
   Db.run (Request.update_with_item id item)
 
-let update_as_new id ~title ~short_title ~content =
-  Db.run (Request.update_as_new id ~title ~short_title ~content)
+let update_as_new id ~title ~short_title ~content ~author =
+  Db.run (Request.update_as_new id ~title ~short_title ~content ~author)
 
 let find_and_delete id =
   Db.run (Request.find_and_delete id)

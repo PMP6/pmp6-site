@@ -7,7 +7,9 @@ CREATE TABLE news (
     short_title TEXT NOT NULL,
     title TEXT NOT NULL,
     pub_time INTEGER NOT NULL,
-    content TEXT NOT NULL
+    content TEXT NOT NULL,
+    author INTEGER NOT NULL,
+    FOREIGN KEY(author) REFERENCES auth_user(id)
 );
 
 COMMIT;
