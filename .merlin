@@ -6,7 +6,7 @@ B _server/**/*
 
 # Apparently only one ppx works at a time
 PKG lwt_ppx
-# PKG tyxml-ppx
+PKG tyxml-ppx
 # PKG js_of_ocaml.ppx
 PKG ppx_jane
 
@@ -30,4 +30,4 @@ PKG caqti-lwt
 PKG caqti-driver-sqlite3
 
 FLG -open Base -open Core_kernel -strict-formats -short-paths -strict-sequence
-FLG -w @1..3@5..28@30..39@43@46..47@49..57@60..62-40
+FLG -w @1..3@5..28@30..39@43@46..47@49..57@60..62-40-49
