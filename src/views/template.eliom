@@ -170,22 +170,34 @@ let connection_icon () =
     [icon]
     ()
 
-let top_right_menu () =
+let logout_icon () =
+  let icon = Icon.solid ~a:[H.a_class ["icon"]] "fa-user-times" () in
+  H.a
+    ~service:Auth.Service.logout
+    [icon]
+    ()
+
+let session_icon user =
+  match user with
+  | None -> connection_icon ()
+  | Some _ -> logout_icon ()
+
+let top_right_menu user =
   let open H in
   ul
     ~a:[a_class ["menu"]]
     [
       li ~a:[a_class ["menu-text"]] [search_form ()];
-      li ~a:[] [connection_icon ()];
+      li ~a:[] [session_icon user];
     ]
 
-let header =
+let header user =
   let open H in
   header [
     menu_toggle ();
     div ~a:[a_class ["top-bar"; "stacked-for-medium"]; a_id "top-menu"] [
       nav ~a:[a_class ["top-bar-left"]] [top_left_menu Skeleton.hierarchy_items];
-      div ~a:[a_class ["top-bar-right"]] [top_right_menu ()];
+      div ~a:[a_class ["top-bar-right"]] [top_right_menu user];
     ]
   ]
 
@@ -241,10 +253,10 @@ let footer =
     ]
   ]
 
-let make_body toasts content =
+let make_body user toasts content =
   (* empty anchor does not work for smooth scroll *)
   H.body ~a:[H.a_id "top"] [
-    header;
+    header user;
     carousel;
     main ~toasts ~content;
     footer;
@@ -253,8 +265,9 @@ let make_body toasts content =
 let return_page { Template_lib.title; in_head; in_body } =
   let _ : unit Eliom_client_value.t = [%client (Foundation.init () : unit)] in
   let%lwt toasts = Toast.render_all () in
+  let%lwt user = Auth.Session.get_user () in
   Lwt.return @@
   H.html
     ~a:[H.a_lang "fr"; H.a_class ["no-js"]]
     (head ~other_head:in_head ~title ())
-    (make_body toasts in_body)
+    (make_body user toasts in_body)

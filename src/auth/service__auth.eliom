@@ -13,3 +13,9 @@ let login =
     ~fallback:connection
     ~post_params:(Eliom_parameter.(string "username" ** string "password"))
     ()
+
+let logout =
+  Eliom_service.create
+    ~path:Eliom_service.No_path
+    ~meth:(Eliom_service.Get Eliom_parameter.unit)
+    ()

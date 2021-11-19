@@ -6,6 +6,7 @@ let pages = Registration_lib.[
 ]
 
 let actions = Registration_lib.[
+  Service.logout, Handler.logout;
 ]
 
 let redirections = Registration_lib.[

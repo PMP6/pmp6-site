@@ -22,6 +22,9 @@ let login () (username, password) =
       (fun () -> Toast.push Toast.Alert (View.Toast.incorrect_password ()))
       Service.connection
 
+let logout () () =
+  Session.logout ()
+
 let connection () () =
   match%lwt Session.get_user () with
   | None ->
