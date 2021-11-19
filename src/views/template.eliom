@@ -209,7 +209,7 @@ let footer =
 
         div_classes ["grid-x"; "grid-padding-x"; "align-right"] [
           div_classes ["cell"; "small-6"; "medium-shrink"] [
-            a ~service:Service__news.main [
+            a ~service:News.Service.main [
               Icon.solid "fa-tools" ()
             ] ()
           ];
