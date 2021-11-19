@@ -142,25 +142,26 @@ let top_menu items =
   ] @@
   menu_title_entry () :: List.filter_map ~f:entry items
 
-let search_form =
-  let create_form =
-    let open H in
-    fun (as_sitesearch, q) ->
-      [
-        Form.input ~input_type:`Hidden ~name:as_sitesearch ~value:"pmp6.fr" Form.string;
-        div_classes ["input-group"] [
-          Form.input
-            ~input_type:`Search ~name:q
-            ~a:[a_placeholder "Rechercher"; a_class ["input-group-field"]]
-            Form.string;
-          div_classes ["input-group-button"] [
-            Form.button_no_value
-              ~button_type:`Submit ~a:[a_class ["button"]]
-              [Icon.solid "fa-search" ()];
-          ]
-        ]
+let search_form () =
+  let open H in
+  H.Form.get_form
+    ~a:[a_class ["search-form"]]
+    ~service:Google.Search.service
+  @@ fun (as_sitesearch, q) ->
+  [
+    Form.input ~input_type:`Hidden ~name:as_sitesearch ~value:"pmp6.fr" Form.string;
+    div_classes ["input-group"] [
+      Form.input
+        ~input_type:`Search ~name:q
+        ~a:[a_placeholder "Rechercher"; a_class ["input-group-field"]]
+        Form.string;
+      div_classes ["input-group-button"] [
+        Form.button_no_value
+          ~button_type:`Submit ~a:[a_class ["button"]]
+          [Icon.solid "fa-search" ()];
       ]
-  in H.Form.get_form ~service:(Google.Search.service) create_form
+    ]
+  ]
 
 let header =
   let open H in
@@ -168,7 +169,7 @@ let header =
     menu_toggle ();
     div ~a:[a_class ["top-bar"; "stacked-for-medium"]; a_id "top-menu"] [
       nav ~a:[a_class ["top-bar-left"]] [top_menu Skeleton.hierarchy_items];
-      div ~a:[a_class ["top-bar-right"]] [search_form];
+      div ~a:[a_class ["top-bar-right"]] [search_form ()];
     ]
   ]
 
