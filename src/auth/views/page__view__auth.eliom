@@ -7,6 +7,12 @@ let connection () =
     ~title:"Connexion"
     [Widget.login_form ()]
 
+let forbidden () =
+  Template_lib.page
+    ~title:"Accès interdit"
+    [H.txt "Vous n'avez pas les autorisations nécessaires pour accéder \
+            à la page demandée."]
+
 let already_connected () =
   Template_lib.page
     ~title:"Vous êtes déjà connecté"
