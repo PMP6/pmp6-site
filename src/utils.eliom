@@ -69,3 +69,16 @@ let with_is_active_attrib is_active attribs =
   if is_active
   then H.a_class (with_is_active is_active []) :: attribs
   else attribs
+
+(* Returns a redirection to a dynamically created service, that will
+   run the action and will fallback to the destination service
+   srv. This allows redirections that do not break the request scope
+   after executing the actions (useful for instance for toasts).
+*)
+let redirection action srv =
+  let redirected_srv =
+    Eliom_registration.Action.create_attached_get
+      ~get_params:Eliom_parameter.unit
+      ~fallback:srv
+      (fun () () -> action ()) in
+  Lwt.return (Eliom_registration.Redirection redirected_srv)
