@@ -41,5 +41,8 @@ let encode password =
   |> ok_or_argon2_error
 
 let verify encoded attempt =
-  Argon2.verify ~kind:Argon2.ID ~encoded ~pwd:attempt
-  |> ok_or_argon2_error
+  match Argon2.verify ~kind:Argon2.ID ~encoded ~pwd:attempt with
+  | Ok true -> true
+  | Ok false
+  | Error VERIFY_MISMATCH -> false
+  | Error e -> failwith (Argon2.ErrorCodes.message e)
