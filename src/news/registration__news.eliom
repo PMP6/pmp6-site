@@ -12,3 +12,5 @@ let actions = Registration_lib.[
   Service.update_into_main, Handler.update;
   Service.delete, Handler.delete;
 ]
+
+let redirections = Registration_lib.[]

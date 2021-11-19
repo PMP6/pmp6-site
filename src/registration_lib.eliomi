@@ -1,3 +1,5 @@
+type redirection := Eliom_service.non_ocaml Eliom_registration.redirection
+
 type _ service_handlers =
   | [] : _ service_handlers
   | ( :: ) :
@@ -11,6 +13,7 @@ type _ service_handlers =
 module type Module = sig
   val pages : Template_lib.page service_handlers
   val actions : unit service_handlers
+  val redirections : redirection service_handlers
 end
 
 type 'result registrar =
@@ -27,5 +30,7 @@ val register_handlers : 'result registrar -> 'result service_handlers -> unit
 val register_pages : ('page -> Html.doc Lwt.t) -> 'page service_handlers -> unit
 
 val register_actions : unit service_handlers -> unit
+
+val register_redirections : redirection service_handlers -> unit
 
 val register_module : (Template_lib.page -> Html.doc Lwt.t) -> (module Module) -> unit

@@ -11,6 +11,7 @@ type _ service_handlers =
 module type Module = sig
   val pages : Template_lib.page service_handlers
   val actions : unit service_handlers
+  val redirections : Eliom_service.non_ocaml Eliom_registration.redirection service_handlers
 end
 
 type 'result registrar =
@@ -47,7 +48,14 @@ let register_actions actions =
     { f = fun service action -> Eliom_registration.Action.register ~service action }
     actions
 
+let register_redirections redirections =
+  register_handlers
+    { f = fun service redirection ->
+        Eliom_registration.Redirection.register ~service redirection }
+    redirections
+
 let register_module return_page (module M : Module) =
   register_pages return_page M.pages;
   register_actions M.actions;
+  register_redirections M.redirections;
   ()
