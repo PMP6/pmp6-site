@@ -106,7 +106,7 @@ let menu_toggle () =
     div_class "title-bar-title" [menu_title ()];
   ]
 
-let top_menu items =
+let top_left_menu items =
   let open H in
   let rec entry (content, hierarchical_site_item) =
     match hierarchical_site_item with
@@ -163,13 +163,29 @@ let search_form () =
     ]
   ]
 
+let connection_icon () =
+  let icon = Icon.solid ~a:[H.a_class ["icon"]] "fa-user" () in
+  H.a
+    ~service:Auth.Service.connection
+    [icon]
+    ()
+
+let top_right_menu () =
+  let open H in
+  ul
+    ~a:[a_class ["menu"]]
+    [
+      li ~a:[a_class ["menu-text"]] [search_form ()];
+      li ~a:[] [connection_icon ()];
+    ]
+
 let header =
   let open H in
   header [
     menu_toggle ();
     div ~a:[a_class ["top-bar"; "stacked-for-medium"]; a_id "top-menu"] [
-      nav ~a:[a_class ["top-bar-left"]] [top_menu Skeleton.hierarchy_items];
-      div ~a:[a_class ["top-bar-right"]] [search_form ()];
+      nav ~a:[a_class ["top-bar-left"]] [top_left_menu Skeleton.hierarchy_items];
+      div ~a:[a_class ["top-bar-right"]] [top_right_menu ()];
     ]
   ]
 

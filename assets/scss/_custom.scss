@@ -107,6 +107,9 @@ dd + dt {
     z-index: 99;
 
     .menu {
+        .icon {
+            font-size: x-large;
+        }
 
         .is-dropdown-submenu {
             box-shadow: 0 0 5px $topbar-background;
@@ -151,14 +154,17 @@ dd + dt {
     }
 
     .top-bar-right {
-        @include breakpoint(large) {
-            padding-right: 0.5rem;
-        }
-
         .input-group {
             // Vertically center the search form
             margin: auto;
+
+            .button {
+                // Override `.menu .button` style to fix input group
+                padding-top: 0;
+                padding-bottom: 0;
+            }
         }
+
     }
 
 }
