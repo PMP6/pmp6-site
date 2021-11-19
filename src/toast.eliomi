@@ -1,6 +1,6 @@
 module H = Html
 
-type div_content = Html_types.div_content_fun H.elt list
+type div_content := Html_types.div_content_fun H.elt list
 
 (** This shall be moved under a more generic Callout/Semantic palette later *)
 type kind =
@@ -20,3 +20,5 @@ val push : kind -> div_content -> unit Lwt.t
 
 val render : t -> [> Html_types.div ] H.elt
 val render_all : unit -> [> Html_types.div ] H.elt list Lwt.t
+
+val simple_message : string -> div_content

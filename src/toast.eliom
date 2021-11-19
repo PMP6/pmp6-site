@@ -50,3 +50,6 @@ let push kind content =
 let render_all () =
   let%lwt all = all () in
   Lwt.return @@ List.map ~f:render all
+
+let simple_message msg =
+  [H.p [H.txt msg]]
