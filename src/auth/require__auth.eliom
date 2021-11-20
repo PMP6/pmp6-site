@@ -13,7 +13,10 @@ module Syntax = struct
 
   let ( let$ ) require handler =
     require
-      (fun _g _p -> Content.redirection Service.connection)
+      (fun _g _p ->
+         Content.redirection_with_action
+           (fun () -> Toast.push Toast.Warning (View.Toast.login_required ()))
+           Service.connection)
       (fun _g _p -> Content.redirection Service.forbidden)
       handler
 end
