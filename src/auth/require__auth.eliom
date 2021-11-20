@@ -19,6 +19,7 @@ module Syntax = struct
            Service.connection)
       (fun _g _p -> Content.redirection Service.forbidden)
       handler
+
 end
 
 let predicate perm no_login forbidden handler =
