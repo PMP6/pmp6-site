@@ -9,7 +9,7 @@ type _ service_handlers =
       'result service_handlers
 
 module type Module = sig
-  val pages : Template_lib.page service_handlers
+  val pages : Content.t service_handlers
   val actions : unit service_handlers
   val redirections : Eliom_service.non_ocaml Eliom_registration.redirection service_handlers
 end
@@ -31,12 +31,16 @@ let rec register_handlers :
       register.f service handler;
       register_handlers register tail
 
-let register_page ~service return_page page =
-  Pmp6.App.register
+let register_page ~service return_page content =
+  Eliom_registration.Any.register
     ~service
     (fun gp pp ->
-       let%lwt page = page gp pp in
-       return_page page)
+       match%lwt content gp pp with
+       | Content.Page page ->
+         let%lwt doc = return_page page in
+         Pmp6.App.send doc
+       | Content.Redirection srv ->
+         Eliom_registration.Redirection.(send @@ Redirection srv))
 
 let register_pages return_page pages =
   register_handlers

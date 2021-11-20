@@ -1,4 +1,5 @@
 module Model = Model__auth
+module Service = Service__auth
 module Session = Session__auth
 module View = View__auth
 
@@ -12,10 +13,9 @@ module Syntax = struct
 
   let ( let$ ) require handler =
     require
-      (fun _g _p -> View.Page.connection ())
-      (fun _g _p -> View.Page.forbidden ())
+      (fun _g _p -> Content.redirection Service.connection)
+      (fun _g _p -> Content.redirection Service.forbidden)
       handler
-
 end
 
 let predicate perm no_login forbidden handler =

@@ -1,7 +1,7 @@
 module H = Html
 
 let contact_page () () =
-  Template_lib.page ~title:"Contact" H.[
+  Content.page ~title:"Contact" H.[
     p [
       txt "Vous voulez vous inscrire, avez des questions sur nos \
            activités ou souhaitez des renseignements supplémentaires \

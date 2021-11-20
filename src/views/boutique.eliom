@@ -63,7 +63,7 @@ let boutique =
   ]
 
 let boutique_page () () =
-  Template_lib.page ~title:"Boutique"
+  Content.page ~title:"Boutique"
     H.[
       h1 [txt "Boutique"];
       section intro;

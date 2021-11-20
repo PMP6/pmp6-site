@@ -262,7 +262,7 @@ let make_body user toasts content =
     footer;
   ]
 
-let return_page { Template_lib.title; in_head; in_body } =
+let return_page { Content.title; in_head; in_body } =
   let _ : unit Eliom_client_value.t = [%client (Foundation.init () : unit)] in
   let%lwt toasts = Toast.render_all () in
   let%lwt user = Auth.Session.get_user () in

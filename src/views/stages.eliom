@@ -193,7 +193,7 @@ let provence =
   ]
 
 let stage_page () () =
-  Template_lib.page ~title:"Stages"
+  Content.page ~title:"Stages"
     H.[
       h1 [txt "Stages"];
       intro;

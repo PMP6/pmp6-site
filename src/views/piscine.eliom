@@ -10,7 +10,7 @@ let gmaps_embed () =
      3479414!5e0!3m2!1sfr!2sfr!4v1566935487391!5m2!1sfr!2sfr"
 
 let piscine_page () () =
-  Template_lib.page ~title:"Piscine"
+  Content.page ~title:"Piscine"
     H.[
       h1 [txt "Piscine"];
       p [

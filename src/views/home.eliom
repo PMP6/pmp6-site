@@ -69,7 +69,7 @@ let fetch_and_make_news_section () =
 
 let home_page () () =
   let%lwt news_section = fetch_and_make_news_section () in
-  Template_lib.page ~title:"PMP6" [
+  Content.page ~title:"PMP6" [
     presentation_section ();
     news_section;
   ]

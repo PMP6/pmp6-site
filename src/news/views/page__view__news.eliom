@@ -2,7 +2,7 @@ module Model = Model__news
 module Widget = Widget__view__news
 
 let list_all all_news =
-  Template_lib.page
+  Content.page
     ~title:"Toutes les actus"
     [
       Html.div_classes ["grid-x"; "grid-margin-x"; "news"]
@@ -26,11 +26,11 @@ let list_all all_news =
     ]
 
 let redaction () =
-  Template_lib.page
+  Content.page
     ~title:"Rédiger une actu"
     [Widget.redaction_form ()]
 
 let edition news =
-  Template_lib.page
+  Content.page
     ~title:"Éditer une actu"
     [Widget.redaction_form ~news ()]
