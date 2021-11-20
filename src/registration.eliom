@@ -10,7 +10,7 @@ let skeleton_pages = Registration_lib.[
 ]
 
 let () =
-  Registration_lib.register_pages Template.return_page skeleton_pages;
+  Registration_lib.register_contents Template.return_page skeleton_pages;
   Registration_lib.register_module Template.return_page (module Auth.Registration);
   Registration_lib.register_module Template.return_page (module News.Registration);
   ()

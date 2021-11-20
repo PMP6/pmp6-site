@@ -9,9 +9,8 @@ type _ service_handlers =
       'result service_handlers
 
 module type Module = sig
-  val pages : Content.t service_handlers
+  val contents : Content.t service_handlers
   val actions : unit service_handlers
-  val redirections : Eliom_service.non_ocaml Eliom_registration.redirection service_handlers
 end
 
 type 'result registrar =
@@ -31,7 +30,7 @@ let rec register_handlers :
       register.f service handler;
       register_handlers register tail
 
-let register_page ~service return_page content =
+let register_content ~service return_page content =
   Eliom_registration.Any.register
     ~service
     (fun gp pp ->
@@ -42,9 +41,9 @@ let register_page ~service return_page content =
        | Content.Redirection srv ->
          Eliom_registration.Redirection.(send @@ Redirection srv))
 
-let register_pages return_page pages =
+let register_contents return_page pages =
   register_handlers
-    { f = fun service page -> register_page ~service return_page page }
+    { f = fun service page -> register_content ~service return_page page }
     pages
 
 let register_actions actions =
@@ -52,14 +51,7 @@ let register_actions actions =
     { f = fun service action -> Eliom_registration.Action.register ~service action }
     actions
 
-let register_redirections redirections =
-  register_handlers
-    { f = fun service redirection ->
-        Eliom_registration.Redirection.register ~service redirection }
-    redirections
-
 let register_module return_page (module M : Module) =
-  register_pages return_page M.pages;
+  register_contents return_page M.contents;
   register_actions M.actions;
-  register_redirections M.redirections;
   ()

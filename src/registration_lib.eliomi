@@ -11,9 +11,8 @@ type _ service_handlers =
       'result service_handlers
 
 module type Module = sig
-  val pages : Content.t service_handlers
+  val contents : Content.t service_handlers
   val actions : unit service_handlers
-  val redirections : redirection service_handlers
 end
 
 type 'result registrar =
@@ -27,10 +26,8 @@ type 'result registrar =
 
 val register_handlers : 'result registrar -> 'result service_handlers -> unit
 
-val register_pages : (Content.page -> Html.doc Lwt.t) -> Content.t service_handlers -> unit
+val register_contents : (Content.page -> Html.doc Lwt.t) -> Content.t service_handlers -> unit
 
 val register_actions : unit service_handlers -> unit
-
-val register_redirections : redirection service_handlers -> unit
 
 val register_module : (Content.page -> Html.doc Lwt.t) -> (module Module) -> unit
