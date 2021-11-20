@@ -14,10 +14,3 @@ let () =
   Registration_lib.register_module Template.return_page (module Auth.Registration);
   Registration_lib.register_module Template.return_page (module News.Registration);
   ()
-
-let () =
-  Eliom_registration.set_exn_handler
-    (fun e -> match e with
-       | Eliom_common.Eliom_Wrong_parameter ->
-         Eliom_registration.Redirection.(send @@ Redirection Skeleton.home_service)
-       | _ -> Lwt.fail e)
