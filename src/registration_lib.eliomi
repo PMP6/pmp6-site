@@ -1,5 +1,3 @@
-type redirection := Eliom_service.non_ocaml Eliom_registration.redirection
-
 type _ service_handlers =
   | [] : _ service_handlers
   | ( :: ) :
