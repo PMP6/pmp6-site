@@ -31,3 +31,6 @@ let connection () () =
     View.Page.connection ()
   | Some _ ->
     View.Page.already_connected ()
+
+let forbidden () () =
+  View.Page.forbidden ()

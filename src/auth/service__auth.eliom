@@ -19,3 +19,9 @@ let logout =
     ~path:Eliom_service.No_path
     ~meth:(Eliom_service.Get Eliom_parameter.unit)
     ()
+
+let forbidden =
+  Eliom_service.create
+    ~path:(path ["forbidden"])
+    ~meth:(Eliom_service.Get Eliom_parameter.unit)
+    ()

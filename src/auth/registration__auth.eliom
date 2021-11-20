@@ -3,6 +3,7 @@ module Service = Service__auth
 
 let pages = Registration_lib.[
   Service.connection, Handler.connection;
+  Service.forbidden, Handler.forbidden;
 ]
 
 let actions = Registration_lib.[
