@@ -184,7 +184,7 @@ let time_ ?(a=[]) time_ =
   let attr = a_datetime datetime :: a in
   Eliom_content.Html.C.node
     ~init:(time ~a:attr [txt datetime])
-    [%client (time ~a:~%attr [txt @@ format_datetime ~%time_])]
+    Caml.([%client (time ~a:~%attr [txt @@ format_datetime ~%time_])])
 
 [%%server.start]
 

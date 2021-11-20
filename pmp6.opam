@@ -20,6 +20,7 @@ depends: [
   "js_of_ocaml"
   "lwt"
   "lwt_ppx"
+  "ocsipersist-dbm"
   "ppx_jane"
   "tyxml"
   "tyxml-ppx"
