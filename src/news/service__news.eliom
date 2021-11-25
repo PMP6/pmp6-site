@@ -1,22 +1,24 @@
 module Model = Model__news
 
-let path path = Eliom_service.Path ("news" :: path @ [""])
+let admin_path path = Admin.Service.path ("news" :: path)
 
 let main =
   Eliom_service.create
-    ~path:(path [])
+    ~path:(admin_path [])
     ~meth:(Eliom_service.Get Eliom_parameter.unit)
     ()
 
+let _ : unit Lwt.t = Admin_module.register "News" main
+
 let redaction =
   Eliom_service.create
-    ~path:(path ["redaction"])
+    ~path:(admin_path ["redaction"])
     ~meth:(Eliom_service.Get Eliom_parameter.unit)
     ()
 
 let edition =
   Eliom_service.create
-    ~path:(path ["edition"])
+    ~path:(admin_path ["edition"])
     ~meth:(Eliom_service.Get (Eliom_parameter.suffix @@ Model.Id.param "id"))
     ()
 

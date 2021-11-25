@@ -238,7 +238,7 @@ let footer =
 
         div_classes ["grid-x"; "grid-padding-x"; "align-right"] [
           div_classes ["cell"; "small-6"; "medium-shrink"] [
-            a ~service:News.Service.main [
+            a ~service:Admin.Service.main [
               Icon.solid "fa-tools" ()
             ] ()
           ];
