@@ -30,8 +30,8 @@ let edition =
   View.Page.edition news
 
 let update =
-  let& _user = Auth.Require.staff in
-  let author = assert false in
+  let& user = Auth.Require.staff in
+  let author = Auth.Model.User.id user in
   fun () (id, (title, (short_title, content))) ->
   let content = Html.Unsafe.data content in
   let%lwt model = Model.update_as_new id ~title ~short_title ~content ~author in
