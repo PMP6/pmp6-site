@@ -144,6 +144,14 @@ dd + dt {
             }
         }
 
+        .icon.logout {
+            color: $standard-color;
+            &:hover {
+                color: $active-color;
+                cursor: pointer;
+            }
+        }
+
         li {
             // Vertically center menu items on top bar
             display: flex;

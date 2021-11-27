@@ -133,24 +133,12 @@ let search_form () =
     ]
   ]
 
-let connection_icon () =
-  let icon = Icon.solid ~a:[H.a_class ["icon"]] "fa-user" () in
-  H.a
-    ~service:Auth.Service.connection
-    [icon]
-    ()
-
-let logout_icon () =
-  let icon = Icon.solid ~a:[H.a_class ["icon"]] "fa-user-times" () in
-  H.a
-    ~service:Auth.Service.logout
-    [icon]
-    ()
-
-let session_icon user =
+let li_session_icon user =
   match user with
-  | None -> connection_icon ()
-  | Some _ -> logout_icon ()
+  | None ->
+    H.li [Auth.View.Widget.connection_icon ()]
+  | Some _ ->
+    H.li ~a:[H.a_class ["menu-text"]] [Auth.View.Widget.logout_icon ()]
 
 let top_right_menu user =
   let open H in
@@ -158,7 +146,7 @@ let top_right_menu user =
     ~a:[a_class ["menu"]]
     [
       li ~a:[a_class ["menu-text"]] [search_form ()];
-      li ~a:[] [session_icon user];
+      li_session_icon user;
     ]
 
 let header user =

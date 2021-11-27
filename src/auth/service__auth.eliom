@@ -16,8 +16,9 @@ let login =
 
 let logout =
   Eliom_service.create
+    ~csrf_safe:true
     ~path:Eliom_service.No_path
-    ~meth:(Eliom_service.Get Eliom_parameter.unit)
+    ~meth:(Eliom_service.Post (Eliom_parameter.unit, Eliom_parameter.unit))
     ()
 
 let forbidden =
