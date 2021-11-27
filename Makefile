@@ -306,7 +306,7 @@ $(DEPSDIR)/%.fixtures: % | $(DEPSDIR)
 	$(ELIOMDEP) -server -ppx $(SERVER_INC) $(SERVER_DEP_DIRS) $(FIXTURES_DEP_DIRS) $< > $@
 
 $(DEPSDIR):
-	mkdir $@
+	mkdir -p $@
 	mkdir -p $(addprefix $@/, $(SERVER_DIRS))
 	mkdir -p $(addprefix $@/, $(CLIENT_DIRS))
 	mkdir -p $(addprefix $@/, $(FIXTURES_DIRS))
