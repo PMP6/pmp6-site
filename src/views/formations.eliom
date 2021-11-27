@@ -1,7 +1,7 @@
 module H = Html
 
 let thumbnail ~alt filename =
-  Template.thumbnail_row ~max_size:4 ~subdir:["formations"] [alt, filename]
+  Widget.thumbnail_row ~max_size:4 ~subdir:["formations"] [alt, filename]
 
 let intro =
   H.(

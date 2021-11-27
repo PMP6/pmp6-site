@@ -82,7 +82,7 @@ let fosse_page () () =
           gmaps_embed ()
         ];
       ];
-      Template.thumbnail_row ~subdir:["fosse"] [
+      Widget.thumbnail_row ~subdir:["fosse"] [
         "Le tube de 20m vu de haut", "fosse_1.JPG";
         "Exercices à 6m", "fosse_2.JPG";
         "Ensemble sur le bord du tube", "fosse_3.JPG";

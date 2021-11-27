@@ -41,7 +41,7 @@ let presentation_section () =
       email "delegues@pmp6.fr" ();
       txt ".";
     ];
-    Template.thumbnail_row
+    Widget.thumbnail_row
       ~max_size:4
       ~subdir:[]
       ["Un mola-mola à Banyuls", "mola-mola.jpg"];

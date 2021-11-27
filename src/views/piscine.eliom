@@ -50,7 +50,7 @@ let piscine_page () () =
           gmaps_embed ()
         ];
       ];
-      Template.thumbnail_row ~subdir:["piscine"] [
+      Widget.thumbnail_row ~subdir:["piscine"] [
         "Un élève en formation", "piscine_1.JPG";
         "Des attractions ludiques pour la piscine", "piscine_2.JPG";
         "Des baptêmes pour le Téléthon", "piscine_3.JPG";

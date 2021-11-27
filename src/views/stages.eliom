@@ -1,7 +1,7 @@
 module H = Eliom_content.Html.D
 
 let thumbnails location =
-  Template.thumbnail_row ~subdir:["stages"; location]
+  Widget.thumbnail_row ~subdir:["stages"; location]
 
 let intro =
   H.(
