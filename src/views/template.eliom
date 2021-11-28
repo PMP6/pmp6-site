@@ -143,9 +143,10 @@ let li_session_icon user =
 let top_right_menu user =
   let open H in
   ul
-    ~a:[a_class ["menu"]]
+    ~a:[a_class ["menu vertical large-horizontal"]]
     [
-      li ~a:[a_class ["menu-text"]] [search_form ()];
+      li ~a:[a_class ["menu-text"; "search-form"]] [search_form ()];
+      li [Admin.View.Widget.interface_icon ()];
       li_session_icon user;
     ]
 
@@ -192,20 +193,9 @@ let footer =
         txt "FFESSM 07750038";
       ];
 
-      div_classes ["cell"; "small-3"; "medium-2"; "large-4"; "icons"] [
-
-        div_classes ["grid-x"; "grid-padding-x"; "align-right"] [
-          div_classes ["cell"; "small-6"; "medium-shrink"] [
-            a ~service:Admin.Service.main [
-              Icon.solid "fa-tools" ()
-            ] ()
-          ];
-
-          div_classes ["cell"; "small-6"; "medium-shrink"] [
-            anchor_a ~anchor:"top" ~a:[a_user_data "smooth-scroll" ""] [
-              Icon.solid "fa-chevron-up" ()
-            ]
-          ];
+      div_classes ["cell"; "small-1"; "small-offset-2"; "large-offset-3"; "icons"] [
+        anchor_a ~anchor:"top" ~a:[a_user_data "smooth-scroll" ""] [
+          Icon.solid "fa-chevron-up" ()
         ]
       ]
     ]

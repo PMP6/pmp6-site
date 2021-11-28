@@ -161,7 +161,12 @@ dd + dt {
 
     }
 
-    .top-bar-right {
+    .top-bar-right .search-form {
+
+        @include breakpoint(medium down) {
+            order: 99;
+        }
+
         .input-group {
             // Vertically center the search form
             margin: auto;
@@ -171,8 +176,14 @@ dd + dt {
                 padding-top: 0;
                 padding-bottom: 0;
             }
-        }
 
+            input[type=search] {
+                // Reduce the search form width on small so that icons fit next to it
+                @include breakpoint(small only) {
+                    max-width: 60%;
+                }
+            }
+        }
     }
 
 }

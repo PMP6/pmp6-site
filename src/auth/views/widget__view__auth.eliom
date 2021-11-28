@@ -3,20 +3,21 @@ module Service = Service__auth
 module H = Html
 
 let connection_icon () =
-  let icon = Icon.solid ~a:[H.a_class ["icon"]] "fa-user" () in
+  let icon = Icon.solid ~a:[H.a_class ["icon"; "show-for-large"]] "fa-user" () in
   H.a
     ~service:Service.connection
-    [icon]
+    [icon; H.span ~a:[H.a_class ["hide-for-large"]] [H.txt "Connexion"]]
     ()
 
 let logout_icon () =
-  let icon = Icon.solid ~a:[H.a_class ["icon"; "logout"]] "fa-user-times" () in
+  let icon =
+    Icon.solid ~a:[H.a_class ["icon"; "logout"; "show-for-large"]] "fa-user-times" () in
   H.Form.post_form
     ~service:Service.logout
     (fun () ->
        [H.Form.button_no_value
           ~button_type:`Submit
-          [icon]
+          [icon; H.span ~a:[H.a_class ["hide-for-large"]] [H.txt "Déconnexion"]]
        ])
     ()
 
