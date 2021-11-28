@@ -133,22 +133,21 @@ let search_form () =
     ]
   ]
 
-let li_session_icon user =
-  match user with
-  | None ->
-    H.li [Auth.View.Widget.connection_icon ()]
-  | Some _ ->
-    H.li ~a:[H.a_class ["menu-text"]] [Auth.View.Widget.logout_icon ()]
-
 let top_right_menu user =
   let open H in
-  ul
-    ~a:[a_class ["menu vertical large-horizontal"]]
-    [
-      li ~a:[a_class ["menu-text"; "search-form"]] [search_form ()];
-      li [Admin.View.Widget.interface_icon ()];
-      li_session_icon user;
-    ]
+  let connection =
+    li [Auth.View.Widget.connection_icon ()] in
+  let logout =
+    li ~a:[a_class ["menu-text"]] [Auth.View.Widget.logout_icon ()] in
+  let admin =
+    li [Admin.View.Widget.interface_icon ()] in
+  let search =
+    li ~a:[a_class ["menu-text"; "search-form"]] [search_form ()] in
+  ul ~a:[a_class ["menu"; "vertical"; "large-horizontal"]] (
+    Utils.with_if (Option.exists ~f:Auth.Model.User.is_staff user) admin @@
+    Utils.with_opt user ~some:logout ~none:connection @@
+    [search]
+  )
 
 let header user =
   let open H in

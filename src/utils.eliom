@@ -54,10 +54,20 @@ let slugify string =
   |> List.rev
   |> String.concat ~sep:"-"
 
-let with_if boolean class_ classes =
+let with_if boolean elt list =
   if boolean
-  then class_ :: classes
-  else classes
+  then elt :: list
+  else list
+
+let with_if_else boolean ~true_ ~false_ list =
+  if boolean
+  then true_ :: list
+  else false_ :: list
+
+let with_opt opt ~some ~none list =
+  match opt with
+  | None -> none :: list
+  | Some _ -> some :: list
 
 let with_vertical is_vertical classes =
   with_if is_vertical "vertical" classes

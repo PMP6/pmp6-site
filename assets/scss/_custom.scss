@@ -163,8 +163,8 @@ dd + dt {
 
     .top-bar-right .search-form {
 
-        @include breakpoint(medium down) {
-            order: 99;
+        @include breakpoint(large only) {
+            order: -1;
         }
 
         .input-group {
