@@ -5,7 +5,7 @@ let path path = Eliom_service.Path ("auth" :: path @ [""])
 let connection =
   Eliom_service.create
     ~path:(path ["connexion"])
-    ~meth:(Eliom_service.Get Eliom_parameter.unit)
+    ~meth:(Eliom_service.Get Eliom_parameter.(opt @@ Utils.subpath_param "next"))
     ()
 
 let login =

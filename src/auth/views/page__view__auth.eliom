@@ -2,10 +2,10 @@ module Widget = Widget__view__auth
 
 module H = Html
 
-let connection () =
+let connection ~next () =
   Content.page
     ~title:"Connexion"
-    [Widget.login_form ()]
+    [Widget.login_form ~next ()]
 
 let forbidden () =
   Content.page

@@ -16,7 +16,9 @@ module Syntax = struct
       (fun _g _p ->
          Content.redirection_with_action
            (fun () -> Toast.push Toast.Warning (View.Toast.login_required ()))
-           Service.connection)
+           (Eliom_service.preapply
+              ~service:Service.connection
+              (Option.try_with Eliom_request_info.get_current_sub_path)))
       (fun _g _p -> Content.redirection Service.forbidden)
       handler
 

@@ -5,9 +5,9 @@ module H = Html
 let connection_icon () =
   let icon = Icon.solid ~a:[H.a_class ["icon"; "show-for-large"]] "fa-user" () in
   H.a
-    ~service:Service.connection
+    ~service:(Service.connection)
     [icon; H.span ~a:[H.a_class ["hide-for-large"]] [H.txt "Connexion"]]
-    ()
+    (Option.try_with Eliom_request_info.get_current_sub_path)
 
 let logout_icon () =
   let icon =
@@ -21,7 +21,7 @@ let logout_icon () =
        ])
     ()
 
-let login_form () =
+let login_form ~next () =
   let open H in
     let span_form_error text =
     H.span ~a:[H.a_class ["form-error"]] [H.txt text]
@@ -61,4 +61,4 @@ let login_form () =
       a_novalidate ();
     ]
     make_form
-    ()
+    next

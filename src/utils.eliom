@@ -79,3 +79,26 @@ let with_is_active_attrib is_active attribs =
   if is_active
   then H.a_class (with_is_active is_active []) :: attribs
   else attribs
+
+let%shared subpath_of_string = Eliom_lib.Url.split_path
+let%shared subpath_to_string = Eliom_lib.Url.string_of_url_path ~encode:false
+
+let subpath_param name =
+  let client_to_and_of =
+    Caml.(
+      [%client
+      Eliom_parameter.{
+        of_string = subpath_of_string;
+        to_string = subpath_to_string;
+      }]) in
+  Eliom_parameter.user_type
+    ~client_to_and_of
+    ~of_string:subpath_of_string
+    ~to_string:subpath_to_string
+    name
+
+let path_srv path =
+  Eliom_service.create
+    ~path:(Eliom_service.Path path)
+    ~meth:(Eliom_service.Get Eliom_parameter.unit)
+    ()
