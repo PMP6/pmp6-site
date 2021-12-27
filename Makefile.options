@@ -27,6 +27,7 @@ CLIENT_FILES := $(SRC_FILES)
 # OCamlfind packages used for both server and client
 COMMON_PACKAGES := \
 	base \
+	base64 \
 	core_kernel \
 	uucp \
 	uuseg \
