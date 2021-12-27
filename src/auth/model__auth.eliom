@@ -1,4 +1,4 @@
-module Password = Password__auth
+module Hash = Hash__auth
 
 let ( & ) x y = (x, y)
 
@@ -8,13 +8,13 @@ module User = struct
     type t = {
       username : string;
       email : string;
-      password : Password.encoded;
+      password : Hash.encoded;
       is_superuser : bool;
       is_staff : bool;
       joined_time : Time.t;
     }
 
-    type mapping = string * (string * (Password.encoded * (bool * (bool * (Time.t)))))
+    type mapping = string * (string * (Hash.encoded * (bool * (bool * (Time.t)))))
 
     let username { username; _ } = username
     let email { email; _ } = email
@@ -25,11 +25,11 @@ module User = struct
 
     let build_new ~username ~email ~password ~is_superuser ~is_staff =
       let joined_time = Time.now () in
-      let password = Password.encode password in
+      let password = Hash.encode password in
       { username; email; password; is_superuser; is_staff; joined_time }
 
     let db_type =
-      Db.Type.(string & string & Password.db_type & bool & bool & time)
+      Db.Type.(string & string & Hash.db_type & bool & bool & time)
 
     let db_unmap
         (username, (email, (password, (is_superuser, (is_staff, (joined_time)))))) =
@@ -51,7 +51,7 @@ module User = struct
       joined_time
 
     let verify_password { password; _ } attempt =
-      Password.verify password attempt
+      Hash.verify password attempt
   end
 
   include Db_utils.With_id (Item)
