@@ -1,5 +1,3 @@
-module Hash = Hash__auth
-
 let ( & ) x y = (x, y)
 
 module User = struct

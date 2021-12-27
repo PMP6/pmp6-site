@@ -1,6 +1,6 @@
-type encoded = Argon2.encoded (* = string *)
+type hash = Argon2.encoded (* = string *)
 
-let db_type = Caqti_type.string
+let hash_db_type = Caqti_type.string
 
 let ok_or_argon2_error result =
   result
@@ -10,7 +10,7 @@ let ok_or_argon2_error result =
 let random_salt salt_len =
   String.init salt_len ~f:(fun _ -> Random.char ())
 
-let encode password =
+let hash password =
   (* Parameters tuned to take ~0.5s on entry-level OVH VPS, using
      less than half of available RAM as of running the test *)
   let salt_len = 16 (* bytes *) in
@@ -40,8 +40,8 @@ let encode password =
   |> Result.map ~f:snd
   |> ok_or_argon2_error
 
-let verify encoded attempt =
-  match Argon2.verify ~kind:Argon2.ID ~encoded ~pwd:attempt with
+let verify_hash hash attempt =
+  match Argon2.verify ~kind:Argon2.ID ~encoded:hash ~pwd:attempt with
   | Ok true -> true
   | Ok false
   | Error VERIFY_MISMATCH -> false
