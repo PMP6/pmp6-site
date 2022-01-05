@@ -6,6 +6,14 @@ let caqti_exn caqti_error =
 let connection_uri =
   "sqlite3:/home/thibault/pmp6-site/pmp6_test.db"
 
+module Hlist = struct
+
+  type _ t =
+    | [] : unit t
+    | ( :: ) : 'a * 'b t -> ('a -> 'b) t
+
+end
+
 module Type = struct
   (* Utilities over Caqti_type *)
   include Caqti_type
@@ -42,6 +50,22 @@ module Type = struct
     field Time
 
   let ( & ) = tup2
+
+  type _ tlist =
+    | [] : unit tlist
+    | ( :: ) : 'a t * 'b tlist -> ('a -> 'b) tlist
+
+  let rec hlist : type a. a tlist -> a Hlist.t t = function
+    | [] ->
+      custom
+        ~encode:(fun Hlist.[] -> Ok ())
+        ~decode:(fun () -> Ok [])
+        unit
+    | t :: ts ->
+      custom
+        ~encode:(fun Hlist.(x :: xs) -> Ok (x, xs))
+        ~decode:(fun (x, xs) -> Ok (x :: xs))
+        (tup2 t (hlist ts))
 
 end
 

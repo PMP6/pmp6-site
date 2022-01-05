@@ -12,7 +12,8 @@ module User = struct
       joined_time : Time.t;
     }
 
-    type mapping = string * (string * (Secret.Hash.t * (bool * (bool * (Time.t)))))
+    type mapping =
+      (string -> string -> Secret.Hash.t -> bool -> bool -> Time.t -> unit) Db.Hlist.t
 
     let username { username; _ } = username
     let email { email; _ } = email
@@ -27,10 +28,10 @@ module User = struct
       { username; email; password; is_superuser; is_staff; joined_time }
 
     let db_type =
-      Db.Type.(string & string & Secret.Hash.db_type & bool & bool & time)
+      Db.Type.(hlist [string; string; Secret.Hash.db_type; bool; bool; time])
 
     let db_unmap
-        (username, (email, (password, (is_superuser, (is_staff, (joined_time)))))) =
+        Db.Hlist.[username; email; password; is_superuser; is_staff; joined_time] =
       {
         username;
         email;
@@ -41,12 +42,14 @@ module User = struct
       }
 
     let db_map { username; email; password; is_superuser; is_staff; joined_time } =
-      username &
-      email &
-      password &
-      is_superuser &
-      is_staff &
-      joined_time
+      Db.Hlist.[
+        username;
+        email;
+        password;
+        is_superuser;
+        is_staff;
+        joined_time;
+      ]
 
     let verify_password { password; _ } attempt =
       Secret.Hash.verify password attempt

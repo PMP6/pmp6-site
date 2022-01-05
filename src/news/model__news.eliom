@@ -2,8 +2,6 @@ module H = Html
 
 module User = Auth.Model.User
 
-let ( & ) x y = (x, y)
-
 module Item = struct
   type t = {
     title : string;
@@ -34,12 +32,13 @@ module Item = struct
   let content_as_string item =
     Html.elt_to_string (content item)
 
-  type mapping = string * (string * (Time.t * (string * (User.Id.t))))
+  type mapping =
+    (string -> string -> Time.t -> string -> User.Id.t -> unit) Db.Hlist.t
 
   let db_type =
-    Db.Type.(string & string & time & string & User.Id.db_type)
+    Db.Type.(hlist [string; string; time; string; User.Id.db_type])
 
-  let db_unmap (title, (short_title, (pub_time, (content, (author))))) =
+  let db_unmap Db.Hlist.[title; short_title; pub_time; content; author] =
     {
       title;
       short_title;
@@ -49,11 +48,13 @@ module Item = struct
     }
 
   let db_map { title; short_title; pub_time; content; author } =
-    title &
-    short_title &
-    pub_time &
-    Html.elt_to_string content &
-    author
+    Db.Hlist.[
+      title;
+      short_title;
+      pub_time;
+      Html.elt_to_string content;
+      author;
+    ]
 end
 
 include Db_utils.With_id (Item)
