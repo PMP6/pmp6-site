@@ -1,28 +1,30 @@
 module Model = Model__auth
 
-let path path = Eliom_service.Path ("auth" :: path @ [""])
+open Service_shortnames
+
+let path subpath = S.Path ("auth" :: subpath @ [""])
 
 let connection =
-  Eliom_service.create
+  S.create
     ~path:(path ["connexion"])
-    ~meth:(Eliom_service.Get Eliom_parameter.(opt @@ Utils.subpath_param "next"))
+    ~meth:(S.Get P.(opt @@ Utils.subpath_param "next"))
     ()
 
 let login =
-  Eliom_service.create_attached_post
+  S.create_attached_post
     ~fallback:connection
-    ~post_params:(Eliom_parameter.(string "username" ** string "password"))
+    ~post_params:(P.(string "username" ** string "password"))
     ()
 
 let logout =
-  Eliom_service.create
+  S.create
     ~csrf_safe:true
-    ~path:Eliom_service.No_path
-    ~meth:(Eliom_service.Post (Eliom_parameter.unit, Eliom_parameter.unit))
+    ~path:S.No_path
+    ~meth:(S.Post (P.unit, P.unit))
     ()
 
 let forbidden =
-  Eliom_service.create
-    ~path:(path ["forbidden"])
-    ~meth:(Eliom_service.Get Eliom_parameter.unit)
+  S.create
+    ~path:(path ["acces-interdit"])
+    ~meth:(S.Get P.unit)
     ()

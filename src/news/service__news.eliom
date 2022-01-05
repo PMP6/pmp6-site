@@ -1,33 +1,35 @@
 module Model = Model__news
 
+open Service_shortnames
+
 let admin_path path = Admin.Service.path ("news" :: path)
 
 let main =
-  Eliom_service.create
+  S.create
     ~path:(admin_path [])
-    ~meth:(Eliom_service.Get Eliom_parameter.unit)
+    ~meth:(S.Get P.unit)
     ()
 
 let _ : unit Lwt.t = Admin_module.register "News" main
 
 let redaction =
-  Eliom_service.create
+  S.create
     ~path:(admin_path ["redaction"])
-    ~meth:(Eliom_service.Get Eliom_parameter.unit)
+    ~meth:(S.Get P.unit)
     ()
 
 let edition =
-  Eliom_service.create
+  S.create
     ~path:(admin_path ["edition"])
-    ~meth:(Eliom_service.Get (Eliom_parameter.suffix @@ Model.Id.param "id"))
+    ~meth:(S.Get (P.suffix @@ Model.Id.param "id"))
     ()
 
 let create_into_main =
-  Eliom_service.create_attached_post
+  S.create_attached_post
     ~fallback:main
     ~csrf_safe:true
     ~post_params:
-      Eliom_parameter.(
+      P.(
         string "title" **
         string "short_title" **
         string "content"
@@ -35,11 +37,11 @@ let create_into_main =
     ()
 
 let update_into_main =
-  Eliom_service.create_attached_post
+  S.create_attached_post
     ~fallback:main
     ~csrf_safe:true
     ~post_params:
-      Eliom_parameter.(
+      P.(
         Model.Id.param "id" **
         string "title" **
         string "short_title" **
@@ -48,8 +50,8 @@ let update_into_main =
     ()
 
 let delete =
-  Eliom_service.create
+  S.create
     ~csrf_safe:true
-    ~path:Eliom_service.No_path
-    ~meth:(Eliom_service.Post (Eliom_parameter.unit, Model.Id.param "id"))
+    ~path:S.No_path
+    ~meth:(S.Post (P.unit, Model.Id.param "id"))
     ()
