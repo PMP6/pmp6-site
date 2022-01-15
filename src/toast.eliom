@@ -47,9 +47,39 @@ let all () = _all ()
 let push kind content =
   _push { kind; content }
 
+let push_primary content =
+  push Primary content
+
+let push_secondary content =
+  push Secondary content
+
+let push_success content =
+  push Success content
+
+let push_warning content =
+  push Warning content
+
+let push_alert content =
+  push Alert content
+
 let render_all () =
   let%lwt all = all () in
   Lwt.return @@ List.map ~f:render all
 
 let simple_message msg =
   [H.p [H.txt msg]]
+
+let push_primary_msg msg =
+  push_primary (simple_message msg)
+
+let push_secondary_msg msg =
+  push_secondary (simple_message msg)
+
+let push_success_msg msg =
+  push_success (simple_message msg)
+
+let push_warning_msg msg =
+  push_warning (simple_message msg)
+
+let push_alert_msg msg =
+  push_alert (simple_message msg)
