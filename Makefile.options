@@ -29,6 +29,7 @@ COMMON_PACKAGES := \
 	base \
 	base64 \
 	core_kernel \
+	fmt \
 	uucp \
 	uuseg \
 	uuseg.string \

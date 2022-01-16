@@ -18,6 +18,7 @@ PKG eliom.server
 
 PKG base64
 PKG argon2
+PKG fmt
 PKG uucp
 PKG uuseg
 PKG uuseg.string
