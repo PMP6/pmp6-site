@@ -17,10 +17,10 @@ let login =
     ()
 
 let logout =
-  S.create
+  S.create_attached_post
     ~csrf_safe:true
-    ~path:S.No_path
-    ~meth:(S.Post (P.unit, P.unit))
+    ~fallback:Skeleton.home_service
+    ~post_params:P.unit
     ()
 
 let forbidden =
@@ -28,3 +28,22 @@ let forbidden =
     ~path:(path ["acces-interdit"])
     ~meth:(S.Get P.unit)
     ()
+
+module Settings = struct
+
+  let path subpath = path ("parametres" :: subpath)
+
+  let email_edition =
+    S.create
+      ~path:(path ["email"])
+      ~meth:(S.Get P.unit)
+      ()
+
+  let save_email =
+    S.create
+      ~path:S.No_path
+      ~csrf_safe:true
+      ~meth:(S.Post (P.unit, P.string "email"))
+      ()
+
+end

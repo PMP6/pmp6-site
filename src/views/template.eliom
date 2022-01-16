@@ -137,17 +137,27 @@ let top_right_menu user =
   let open H in
   let connection =
     li [Auth.View.Widget.connection_icon ()] in
-  let logout =
-    li ~a:[a_class ["menu-text"]] [Auth.View.Widget.logout_icon ()] in
+  let _user_menu =
+    li ~a:[a_class ["menu-text"]] [Auth.View.Widget.user_menu_icon ()] in
+  let user_menu =
+    Auth.View.Widget.user_menu () in
   let admin =
     li [Admin.View.Widget.interface_icon ()] in
   let search =
     li ~a:[a_class ["menu-text"; "search-form"]] [search_form ()] in
-  ul ~a:[a_class ["menu"; "vertical"; "large-horizontal"]] (
-    Utils.with_if (Option.exists ~f:Auth.Model.User.is_staff user) admin @@
-    Utils.with_opt user ~some:logout ~none:connection @@
-    [search]
-  )
+  ul
+    ~a:[
+      a_class ["menu"; "vertical"; "large-horizontal"];
+      a_user_data
+        "responsive-menu"
+        "accordion large-dropdown";
+      a_user_data "click-open" "true";
+    ]
+    (
+      Utils.with_if (Option.exists ~f:Auth.Model.User.is_staff user) admin @@
+      Utils.with_opt user ~some:user_menu ~none:connection @@
+      [search]
+    )
 
 let header user =
   let open H in

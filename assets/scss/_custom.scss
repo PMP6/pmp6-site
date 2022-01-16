@@ -97,8 +97,6 @@ dd + dt {
 
     // Font and display
     font-family: "Open Sans", $body-font-family;
-    font-variant: small-caps;
-    text-transform: uppercase;
     font-size: 0.85em;
 
     // Shadow
@@ -136,18 +134,14 @@ dd + dt {
             margin-left: 2ch;
         }
 
-        li, a, a:focus {
+        li, a, a:focus, .action-button, .action-button:focus {
+            font-variant: small-caps;
+            text-transform: uppercase;
+
             color: $standard-color;
             &:hover {
                 color: $active-color;
                 text-shadow: 0 0 3px rgba(0, 0, 0, 0.75);
-            }
-        }
-
-        .icon.logout {
-            color: $standard-color;
-            &:hover {
-                color: $active-color;
                 cursor: pointer;
             }
         }

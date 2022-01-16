@@ -25,3 +25,8 @@ let already_connected () =
         ~a:[H.a_class ["callout"; "warning"]]
         [H.txt "Vous êtes déjà connecté."]
     ]
+
+let email_edition user =
+  Content.page
+    ~title:"Modifier mon adresse email"
+    [Widget.email_edition_form user]

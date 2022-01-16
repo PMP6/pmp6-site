@@ -1,4 +1,4 @@
-let ( & ) x y = (x, y)
+let ( & ) = Db.Type.( & )
 
 module User = struct
 
@@ -143,6 +143,31 @@ module User = struct
           WHERE id = ?
         |}
 
+    let email_exists email =
+      Db.find
+        ~in_:(Db.Type.string, email)
+        ~out:(Db.Type.bool, Fn.id)
+        {| SELECT EXISTS (SELECT 1 FROM auth_user WHERE email = ?) |}
+
+    let try_force_update_email id email =
+      Db.exec
+        ~in_:(Id.db_type & Db.Type.string, (id, email))
+        {|
+          UPDATE auth_user
+          SET email = $2
+          WHERE id = $1
+        |}
+
+    let update_email id email =
+      let open Db.Let_syntax in
+      Db.transaction (
+        if%bind email_exists email
+        then return (Error `Email_already_exists)
+        else
+          let%map () = try_force_update_email id email in
+          Ok ()
+      )
+
   end
 
   let all () =
@@ -165,5 +190,11 @@ module User = struct
 
   let delete id =
     Db.run (Request.delete id)
+
+  let email_exists email =
+    Db.run (Request.email_exists email)
+
+  let update_email id email =
+    Db.run (Request.update_email id email)
 
 end

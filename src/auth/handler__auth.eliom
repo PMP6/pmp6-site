@@ -1,7 +1,10 @@
 module Model = Model__auth
+module Require = Require__auth
 module Session = Session__auth
 module Service = Service__auth
 module View = View__auth
+
+open Require.Syntax
 
 let login next (username, password) =
   match%lwt Model.User.find_by_username username with
@@ -35,3 +38,24 @@ let connection next () =
 
 let forbidden () () =
   View.Page.forbidden ()
+
+module Settings = struct
+
+  let email_edition =
+    let$ user = Require.authenticated in
+    fun () () ->
+      View.Page.email_edition user
+
+  let save_email =
+    let& user = Require.authenticated in
+    fun () new_email ->
+      if String.(new_email = Model.User.email user)
+      then Toast.push_secondary_msg "Cette adresse est identique à la précédente."
+      else
+        match%lwt Model.User.update_email (Model.User.id user) new_email with
+        | Ok () ->
+          Toast.push_success_msg "L'adresse email a bien été changée."
+        | Error `Email_already_exists ->
+          Toast.push_alert_msg "Cette adresse mail est indisponible."
+
+end
