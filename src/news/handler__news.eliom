@@ -16,8 +16,8 @@ let redaction =
     View.Page.redaction ()
 
 let create =
-  let& _user = Auth.Require.staff in
-  let author = assert false in
+  let& user = Auth.Require.staff in
+  let author = Auth.Model.User.id user in
   fun () (title, (short_title, content)) ->
   let content = Html.Unsafe.data content in
   let%lwt model = Model.create ~title ~short_title ~content ~author in
