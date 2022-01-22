@@ -14,6 +14,10 @@ include Makefile.localenv
 ## Generate js_of_eliom runtime options
 JSOPT_RUNTIMES := $(addprefix -jsopt +,${JS_RUNTIMES})
 
+define WITH_SECRETS
+	(set -a; source $(realpath $(SECRETS_ENV_FILE)); $1; set +a)
+endef
+
 ## Required binaries
 OCAMLC		  := ocamlc -w ${WARNINGS} ${CFLAGS} ${OPENFLAGS}
 OCAMLOPT	  := ocamlopt -w ${WARNINGS} ${CFLAGS} ${OPENFLAGS}
@@ -61,9 +65,9 @@ DIST_FILES = $(ELIOMSTATICDIR)/$(PROJECT_NAME).js $(LIBDIR)/$(PROJECT_NAME).cma
 
 .PHONY: test.byte test.opt
 test.byte: $(addprefix $(TEST_PREFIX),$(ETCDIR)/$(PROJECT_NAME)-test.conf $(DIST_DIRS) $(DIST_FILES))
-	$(OCSIGENSERVER) $(RUN_DEBUG) -c $<
+	$(call WITH_SECRETS, $(OCSIGENSERVER) $(RUN_DEBUG) -c $<)
 test.opt: $(addprefix $(TEST_PREFIX),$(ETCDIR)/$(PROJECT_NAME)-test.conf $(DIST_DIRS) $(patsubst %.cma,%.cmxs, $(DIST_FILES)))
-	$(OCSIGENSERVER.OPT) $(RUN_DEBUG) -c $<
+	$(call WITH_SECRETS, $(OCSIGENSERVER.OPT) $(RUN_DEBUG) -c $<)
 
 $(addprefix $(TEST_PREFIX), $(DIST_DIRS)):
 	mkdir -p $@
@@ -100,9 +104,9 @@ $(addprefix $(PREFIX),$(DATADIR) $(LOGDIR) $(STATICDIR) $(ELIOMSTATICDIR) $(shel
 	install $(addprefix -o ,$(WWWUSER)) -d $@
 
 run.byte:
-	$(OCSIGENSERVER) $(RUN_DEBUG) -c ${PREFIX}${ETCDIR}/${PROJECT_NAME}.conf
+	$(call WITH_SECRETS, $(OCSIGENSERVER) $(RUN_DEBUG) -c ${PREFIX}${ETCDIR}/${PROJECT_NAME}.conf)
 run.opt:
-	$(OCSIGENSERVER.OPT) $(RUN_DEBUG) -c ${PREFIX}${ETCDIR}/${PROJECT_NAME}.conf
+	$(call WITH_SECRETS, $(OCSIGENSERVER.OPT) $(RUN_DEBUG) -c ${PREFIX}${ETCDIR}/${PROJECT_NAME}.conf)
 
 ##----------------------------------------------------------------------
 ## Aux

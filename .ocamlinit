@@ -7,3 +7,6 @@
 
 open Core_kernel;;
 open Lwt.Infix;;
+
+#require "async_smtp";;
+open Async_smtp;;

@@ -4,6 +4,9 @@
 
 PROJECT_NAME := pmp6
 
+# If you modify this, make sure you don't use a git-tracked file.
+SECRETS_ENV_FILE := secrets.env
+
 # Name of the mock eliom module for fixtures installation
 PROJECT_FIXTURES_NAME := $(PROJECT_NAME)__fixtures
 
@@ -42,6 +45,8 @@ COMMON_PACKAGES := \
 # OCamlfind packages for the server
 SERVER_PACKAGES := \
 	$(COMMON_PACKAGES) \
+	async \
+	async_smtp \
 	argon2 \
 	caqti-driver-sqlite3 \
 	caqti-lwt
