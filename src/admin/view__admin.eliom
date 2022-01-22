@@ -20,6 +20,9 @@ let main () =
   Content.page
     ~title:"Administration"
     [
+      H.h1 [H.txt "Interface d'administration"];
+      H.p [H.txt "Cliquez sur un lien pour accéder à l'administration \
+                  de ce module."];
       Html.ul ~a:[Html.a_class ["menu"]] @@
       List.map ~f:(Tuple2.uncurry make_li_elt) all_modules
     ]

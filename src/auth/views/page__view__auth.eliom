@@ -5,12 +5,16 @@ module H = Html
 let connection ~next () =
   Content.page
     ~title:"Connexion"
-    [Widget.login_form ~next ()]
+    [
+      H.h1 [H.txt "Connexion"];
+      Widget.login_form ~next ();
+    ]
 
 let forbidden () =
   Content.page
     ~title:"Accès interdit"
     [
+      H.h1 [H.txt "Accès interdit"];
       H.div
         ~a:[H.a_class ["callout"; "alert"]]
         [H.txt "Vous n'avez pas les autorisations nécessaires pour accéder \
@@ -29,4 +33,7 @@ let already_connected () =
 let email_edition user =
   Content.page
     ~title:"Modifier mon adresse email"
-    [Widget.email_edition_form user]
+    [
+      H.h1 [H.txt "Modifier mon adresse email"];
+      Widget.email_edition_form user
+    ]
