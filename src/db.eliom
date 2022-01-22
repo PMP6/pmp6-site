@@ -4,7 +4,7 @@ let caqti_exn caqti_error =
   Caqti_error.Exn caqti_error
 
 let connection_uri =
-  "sqlite3:/home/thibault/pmp6-site/pmp6_test.db"
+  Settings.db_uri
 
 module Hlist = struct
 
