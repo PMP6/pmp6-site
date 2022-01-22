@@ -1,5 +1,5 @@
 module Model = Model__auth
-module Notify = Notify__auth
+module Usermail = Usermail__auth
 module Require = Require__auth
 module Session = Session__auth
 module Service = Service__auth
@@ -57,7 +57,7 @@ module Settings = struct
         | Ok () ->
           let () =
             Lwt.async @@ fun () ->
-            Notify.send_user_email
+            Usermail.send
               ~user
               ~forced_address:new_email
               ~subject:"Modification de votre adresse email"

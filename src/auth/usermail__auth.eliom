@@ -1,6 +1,6 @@
 module Model = Model__auth
 
-let send_user_email
+let send
     ~user
     ?(forced_address=Model.User.email user)
     ?(forced_username=Model.User.username user)
