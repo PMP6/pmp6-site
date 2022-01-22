@@ -56,6 +56,6 @@ module Settings = struct
         | Ok () ->
           Toast.push_success_msg "L'adresse email a bien été changée."
         | Error `Email_already_exists ->
-          Toast.push_alert_msg "Cette adresse mail est indisponible."
+          Toast.push_alert_msg "Cette adresse email est indisponible."
 
 end
