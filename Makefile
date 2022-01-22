@@ -250,7 +250,7 @@ fixtures-media: $(FIXTURES_DIR)/media
 fixtures: fixtures-media fixtures.byte
 
 fixtures.byte: $(addprefix $(TEST_PREFIX),$(ETCDIR)/$(PROJECT_FIXTURES_NAME).conf $(DIST_DIRS) $(LIBDIR)/$(PROJECT_FIXTURES_NAME).cma)
-	$(OCSIGENSERVER) $(RUN_DEBUG) -c $<
+	$(call WITH_SECRETS, $(OCSIGENSERVER) $(RUN_DEBUG) -c $<)
 
 ${ELIOM_SERVER_DIR}/${FIXTURES_DIR}/%.cmi: ${FIXTURES_DIR}/%.eliomi
 	${ELIOMC} -c ${SERVER_INC} ${SERVER_INC_DIRS} ${FIXTURES_INC_DIRS} $(GENERATE_DEBUG) $<
