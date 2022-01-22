@@ -54,7 +54,26 @@ module Settings = struct
       else
         match%lwt Model.User.update_email (Model.User.id user) new_email with
         | Ok () ->
-          Toast.push_success_msg "L'adresse email a bien été changée."
+          let () =
+            Lwt.async @@ fun () ->
+            Email.send_mail
+              ~auto_generated:()
+              ~to_:[new_email]
+              ~subject:"Modification de votre adresse email"
+              ~content:
+                (Fmt.str
+                   "Bonjour %s,@.@.@[%a@]"
+                   (Model.User.username user)
+                   Fmt.text
+                   "Votre adresse email a bien été modifiée. Si vous \
+                    n'êtes pas à l'origine de cette demande, veuillez \
+                    contacter l'administrateur du site.")
+              ()
+          in
+          Toast.push_success_msg
+            "Votre adresse a bien été modifiée. Vous allez recevoir un \
+             email de confirmation. Dans le cas contraire, contactez \
+             l'administrateur."
         | Error `Email_already_exists ->
           Toast.push_alert_msg "Cette adresse email est indisponible."
 
