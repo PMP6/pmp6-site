@@ -1,4 +1,5 @@
 module Model = Model__auth
+module Notify = Notify__auth
 module Require = Require__auth
 module Session = Session__auth
 module Service = Service__auth
@@ -56,18 +57,14 @@ module Settings = struct
         | Ok () ->
           let () =
             Lwt.async @@ fun () ->
-            Email.send_mail
-              ~auto_generated:()
-              ~to_:[new_email]
+            Notify.send_user_email
+              ~user
+              ~forced_address:new_email
               ~subject:"Modification de votre adresse email"
               ~content:
-                (Fmt.str
-                   "Bonjour %s,@.@.@[%a@]"
-                   (Model.User.username user)
-                   Fmt.text
-                   "Votre adresse email a bien été modifiée. Si vous \
-                    n'êtes pas à l'origine de cette demande, veuillez \
-                    contacter l'administrateur du site.")
+                "Votre adresse email a bien été modifiée. Si vous \
+                 n'êtes pas à l'origine de cette demande, veuillez \
+                 contacter l'administrateur du site."
               ()
           in
           Toast.push_success_msg

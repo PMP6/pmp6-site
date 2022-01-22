@@ -1,0 +1,13 @@
+module Model = Model__auth
+
+let send_user_email
+    ~user
+    ?(forced_address=Model.User.email user)
+    ?(forced_username=Model.User.username user)
+    ~subject ~content
+    () =
+  let to_ = [forced_address] in
+  Email.send_mail
+    ~auto_generated:() ~to_ ~subject
+    ~content:(Fmt.str "Bonjour %s,@.@.@[%a@]" forced_username Fmt.text content)
+    ()
