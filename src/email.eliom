@@ -7,7 +7,7 @@ let credentials = match Settings.smtp_credentials with
   | None -> None
   | Some (username, password) -> Some (Smtp_client.Credentials.login ~username ~password ())
 
-let send_mail
+let send
     ?auto_generated
     ?(display_name=Settings.default_from_display_name)
     ?(from=Settings.default_from_email)

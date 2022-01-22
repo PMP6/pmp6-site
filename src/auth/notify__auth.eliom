@@ -7,7 +7,7 @@ let send_user_email
     ~subject ~content
     () =
   let to_ = [forced_address] in
-  Email.send_mail
+  Email.send
     ~auto_generated:() ~to_ ~subject
     ~content:(Fmt.str "Bonjour %s,@.@.@[%a@]" forced_username Fmt.text content)
     ()
