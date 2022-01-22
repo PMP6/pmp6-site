@@ -107,7 +107,7 @@ module User = struct
         {|
           SELECT id, username, email, password, is_superuser, is_staff, joined_time
           FROM auth_user
-          WHERE username = ? COLLATE NOCASE
+          WHERE username = ?
           LIMIT 1
         |}
 
