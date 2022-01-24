@@ -1,6 +1,6 @@
 module Model = Model__news
 
-open Service_shortnames
+open Service_helpers
 
 let admin_path path = Admin.Service.path ("news" :: path)
 

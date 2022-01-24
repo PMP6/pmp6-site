@@ -1,6 +1,6 @@
 module Model = Model__auth
 
-open Service_shortnames
+open Service_helpers
 
 let path subpath = S.Path ("auth" :: subpath @ [""])
 
