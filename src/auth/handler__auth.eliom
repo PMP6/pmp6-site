@@ -10,8 +10,8 @@ open Require.Syntax
 let login next (username, password) =
   match%lwt Model.User.find_by_username username with
   | None ->
-    Content.redirection_with_action
-      (fun () -> Toast.push Toast.Alert (View.Toast.non_existent_user ()))
+    Content.redirection
+      ~action:(fun () -> Toast.push Toast.Alert (View.Toast.non_existent_user ()))
       (Eliom_service.preapply ~service:Service.connection next)
   | Some user ->
     if Model.User.verify_password user password
@@ -19,13 +19,13 @@ let login next (username, password) =
       let%lwt () = Session.login user in
       let srv_next =
         Option.value_map ~default:Skeleton.home_service ~f:Utils.path_srv next in
-      Content.redirection_with_action
-        (fun () -> Toast.push Toast.Success (View.Toast.login_success ()))
+      Content.redirection
+        ~action:(fun () -> Toast.push Toast.Success (View.Toast.login_success ()))
         srv_next
     else
-      Content.redirection_with_action
-      (fun () -> Toast.push Toast.Alert (View.Toast.incorrect_password ()))
-      (Eliom_service.preapply ~service:Service.connection next)
+      Content.redirection
+        ~action:(fun () -> Toast.push Toast.Alert (View.Toast.incorrect_password ()))
+        (Eliom_service.preapply ~service:Service.connection next)
 
 let logout () () =
   Session.logout ()

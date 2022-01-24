@@ -14,8 +14,8 @@ module Syntax = struct
   let ( let$ ) require handler =
     require
       (fun _g _p ->
-         Content.redirection_with_action
-           (fun () -> Toast.push Toast.Warning (View.Toast.login_required ()))
+         Content.redirection
+           ~action:(fun () -> Toast.push Toast.Warning (View.Toast.login_required ()))
            (Eliom_service.preapply
               ~service:Service.connection
               (Option.try_with Eliom_request_info.get_current_sub_path)))
