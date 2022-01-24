@@ -40,10 +40,10 @@ module Settings = struct
       ()
 
   let save_email =
-    S.create
-      ~path:S.No_path
+    S.create_attached_post
+      ~fallback:email_edition
       ~csrf_safe:true
-      ~meth:(S.Post (P.unit, P.string "email"))
+      ~post_params:(P.string "email")
       ()
 
 end
