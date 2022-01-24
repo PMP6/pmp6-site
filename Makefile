@@ -15,7 +15,7 @@ include Makefile.localenv
 JSOPT_RUNTIMES := $(addprefix -jsopt +,${JS_RUNTIMES})
 
 define WITH_SECRETS
-	(set -a; source $(realpath $(SECRETS_ENV_FILE)); $1; set +a)
+	(set -a; source $(realpath $(SECRETS_ENV_FILE)); set +a; $1)
 endef
 
 ## Required binaries
