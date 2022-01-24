@@ -1,4 +1,4 @@
-let skeleton_pages = Registration_lib.[
+let skeleton_routes = Registration_lib.[
   Skeleton.home_service, Home.home_page;
   Skeleton.Plonger.Services.formations, Formations.formation_page;
   Skeleton.Plonger.Services.stages, Stages.stage_page;
@@ -10,8 +10,8 @@ let skeleton_pages = Registration_lib.[
 ]
 
 let () =
-  Registration_lib.register_contents Template.return_page skeleton_pages;
-  Registration_lib.register_module Template.return_page (module Admin.Registration);
-  Registration_lib.register_module Template.return_page (module Auth.Registration);
-  Registration_lib.register_module Template.return_page (module News.Registration);
+  Registration_lib.register_routes Template.return_page skeleton_routes;
+  Registration_lib.register_routes Template.return_page Admin.Registration.routes;
+  Registration_lib.register_routes Template.return_page Auth.Registration.routes;
+  Registration_lib.register_routes Template.return_page News.Registration.routes;
   ()

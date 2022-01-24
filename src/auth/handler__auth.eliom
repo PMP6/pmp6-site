@@ -28,7 +28,7 @@ let login next (username, password) =
         (Eliom_service.preapply ~service:Service.connection next)
 
 let logout () () =
-  Session.logout ()
+  Content.action Session.logout ()
 
 let connection next () =
   match%lwt Session.get_user () with
@@ -48,10 +48,13 @@ module Settings = struct
       View.Page.email_edition user
 
   let save_email =
-    let& user = Require.authenticated in
+    let$ user = Require.authenticated in
     fun () new_email ->
       if String.(new_email = Model.User.email user)
-      then Toast.push_secondary_msg "Cette adresse est identique à la précédente."
+      then
+        Content.action
+          Toast.push_secondary_msg
+          "Cette adresse est identique à la précédente."
       else
         match%lwt Model.User.update_email (Model.User.id user) new_email with
         | Ok () ->
@@ -67,11 +70,12 @@ module Settings = struct
                  contacter l'administrateur du site."
               ()
           in
-          Toast.push_success_msg
+          Content.action
+            Toast.push_success_msg
             "Votre adresse a bien été modifiée. Vous allez recevoir un \
              email de confirmation. Dans le cas contraire, contactez \
              l'administrateur."
         | Error `Email_already_exists ->
-          Toast.push_alert_msg "Cette adresse email est indisponible."
+          Content.action Toast.push_alert_msg "Cette adresse email est indisponible."
 
 end

@@ -5,12 +5,6 @@ module View = View__auth
 
 module Syntax = struct
 
-  let ( let& ) require handler =
-    require
-      (fun _g _p -> Lwt.return ())
-      (fun _g _p -> Lwt.return ())
-      handler
-
   let ( let$ ) require handler =
     require
       (fun _g _p ->
