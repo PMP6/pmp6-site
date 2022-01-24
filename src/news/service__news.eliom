@@ -10,7 +10,7 @@ let main =
     ~meth:(S.Get P.unit)
     ()
 
-let _ : unit Lwt.t = Admin_module.register "News" main
+let _ : unit Lwt.t = Admin_module.attach "News" main
 
 let redaction =
   S.create

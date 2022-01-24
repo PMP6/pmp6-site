@@ -10,5 +10,5 @@ let modules : (string * service) list Eliom_reference.eref =
 let all () =
   Eliom_reference.get modules
 
-let register name service =
+let attach name service =
   Eliom_reference.modify modules (fun modules -> (name, service) :: modules)
