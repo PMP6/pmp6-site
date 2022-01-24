@@ -10,3 +10,5 @@ open Lwt.Infix;;
 
 #require "async_smtp";;
 open Async_smtp;;
+
+#require "ocsigenserver";;
