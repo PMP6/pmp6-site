@@ -10,7 +10,7 @@ module Hash : sig
   val verify : t -> string -> bool
 end
 
-module Key : sig
+module Token : sig
   type t
 
   val create : unit -> t

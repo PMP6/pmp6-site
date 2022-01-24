@@ -50,23 +50,13 @@ module Hash = struct
 
 end
 
-let%shared key_of_url_string string =
-  Base64.decode_exn
-    ~pad:false
-    ~alphabet:Base64.uri_safe_alphabet
-    string
+module Token = struct
 
-let%shared key_to_url_string key =
-  Base64.encode_exn
-    ~pad:false
-    ~alphabet:Base64.uri_safe_alphabet
-    key
-
-module Key = struct
   type t = string
 
   let create () =
     Ocsigen_lib.make_cryptographic_safe_string ()
+    |> Base64.encode_exn ~pad:false ~alphabet:Base64.uri_safe_alphabet
 
   let hash key =
     Hash.encode key
@@ -74,18 +64,6 @@ module Key = struct
   let verify hash key =
     Hash.verify hash key
 
-  let param name =
-    let client_to_and_of =
-      Caml.(
-        [%client
-        Eliom_parameter.{
-          of_string = key_of_url_string;
-          to_string = key_to_url_string;
-        }]) in
-    Eliom_parameter.user_type
-      ~client_to_and_of
-      ~of_string:key_of_url_string
-      ~to_string:key_to_url_string
-      name
+  let param = Eliom_parameter.string
 
 end
