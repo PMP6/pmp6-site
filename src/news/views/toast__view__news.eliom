@@ -8,7 +8,7 @@ module Creation = struct
       H.p [
         H.txt "L'actu ";
         H.em [H.txt @@ Model.short_title news];
-        H.txt " a bien été créée !";
+        H.txt " a bien été créée.";
       ]
     ]
 end
@@ -19,7 +19,7 @@ module Deletion = struct
       H.p [
         H.txt "L'actu ";
         H.em [H.txt @@ Model.Item.short_title item];
-        H.txt " a bien été supprimée ! ";
+        H.txt " a bien été supprimée.";
         H.Raw.a [H.txt "TODO: Annuler."];
       ]
     ]
@@ -31,7 +31,7 @@ module Update = struct
       H.p [
         H.txt "L'actu ";
         H.em [H.txt @@ Model.short_title news];
-        H.txt " a bien été mise à jour !";
+        H.txt " a bien été mise à jour.";
       ]
     ]
 end
