@@ -107,14 +107,19 @@ let run request =
   let%lwt result = run_keep_errors request in
   Caqti_lwt.or_fail result
 
-let collect ~out:(output_type, make_item) query =
+let unit = Type.unit, ()
+
+let collect ~in_:(input_type, input) ~out:(output_type, make_item) query =
   fun (module C : C) ->
   let%map.R items =
     C.fold
-      (Caqti_request.collect Caqti_type.unit output_type query)
+      (Caqti_request.collect input_type output_type query)
       (fun result acc -> make_item result :: acc)
-      () [] in
+      input [] in
   List.rev items
+
+let collect_all ~out query =
+  collect ~in_:unit ~out query
 
 let find ~in_:(input_type, input) ~out:(output_type, make_item) query =
   fun (module C : C) ->

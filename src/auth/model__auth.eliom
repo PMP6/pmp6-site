@@ -81,7 +81,7 @@ module User = struct
   module Request = struct
 
     let all =
-      Db.collect
+      Db.collect_all
         ~out:(db_type, db_unmap)
         {|
           SELECT id, username, email, password, is_superuser, is_staff, joined_time

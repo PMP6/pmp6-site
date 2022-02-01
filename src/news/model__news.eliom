@@ -92,7 +92,7 @@ let unique_slug ?prefix model =
 module Request = struct
 
   let all =
-    Db.collect
+    Db.collect_all
       ~out:(db_type, db_unmap)
       {|
         SELECT id, title, short_title, pub_time, content, author
