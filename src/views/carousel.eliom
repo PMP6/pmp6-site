@@ -19,16 +19,9 @@ let images =
     ]
 
 let slide ~is_active ~src ~caption =
-  let _figcaption =
-    `Bottom (
-      H.figcaption
-        ~a:[H.a_class ["orbit-caption"]]
-        [H.txt caption]
-    ) in
   H.li ~a:[H.a_class @@ Utils.with_is_active is_active ["orbit-slide"]] [
     H.figure
       ~a:[H.a_class ["orbit-figure"]]
-      (* ~figcaption *)
       [H.img ~a:[H.a_class ["orbit-image"]] ~src ~alt:caption ()]
   ]
 

@@ -3,16 +3,25 @@ module Model = Model__auth
 module H = Html
 
 let login_required () =
-  Toast.simple_message "Vous devez être connecté pour accéder à la page demandée."
+  Toast.warning_msg "Vous devez être connecté pour accéder à la page demandée."
 
 let non_existent_user () =
-  Toast.simple_message "Ce nom d'utilisateur n'existe pas."
+  Toast.alert_msg "Ce nom d'utilisateur n'existe pas."
 
 let incorrect_password () =
-  Toast.simple_message "Mot de passe incorrect."
+  Toast.alert_msg "Mot de passe incorrect."
 
 let login_success () =
-  Toast.simple_message "Vous êtes maintenant connecté."
+  Toast.success_msg "Vous êtes maintenant connecté."
 
-let already_connected () =
-  Toast.simple_message "Vous êtes déjà connecté."
+let email_is_the_same () =
+  Toast.secondary_msg "Cette adresse est identique à la précédente."
+
+let email_not_available () =
+  Toast.alert_msg "Cette adresse email est indisponible."
+
+let email_successfully_changed () =
+  Toast.success_msg
+    "Votre adresse a bien été modifiée. Vous allez recevoir un email \
+     de confirmation. Dans le cas contraire, contactez \
+     l'administrateur."

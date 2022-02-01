@@ -137,8 +137,6 @@ let top_right_menu user =
   let open H in
   let connection =
     li [Auth.View.Widget.connection_icon ()] in
-  let _user_menu =
-    li ~a:[a_class ["menu-text"]] [Auth.View.Widget.user_menu_icon ()] in
   let user_menu =
     Auth.View.Widget.user_menu () in
   let admin =

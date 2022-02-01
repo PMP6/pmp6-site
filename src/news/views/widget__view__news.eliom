@@ -1,6 +1,8 @@
-module H = Html
 module Model = Model__news
 module Service = Service__news
+
+module F = Foundation
+module H = Html
 
 let tab_slug news =
   Model.unique_slug ~prefix:"news" news
@@ -53,24 +55,26 @@ let deletion_icon_and_modal news =
 
 let action_icons_callout news =
   let open H in
-  div_classes ["callout"; "action-icons"] [
-    div_classes ["grid-x"] [
-      div_classes
-        ["cell"; "text-center"; "large-12"; "small-4"]
-        [
-          p [
-            a
-              ~service:Service.edition
-              [Icon.solid "fa-edit" ()]
-              (Model.id news)
-          ]
-        ];
-      deletion_icon_and_modal news;
-      div_classes
-        ["cell"; "text-center"; "large-12"; "small-4"]
-        [p [Raw.a [Icon.solid "fa-eye-slash" ()]]];
+  F.Callout.create
+    ~a:[ H.a_class [ "action-icons" ] ]
+    [
+      div_classes ["grid-x"] [
+        div_classes
+          ["cell"; "text-center"; "large-12"; "small-4"]
+          [
+            p [
+              a
+                ~service:Service.edition
+                [Icon.solid "fa-edit" ()]
+                (Model.id news)
+            ]
+          ];
+        deletion_icon_and_modal news;
+        div_classes
+          ["cell"; "text-center"; "large-12"; "small-4"]
+          [p [Raw.a [Icon.solid "fa-eye-slash" ()]]];
+      ]
     ]
-  ]
 
 let article_with_action_icons news =
   let open H in
@@ -144,9 +148,8 @@ let redaction_form ?news () =
     Option.value_map ~default:"" ~f news in
   let make_form_without_hidden_input (title, (short_title, content)) =
     [
-      div
+      F.Callout.alert
         ~a:[
-          a_class ["alert"; "callout"];
           a_user_data "abide-error" "";
           a_style "display: none";
         ]

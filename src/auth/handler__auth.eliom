@@ -13,7 +13,7 @@ let login =
     match%lwt Model.User.find_by_username username with
     | None ->
       Content.redirection
-        ~action:(fun () -> Toast.push Toast.Alert (View.Toast.non_existent_user ()))
+        ~action:(fun () -> Toast.push @@ View.Toast.non_existent_user ())
         (Eliom_service.preapply ~service:Service.connection next)
     | Some user ->
       if Model.User.verify_password user password
@@ -22,11 +22,11 @@ let login =
         let srv_next =
           Option.value_map ~default:Skeleton.home_service ~f:Utils.path_srv next in
         Content.redirection
-          ~action:(fun () -> Toast.push Toast.Success (View.Toast.login_success ()))
+          ~action:(fun () -> Toast.push @@ View.Toast.login_success ())
           srv_next
       else
         Content.redirection
-          ~action:(fun () -> Toast.push Toast.Alert (View.Toast.incorrect_password ()))
+          ~action:(fun () -> Toast.push @@ View.Toast.incorrect_password ())
           (Eliom_service.preapply ~service:Service.connection next)
 
 let logout =
@@ -53,10 +53,7 @@ module Settings = struct
     let$ user = Require.authenticated in
     fun () new_email ->
       if String.(new_email = Model.User.email user)
-      then
-        Content.action
-          Toast.push_secondary_msg
-          "Cette adresse est identique à la précédente."
+      then Content.action Toast.push (View.Toast.email_is_the_same ())
       else
         match%lwt Model.User.update_email (Model.User.id user) new_email with
         | Ok () ->
@@ -72,12 +69,8 @@ module Settings = struct
                  contacter l'administrateur du site."
               ()
           in
-          Content.action
-            Toast.push_success_msg
-            "Votre adresse a bien été modifiée. Vous allez recevoir un \
-             email de confirmation. Dans le cas contraire, contactez \
-             l'administrateur."
+          Content.action Toast.push (View.Toast.email_successfully_changed ())
         | Error `Email_already_exists ->
-          Content.action Toast.push_alert_msg "Cette adresse email est indisponible."
+          Content.action Toast.push (View.Toast.email_not_available ())
 
 end

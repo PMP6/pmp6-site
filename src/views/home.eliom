@@ -1,6 +1,8 @@
 module%client H = Html
 module H = Html
 
+module F = Foundation
+
 open%client Js_of_ocaml
 open%client Js_of_ocaml_lwt
 
@@ -56,7 +58,7 @@ let make_news_section all_news =
       div_classes ["large-auto"; "medium-12"; "cell"]
         [News.View.Widget.news_tabs all_news; News.View.Widget.news_tabs_content all_news];
       div_classes ["large-shrink"; "medium-12"; "cell"; "text-center"] [
-        div_class "callout" [
+        F.Callout.create [
           Facebook.page_widget ()
         ]
       ]

@@ -2,35 +2,34 @@ module H = Html
 
 type div_content = Html_types.div_content_fun H.elt list
 
-type kind =
-  | Primary
-  | Secondary
-  | Success
-  | Warning
-  | Alert
-
-let kind_to_class = function
-  | Primary -> "primary"
-  | Secondary -> "secondary"
-  | Success -> "success"
-  | Warning -> "warning"
-  | Alert -> "alert"
-
 type t = {
-  kind : kind;
+  color : Foundation.Color.t;
   content : div_content;
 }
 
-let kind x = x.kind
+let color x = x.color
 let content x = x.content
 
-let render { kind; content } =
-  H.div
-    ~a:[H.a_class ["callout"; kind_to_class kind]; H.a_user_data "closable" ""]
-    (H.close_button () :: content)
+let create color content = { color; content }
 
-(* Low-level closures *)
-let (_all, _push) =
+let primary = create Primary
+let secondary = create Secondary
+let success = create Success
+let warning = create Warning
+let alert = create Alert
+
+let msg color msg = create color [ H.p [ H.txt msg ] ]
+
+let primary_msg = msg Primary
+let secondary_msg = msg Secondary
+let success_msg = msg Success
+let warning_msg = msg Warning
+let alert_msg = msg Alert
+
+let render { color; content } =
+  Foundation.Callout.create ~color ~closable:true (H.close_button () :: content)
+
+let (all, push) =
   let messages =
     Eliom_reference.eref ~scope:Eliom_common.request_scope [] in
   let all () =
@@ -42,44 +41,23 @@ let (_all, _push) =
   in
   (all, push)
 
-let all () = _all ()
-
-let push kind content =
-  _push { kind; content }
-
-let push_primary content =
-  push Primary content
-
-let push_secondary content =
-  push Secondary content
-
-let push_success content =
-  push Success content
-
-let push_warning content =
-  push Warning content
-
-let push_alert content =
-  push Alert content
-
 let render_all () =
   let%lwt all = all () in
   Lwt.return @@ List.map ~f:render all
 
-let simple_message msg =
-  [H.p [H.txt msg]]
+let create_and_push color content =
+  create color content |> push
 
-let push_primary_msg msg =
-  push_primary (simple_message msg)
+let push_primary = create_and_push Primary
+let push_secondary = create_and_push Secondary
+let push_success = create_and_push Success
+let push_warning = create_and_push Warning
+let push_alert = create_and_push Alert
 
-let push_secondary_msg msg =
-  push_secondary (simple_message msg)
+let push_msg color msg_ = push (msg color msg_)
 
-let push_success_msg msg =
-  push_success (simple_message msg)
-
-let push_warning_msg msg =
-  push_warning (simple_message msg)
-
-let push_alert_msg msg =
-  push_alert (simple_message msg)
+let push_primary_msg = push_msg Primary
+let push_secondary_msg = push_msg Secondary
+let push_success_msg = push_msg Success
+let push_warning_msg = push_msg Warning
+let push_alert_msg = push_msg Alert

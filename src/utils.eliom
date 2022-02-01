@@ -69,6 +69,11 @@ let with_opt opt ~some ~none list =
   | None -> none :: list
   | Some _ -> some :: list
 
+let with_some_map opt f list =
+  match opt with
+  | None -> list
+  | Some elt -> f elt :: list
+
 let with_vertical is_vertical classes =
   with_if is_vertical "vertical" classes
 
