@@ -58,8 +58,7 @@ module Settings = struct
         match%lwt Model.User.update_email (Model.User.id user) new_email with
         | Ok () ->
           let () =
-            Lwt.async @@ fun () ->
-            Usermail.send
+            Usermail.send_async
               ~user
               ~forced_address:new_email
               ~subject:"Modification de votre adresse email"

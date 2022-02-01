@@ -11,3 +11,7 @@ let send
     ~auto_generated:() ~to_ ~subject
     ~content:(Fmt.str "Bonjour %s,@.@.@[%a@]" forced_username Fmt.text content)
     ()
+
+let send_async ~user ?forced_address ?forced_username ~subject ~content () =
+  Lwt.async @@ fun () ->
+  send ~user ?forced_address ?forced_username ~subject ~content ()
