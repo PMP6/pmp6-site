@@ -22,6 +22,9 @@ module Fallback = struct
   let forbidden _gp _pp =
     Content.redirection Service.forbidden
 
+  let already_connected _gp _pp =
+    View.Page.already_connected ()
+
 end
 
 let auth_with_predicate perm handler =
@@ -43,3 +46,9 @@ let authenticated handler = has_permission (Fn.const true) handler
 let superuser handler = has_permission (Fn.const false) handler
 
 let staff handler = has_permission Model.User.is_staff handler
+
+let unauthenticated handler =
+  Eliom_tools.wrap_handler
+    Session.get_unauthenticated
+    Fallback.already_connected
+    handler

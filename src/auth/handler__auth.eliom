@@ -7,35 +7,37 @@ module View = View__auth
 
 open Require.Syntax
 
-let login next (username, password) =
-  match%lwt Model.User.find_by_username username with
-  | None ->
-    Content.redirection
-      ~action:(fun () -> Toast.push Toast.Alert (View.Toast.non_existent_user ()))
-      (Eliom_service.preapply ~service:Service.connection next)
-  | Some user ->
-    if Model.User.verify_password user password
-    then
-      let%lwt () = Session.login user in
-      let srv_next =
-        Option.value_map ~default:Skeleton.home_service ~f:Utils.path_srv next in
+let login =
+  let$ () = Require.unauthenticated in
+  fun next (username, password) ->
+    match%lwt Model.User.find_by_username username with
+    | None ->
       Content.redirection
-        ~action:(fun () -> Toast.push Toast.Success (View.Toast.login_success ()))
-        srv_next
-    else
-      Content.redirection
-        ~action:(fun () -> Toast.push Toast.Alert (View.Toast.incorrect_password ()))
+        ~action:(fun () -> Toast.push Toast.Alert (View.Toast.non_existent_user ()))
         (Eliom_service.preapply ~service:Service.connection next)
+    | Some user ->
+      if Model.User.verify_password user password
+      then
+        let%lwt () = Session.login user in
+        let srv_next =
+          Option.value_map ~default:Skeleton.home_service ~f:Utils.path_srv next in
+        Content.redirection
+          ~action:(fun () -> Toast.push Toast.Success (View.Toast.login_success ()))
+          srv_next
+      else
+        Content.redirection
+          ~action:(fun () -> Toast.push Toast.Alert (View.Toast.incorrect_password ()))
+          (Eliom_service.preapply ~service:Service.connection next)
 
-let logout () () =
-  Content.action Session.logout ()
+let logout =
+  let$ _user = Require.authenticated in
+  fun () () ->
+    Content.action Session.logout ()
 
-let connection next () =
-  match%lwt Session.get_user () with
-  | None ->
+let connection =
+  let$ () = Require.unauthenticated in
+  fun next () ->
     View.Page.connection ~next ()
-  | Some _ ->
-    View.Page.already_connected ()
 
 let forbidden () () =
   View.Page.forbidden ()
