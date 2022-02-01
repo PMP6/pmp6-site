@@ -46,6 +46,12 @@ let close_button () =
     ]
     [span ~a:[a_aria "hidden" ["true"]] [txt "×"]]
 
+let new_id =
+  let module Id = Unique_id.Int () in
+  fun () ->
+    let id = Id.create () in
+    "pmp6__auto__" ^ Id.to_string id
+
 module Confirmation_modal : sig
 
   (** Build elements that go through a confirmation modal to trigger
@@ -102,11 +108,6 @@ module Confirmation_modal : sig
 end
 =
 struct
-  let create_id =
-    let module Id = Unique_id.Int () in
-    fun () ->
-      let id = Id.create () in
-      "confirmation-modal__" ^ Id.to_string id
 
   let modal_elt target_srv gp pp pp_form_param text modal_id =
     div
@@ -152,7 +153,7 @@ struct
       ]
 
   let with_modal ~service text make_elem gp pp pp_form_param =
-    let modal_id = create_id () in
+    let modal_id = new_id () in
     let opens_modal = a_user_data "open" modal_id in
     make_elem ~opens_modal (modal_elt service gp pp pp_form_param text modal_id)
 end
