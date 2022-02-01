@@ -6,32 +6,40 @@ module View = View__auth
 module Syntax = struct
 
   let ( let$ ) require handler =
-    require
-      (fun _g _p ->
-         Content.redirection
-           ~action:(fun () -> Toast.push Toast.Warning (View.Toast.login_required ()))
-           (Eliom_service.preapply
-              ~service:Service.connection
-              (Option.try_with Eliom_request_info.get_current_sub_path)))
-      (fun _g _p -> Content.redirection Service.forbidden)
-      handler
+    require handler
 
 end
 
-let predicate perm no_login forbidden handler =
+module Fallback = struct
+
+  let login_required _gp _pp =
+    Content.redirection
+      ~action:(fun () -> Toast.push Toast.Warning (View.Toast.login_required ()))
+      (Eliom_service.preapply
+         ~service:Service.connection
+         (Option.try_with Eliom_request_info.get_current_sub_path))
+
+  let forbidden _gp _pp =
+    Content.redirection Service.forbidden
+
+end
+
+let auth_with_predicate perm handler =
   Eliom_tools.wrap_handler
     Session.get_user
-    no_login
+    Fallback.login_required
     (fun user gp pp ->
        if perm user
        then handler user gp pp
-       else forbidden gp pp)
+       else Fallback.forbidden gp pp)
 
-let has_permission perm eta =
-  predicate (fun user -> perm user || Model.User.is_superuser user) eta
+let has_permission perm handler =
+  auth_with_predicate
+    (fun user -> perm user || Model.User.is_superuser user)
+    handler
 
-let authenticated eta = has_permission (Fn.const true) eta
+let authenticated handler = has_permission (Fn.const true) handler
 
-let superuser eta = has_permission (Fn.const false) eta
+let superuser handler = has_permission (Fn.const false) handler
 
-let staff eta = has_permission Model.User.is_staff eta
+let staff handler = has_permission Model.User.is_staff handler
