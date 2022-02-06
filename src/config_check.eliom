@@ -17,6 +17,9 @@ let check_bool name run_test =
        then Lwt.return ()
        else Lwt.fail_with "unmet condition")
 
+let check_ignore name run_test =
+  check_unit name (fun () -> Lwt_monad.ignore_m @@ run_test ())
+
 let check_list tests =
   Lwt_list.fold_left_s
     (fun () test -> test ())
@@ -26,6 +29,7 @@ let check_list tests =
 let tests = [
   check_bool "enabled foreign keys" Db.check_foreign_keys;
   check_unit "email" Email.check;
+  check_ignore "smoke user model" Auth.Model.User.all;
 ]
 
 let () =
