@@ -111,6 +111,17 @@ module User = struct
           LIMIT 1
         |}
 
+    let find_by_email email =
+      Db.find_opt
+        ~in_:(Db.Type.string, email)
+        ~out:(db_type, db_unmap)
+        {|
+          SELECT id, username, email, password, is_superuser, is_staff, joined_time
+          FROM auth_user
+          WHERE email = ?
+          LIMIT 1
+        |}
+
     let create_from_item item =
       Db.find
         ~in_:(Item.db_type, Item.db_map item)
@@ -158,6 +169,15 @@ module User = struct
           WHERE id = $1
         |}
 
+    let update_password id password =
+      let hash = Secret.Hash.encode password in
+      Db.exec
+        ~in_:(Id.db_type & Secret.Hash.db_type, (id, hash))
+        {|
+          UPDATE auth_user
+          SET password = $2
+          WHERE id = $1
+        |}
 
   end
 
@@ -169,6 +189,9 @@ module User = struct
 
   let find_by_username username =
     Db.run (Request.find_by_username username)
+
+  let find_by_email email =
+    Db.run (Request.find_by_email email)
 
   let create_from_item item =
     Db.run (Request.create_from_item item)
@@ -195,5 +218,126 @@ module User = struct
         let%map () = Request.try_force_update_email id email in
         Ok ()
     )
+
+  let update_password id password =
+    Db.run (Request.update_password id password)
+
+end
+
+module Password_token = struct
+
+  module Item = struct
+    type t = {
+      hash : Secret.Hash.t;
+      user : User.Id.t;
+      expiry_time : Time.t;
+    }
+
+    type mapping =
+      (Secret.Hash.t -> User.Id.t -> Time.t -> unit) Db.Hlist.t
+
+    let hash { hash; _ } = hash
+    let user { user; _ } = user
+    let expiry_time { expiry_time; _ } = expiry_time
+
+    let build_new ~hash ~user =
+      let expiry_time = Time.add (Time.now ()) Time.Span.hour in
+      { hash; user; expiry_time }
+
+    let db_type =
+      Db.Type.(hlist [ Secret.Hash.db_type; User.Id.db_type; time ])
+
+    let db_unmap Db.Hlist.[ hash; user; expiry_time ] =
+      { hash; user; expiry_time}
+
+    let db_map { hash; user; expiry_time } =
+      Db.Hlist.[ hash; user; expiry_time ]
+
+  end
+
+  include Db_utils.With_id (Item)
+
+  let hash = lift Item.hash
+  let user = lift Item.user
+  let expiry_time = lift Item.expiry_time
+
+  module Request = struct
+
+    let create_from_item item =
+      Db.exec
+        ~in_:(Item.db_type, Item.db_map item)
+        {|
+          INSERT INTO auth_password_token (hash, user, expiry_time)
+          VALUES (?, ?, ?)
+        |}
+
+    let create_new user hash =
+      create_from_item @@
+      Item.build_new ~user ~hash
+
+    let get_all_valid =
+      Db.collect
+        ~in_:(Db.Type.time, Time.now ())
+        ~out:(User.Id.db_type & Secret.Hash.db_type, Fn.id)
+        {|
+          SELECT user, hash
+          FROM auth_password_token
+          WHERE expiry_time > ?
+        |}
+
+    let delete_for_user user =
+      Db.exec
+        ~in_:(User.Id.db_type, user)
+        {|
+          DELETE FROM auth_password_token
+          WHERE user = ?
+        |}
+
+    let prune_expired () =
+      Db.exec_with_affected_count
+        ~in_:(Db.Type.time, Time.now ())
+        {|
+          DELETE FROM auth_password_token
+          WHERE expiry_time <= ?
+        |}
+
+  end
+
+  let create user =
+    let token = Secret.Token.create () in
+    let hash = Secret.Token.hash token in
+    let%lwt () = Db.run @@ Request.create_new user hash in
+    Lwt.return token
+
+  let validate_password_reset token password =
+    let open Db.Let_syntax in
+    Db.run @@
+    Db.transaction (
+      let%bind valid_tokens = Request.get_all_valid in
+      let valid_users =
+        List.filter_map
+          ~f:(fun (user, hash) ->
+            if Secret.Token.verify hash token
+            then Some user
+            else None)
+          valid_tokens in
+      match valid_users with
+      | [] -> return (Error `Token_absent_or_expired)
+      | _ :: _ :: _ -> return (Error `Unexpected) (* Hash collision ? *)
+      | [ user ] ->
+        let%bind () = User.Request.update_password user password in
+        let%bind () = Request.delete_for_user user in
+        return (Ok user)
+    )
+
+  let prune_expired () =
+    Log.log "Pruning expired password tokens...";
+    let%lwt count = Db.run (Request.prune_expired ()) in
+    Log.logf "... pruned %i token(s)." count;
+    Lwt.return ()
+
+  let _prune_daily : never_returns Lwt.t =
+    Log.log "Scheduling a daily expired tokens pruning";
+    Lwt_utils.every Time.Span.day prune_expired
 
 end

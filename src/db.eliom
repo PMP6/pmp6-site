@@ -157,6 +157,12 @@ let exec ~in_:(input_type, input) query =
     (Caqti_request.exec input_type query)
     input
 
+let exec_with_affected_count ~in_:(input_type, input) query =
+  fun (module C : C) ->
+  C.exec_with_affected_count
+    (Caqti_request.exec input_type query)
+    input
+
 let transaction request =
   fun (module C : C) ->
   let%bind.R () = C.start () in

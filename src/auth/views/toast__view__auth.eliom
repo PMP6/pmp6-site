@@ -8,6 +8,9 @@ let login_required () =
 let non_existent_user () =
   Toast.alert_msg "Ce nom d'utilisateur n'existe pas."
 
+let non_existent_email () =
+  Toast.alert_msg "Cette adresse email ne correspond à aucun utilisateur."
+
 let incorrect_password () =
   Toast.alert_msg "Mot de passe incorrect."
 

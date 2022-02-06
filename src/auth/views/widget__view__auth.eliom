@@ -111,3 +111,77 @@ let email_edition_form user =
     ]
     make_form
     ()
+
+let password_reset_form () =
+  let open H in
+  let span_form_error text =
+    H.span ~a:[H.a_class ["form-error"]] [H.txt text]
+  in
+  let make_form new_email =
+    [
+      label [
+        txt "Votre adresse email";
+        Form.input
+          ~input_type:`Text
+          ~name:new_email
+          ~a:[a_required (); a_pattern "email"]
+          Form.string;
+        span_form_error "Vous devez entrer une adresse email valide.";
+      ];
+
+      Form.button_no_value
+        ~button_type:`Submit
+        ~a:[a_class ["button"; "small-only-expanded"]]
+        [txt "Envoyer"];
+    ] in
+  Form.post_form
+    ~service:Service.Settings.request_password_token
+    ~xhr:false (* Mandatory to go through Abide form validation *)
+    ~a:[
+      a_user_data "abide" "";
+      a_novalidate ();
+    ]
+    make_form
+    ()
+
+let password_change_form token =
+  let open H in
+  let span_form_error text =
+    H.span ~a:[H.a_class ["form-error"]] [H.txt text]
+  in
+  let pwd_input_id = new_id () in
+  let make_form new_password =
+    [
+      label [
+        txt "Votre nouveau mot de passe";
+        Form.input
+          ~input_type:`Password
+          ~name:new_password
+          ~a:[a_required (); a_id pwd_input_id]
+          Form.string;
+        span_form_error "Vous devez entrer un mot de passe.";
+      ];
+
+      label [
+        txt "Confirmez votre mot de passe";
+        Form.input
+          ~input_type:`Password
+          ~a:[a_required (); a_user_data "equalto" pwd_input_id]
+          Form.string;
+        span_form_error "Les deux mots de passe doivent être identiques !";
+      ];
+
+      Form.button_no_value
+        ~button_type:`Submit
+        ~a:[a_class ["button"; "small-only-expanded"]]
+        [txt "Enregistrer"];
+    ] in
+  Form.post_form
+    ~service:Service.Settings.validate_password_reset
+    ~xhr:false (* Mandatory to go through Abide form validation *)
+    ~a:[
+      a_user_data "abide" "";
+      a_novalidate ();
+    ]
+    make_form
+    token

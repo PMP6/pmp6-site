@@ -12,4 +12,11 @@ CREATE TABLE auth_user (
     joined_time INTEGER NOT NULL
 );
 
+CREATE TABLE auth_password_token (
+    id INTEGER NOT NULL PRIMARY KEY,
+    hash TEXT NOT NULL UNIQUE,
+    user INTEGER NOT NULL REFERENCES auth_user(id) ON DELETE CASCADE,
+    expiry_time INTEGER NOT NULL
+);
+
 COMMIT;

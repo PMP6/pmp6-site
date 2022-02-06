@@ -72,4 +72,85 @@ module Settings = struct
         | Error `Email_already_exists ->
           Content.action Toast.push (View.Toast.email_not_available ())
 
+  let forgotten_password =
+    let$ () = Require.unauthenticated in
+    fun () () ->
+      View.Page.forgotten_password ()
+
+  let request_password_token =
+    let$ () = Require.unauthenticated in
+    fun () email ->
+      match%lwt Model.User.find_by_email email with
+      | None ->
+        Content.redirection
+          ~action:(fun () -> Toast.push @@ View.Toast.non_existent_email ())
+          Service.Settings.forgotten_password
+      | Some user ->
+        let%lwt token = Model.Password_token.create (Model.User.id user) in
+        let reset_uri =
+          Eliom_uri.make_string_uri
+            ~absolute:true
+            ~service:Service.Settings.password_reset
+            token in
+        let forgotten_password_uri =
+          Eliom_uri.make_string_uri
+            ~absolute:true
+            ~service:Service.Settings.forgotten_password
+            () in
+        let () =
+          Usermail.send_async
+            ~user
+            ~subject:"Réinitialisation de votre mot de passe"
+            ~content:
+              (Fmt.str
+                 "Vous recevez ce message parce qu'une réinitialisation \
+                  de votre mot de passe a été demandée sur notre site. \
+                  @.@.\
+                  ATTENTION : si vous n'avez pas effectué \
+                  personnellement cette demande, veuillez ignorer et \
+                  effacer cet email immédiatement ! \
+                  @.@.\
+                  Si vous souhaitez effectivement réinitialiser votre \
+                  mot de passe, cliquez sur le lien suivant ou recopiez \
+                  le dans votre navigateur : %s \
+                  @.@.\
+                  Remarque : le formulaire associé n'est valable que \
+                  pendant une heure à compter de l'envoi de cet \
+                  email. Passé ce délai, vous devrez effectuer une \
+                  nouvelle demande à l'adresse suivante : %s"
+                 reset_uri
+                 forgotten_password_uri
+              )
+            ()
+        in
+        View.Page.password_token_requested ()
+
+  let password_reset =
+    let$ () = Require.unauthenticated in
+    fun token () ->
+      View.Page.password_reset token
+
+  let validate_password_reset =
+    let$ () = Require.unauthenticated in
+    fun token password ->
+      match%lwt Model.Password_token.validate_password_reset token password with
+      | Error (`Token_absent_or_expired | `Unexpected)->
+        View.Page.failed_password_reset ()
+      | Ok user_id ->
+        let%lwt () = Session.login_id user_id in
+        let%lwt user = Model.User.find user_id in
+        let () =
+          Usermail.send_async
+            ~user
+            ~subject:"Votre mot de passe a été réinitialisé"
+            ~content:
+              "Votre mot de passe vient d'être réinitialisé avec succès \
+               sur notre site. Si vous n'êtes pas à l'origine de cette \
+               demande, veuillez contacter immédiatement un \
+               administrateur. Nous vous conseillons également de \
+               changer sans délai le mot de passe de votre compte email \
+               qui pourrait être compromis."
+            () in
+        View.Page.successful_password_reset ()
+
 end

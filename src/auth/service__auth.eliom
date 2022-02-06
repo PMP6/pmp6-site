@@ -46,4 +46,28 @@ module Settings = struct
       ~post_params:(P.string "email")
       ()
 
+  let forgotten_password =
+    S.create
+      ~path:(path ["mot-de-passe-oublie"])
+      ~meth:(S.Get P.unit)
+      ()
+
+  let request_password_token =
+    S.create_attached_post
+      ~fallback:forgotten_password
+      ~post_params:(P.string "email")
+      ()
+
+  let password_reset =
+    S.create
+      ~path:(path ["reinitialisation"])
+      ~meth:(S.Get (Secret.Token.param "token"))
+      ()
+
+  let validate_password_reset =
+    S.create_attached_post
+      ~fallback:password_reset
+      ~post_params:(P.string "password")
+      ()
+
 end
