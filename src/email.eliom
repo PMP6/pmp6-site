@@ -40,3 +40,15 @@ let send
     ~bcc:(email_addresses bcc)
     ~subject:(subject_prefix ^ subject)
     (Simplemail.Content.text_utf8 content)
+
+let check () =
+  (* Sending a dummy empty mail and hope no exception is raised. *)
+  send
+    ~to_:["dummy@mailinator.com"]
+    ~from:"dummy@dummy.dummy"
+    ~display_name:""
+    ~subject_prefix:""
+    ~subject:"Test"
+    ~content:"Dummy"
+    ~signature:None
+    ()

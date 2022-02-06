@@ -25,6 +25,7 @@ let check_list tests =
 
 let tests = [
   check_bool "enabled foreign keys" Db.check_foreign_keys;
+  check_unit "email" Email.check;
 ]
 
 let () =
