@@ -158,15 +158,6 @@ module User = struct
           WHERE id = $1
         |}
 
-    let update_email id email =
-      let open Db.Let_syntax in
-      Db.transaction (
-        if%bind email_exists email
-        then return (Error `Email_already_exists)
-        else
-          let%map () = try_force_update_email id email in
-          Ok ()
-      )
 
   end
 
@@ -195,6 +186,14 @@ module User = struct
     Db.run (Request.email_exists email)
 
   let update_email id email =
-    Db.run (Request.update_email id email)
+    let open Db.Let_syntax in
+    Db.run @@
+    Db.transaction (
+      if%bind Request.email_exists email
+      then return (Error `Email_already_exists)
+      else
+        let%map () = Request.try_force_update_email id email in
+        Ok ()
+    )
 
 end
