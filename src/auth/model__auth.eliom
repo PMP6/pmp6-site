@@ -309,7 +309,7 @@ module Password_token = struct
     let%lwt () = Db.run @@ Request.create_new user hash in
     Lwt.return token
 
-  let validate_password_reset token password =
+  let validate_password_reset token ~password =
     let open Db.Let_syntax in
     Db.run @@
     Db.transaction (

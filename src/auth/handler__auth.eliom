@@ -133,7 +133,7 @@ module Settings = struct
   let validate_password_reset =
     let$ () = Require.unauthenticated in
     fun token password ->
-      match%lwt Model.Password_token.validate_password_reset token password with
+      match%lwt Model.Password_token.validate_password_reset token ~password with
       | Error (`Token_absent_or_expired | `Unexpected)->
         View.Page.failed_password_reset ()
       | Ok user_id ->
