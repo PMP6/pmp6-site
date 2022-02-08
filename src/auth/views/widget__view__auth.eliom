@@ -11,14 +11,9 @@ let connection_icon () =
     (Option.try_with Eliom_request_info.get_current_sub_path)
 
 let logout_button () =
-  H.Form.post_form
+  H.post_pseudo_link
     ~service:Service.logout
-    (fun () ->
-       [H.Form.button_no_value
-          ~a:[H.a_class ["link"]]
-          ~button_type:`Submit
-          [H.txt "Déconnexion"]
-       ])
+    [H.txt "Déconnexion"]
     ()
 
 let user_menu_icon () =

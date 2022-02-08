@@ -5,6 +5,8 @@ module%client Js = Js_of_ocaml.Js
 
 include Eliom_content.Html.D
 
+let class_ cls = a_class [ cls ]
+
 let div_classes classes ?(a=[]) =
   div ~a:(a_class classes :: a)
 
@@ -186,6 +188,21 @@ let time_ ?(a=[]) time_ =
   Eliom_content.Html.C.node
     ~init:(time ~a:attr [txt datetime])
     Caml.([%client (time ~a:~%attr [txt @@ format_datetime ~%time_])])
+
+(* Currently this does not allow post parameters. Use this with
+   (possibly dynamically created) unit post services. This could be
+   extended to support post parameters but that would probably go in
+   another function as it involves a bit of plumbing (cf. Modal). *)
+let split_post_pseudo_link ~service content gp =
+  let id = new_id () in
+  let button =
+    Form.button_no_value ~a:[ class_ "link"; a_form id ] ~button_type:`Submit content in
+  Form.post_form ~service ~a:[ a_id id ] (fun () -> []) gp,
+  button
+
+let post_pseudo_link ~service content gp =
+  let form, button = split_post_pseudo_link ~service content gp in
+  div [ form; button ]
 
 [%%server.start]
 
