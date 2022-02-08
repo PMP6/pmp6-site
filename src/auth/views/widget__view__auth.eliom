@@ -15,7 +15,7 @@ let logout_button () =
     ~service:Service.logout
     (fun () ->
        [H.Form.button_no_value
-          ~a:[H.a_class ["action-button"]]
+          ~a:[H.a_class ["link"]]
           ~button_type:`Submit
           [H.txt "Déconnexion"]
        ])
@@ -33,7 +33,7 @@ let user_menu () =
         ~a:[H.a_class ["menu"]]
         [
           H.li [H.a ~service:Service.Settings.email_edition [H.txt "Paramètres"] ()];
-          H.li ~a:[H.a_class ["menu-text"]] [logout_button ()];
+          H.li [logout_button ()];
         ]
     ]
 

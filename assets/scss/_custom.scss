@@ -25,6 +25,10 @@
     border-left: solid 1px $tab-content-border;
 }
 
+.link {
+    @extend a;
+}
+
 html {
     height: 100%;
     min-height: 100%;
@@ -134,7 +138,7 @@ dd + dt {
             margin-left: 2ch;
         }
 
-        li, a, a:focus, .action-button, .action-button:focus {
+        li, a, a:focus {
             font-variant: small-caps;
             text-transform: uppercase;
 
