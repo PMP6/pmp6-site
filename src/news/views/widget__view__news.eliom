@@ -36,7 +36,11 @@ let article_ news =
 let deletion_icon_and_modal news =
   let open H in
   let modal_text =
-    "Voulez-vous vraiment supprimer l'actu " ^ Model.short_title news ^ " ?" in
+    Fmt.str
+      "Voulez-vous vraiment supprimer l'actu %s ? Cette action est \
+       définitive. Si vous avez un doute ou que vous souhaitez \
+       conserver son contenu, il est préférable de la masquer."
+      (Model.short_title news) in
   Confirmation_modal.with_modal
     ~service:Service.delete
     modal_text
