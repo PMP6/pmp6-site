@@ -40,7 +40,7 @@ val push_success_msg : string -> unit Lwt.t
 val push_warning_msg : string -> unit Lwt.t
 val push_alert_msg : string -> unit Lwt.t
 
-val all : unit -> t list Lwt.t
+val fetch : unit -> t list Lwt.t
 
 val render : t -> [> Html_types.div ] H.elt
-val render_all : unit -> [> Html_types.div ] H.elt list Lwt.t
+val fetch_and_render : unit -> [> Html_types.div ] H.elt list Lwt.t

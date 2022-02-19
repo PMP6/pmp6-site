@@ -12,22 +12,19 @@ let login =
   fun next (username, password) ->
     match%lwt Model.User.find_by_username username with
     | None ->
-      Content.redirection
-        ~action:(fun () -> Toast.push @@ View.Toast.non_existent_user ())
-        (Eliom_service.preapply ~service:Service.connection next)
+      let%lwt () = Toast.push @@ View.Toast.non_existent_user () in
+      Content.redirection (Eliom_service.preapply ~service:Service.connection next)
     | Some user ->
       if Model.User.verify_password user password
       then
         let%lwt () = Session.login user in
         let srv_next =
           Option.value_map ~default:Skeleton.home_service ~f:Utils.path_srv next in
-        Content.redirection
-          ~action:(fun () -> Toast.push @@ View.Toast.login_success ())
-          srv_next
+        let%lwt () = Toast.push @@ View.Toast.login_success () in
+        Content.redirection srv_next
       else
-        Content.redirection
-          ~action:(fun () -> Toast.push @@ View.Toast.incorrect_password ())
-          (Eliom_service.preapply ~service:Service.connection next)
+        let%lwt () = Toast.push @@ View.Toast.incorrect_password () in
+        Content.redirection (Eliom_service.preapply ~service:Service.connection next)
 
 let logout =
   let$ _user = Require.authenticated in
@@ -82,9 +79,8 @@ module Settings = struct
     fun () email ->
       match%lwt Model.User.find_by_email email with
       | None ->
-        Content.redirection
-          ~action:(fun () -> Toast.push @@ View.Toast.non_existent_email ())
-          Service.Settings.forgotten_password
+        let%lwt () = Toast.push @@ View.Toast.non_existent_email () in
+        Content.redirection Service.Settings.forgotten_password
       | Some user ->
         let%lwt token = Model.Password_token.create (Model.User.id user) in
         let reset_uri =

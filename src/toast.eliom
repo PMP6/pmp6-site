@@ -29,20 +29,21 @@ let alert_msg = msg Alert
 let render { color; content } =
   Foundation.Callout.create ~color ~closable:true (H.close_button () :: content)
 
-let (all, push) =
+let (fetch, push) =
   let messages =
-    Eliom_reference.eref ~scope:Eliom_common.request_scope [] in
-  let all () =
-    Eliom_reference.get messages
+    Eliom_reference.eref ~scope:Eliom_common.default_session_scope [] in
+  let fetch () =
+    let%lwt result = Eliom_reference.get messages in
+    let%lwt () = Eliom_reference.set messages [] in
+    Lwt.return result
   in
   let push msg =
-    let%lwt all = all () in
-    Eliom_reference.set messages (msg :: all)
+    Eliom_reference.modify messages (List.cons msg)
   in
-  (all, push)
+  (fetch, push)
 
-let render_all () =
-  let%lwt all = all () in
+let fetch_and_render () =
+  let%lwt all = fetch () in
   Lwt.return @@ List.map ~f:render all
 
 let create_and_push color content =

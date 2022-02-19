@@ -13,8 +13,8 @@ end
 module Fallback = struct
 
   let login_required _gp _pp =
+    let%lwt () = Toast.push @@ View.Toast.login_required () in
     Content.redirection
-      ~action:(fun () -> Toast.push @@ View.Toast.login_required ())
       (Eliom_service.preapply
          ~service:Service.connection
          (Option.try_with Eliom_request_info.get_current_sub_path))
