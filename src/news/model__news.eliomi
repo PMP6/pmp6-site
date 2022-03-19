@@ -2,7 +2,7 @@
 module User := Auth.Model.User
 
 module Item : sig
-  include Db_utils.Data
+  include Db_model.Data
 
   val title : t -> string
   val short_title : t -> string
@@ -31,7 +31,7 @@ module Item : sig
   end
 end
 
-include Db_utils.Data_with_id with type item := Item.t
+include Db_model.Data_with_id with type item := Item.t
 
 (** {1 Utilities} *)
 

@@ -55,7 +55,7 @@ module User = struct
       Secret.Hash.verify password attempt
   end
 
-  include Db_utils.With_id (Item)
+  include Db_model.With_id (Item)
 
   let username =
     lift Item.username
@@ -92,8 +92,8 @@ module User = struct
     let find id =
       Db.find
         ~in_:(Id.db_type, id)
-        ~out:(db_type, db_unmap)
-        {|
+       ~out:(db_type, db_unmap)
+       {|
           SELECT id, username, email, password, is_superuser, is_staff, joined_time
           FROM auth_user
           WHERE id = ?
@@ -255,7 +255,7 @@ module Password_token = struct
 
   end
 
-  include Db_utils.With_id (Item)
+  include Db_model.With_id (Item)
 
   let hash = lift Item.hash
   let user = lift Item.user

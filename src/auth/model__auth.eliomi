@@ -1,6 +1,6 @@
 module User : sig
   module Item : sig
-    include Db_utils.Data
+    include Db_model.Data
 
     val username : t -> string
     val email : t -> string
@@ -20,7 +20,7 @@ module User : sig
     val verify_password : t -> string -> bool
   end
 
-  include Db_utils.Data_with_id with type item := Item.t
+  include Db_model.Data_with_id with type item := Item.t
 
   val id : t -> Id.t
   val item : t -> Item.t

@@ -57,7 +57,7 @@ module Item = struct
     ]
 end
 
-include Db_utils.With_id (Item)
+include Db_model.With_id (Item)
 
 let title =
   lift Item.title
