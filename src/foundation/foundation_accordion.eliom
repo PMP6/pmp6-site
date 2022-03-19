@@ -11,7 +11,7 @@ let create elements
   (* Elements should be a list of (title, div content as a list) tuples *)
   let make_item index (title, content) =
     H.li ~a:[
-      H.a_class (["accordion-item"] |> Utils.with_if (index = active_index) "is-active");
+      H.a_class (["accordion-item"] |> Utils.cons_if (index = active_index) "is-active");
       H.a_user_data "accordion-item" "";
     ] [
       (* Accordion tab title *)
@@ -27,7 +27,7 @@ let create elements
   in
   H.ul ~a:(
     (H.a_class [ "accordion" ] :: H.a_user_data "accordion" "" :: a)
-    |> Utils.with_if multi_expand @@ H.a_user_data "multi-expand" "true"
-    |> Utils.with_if allow_all_closed @@ H.a_user_data "allow-all-closed" "true"
-    |> Utils.with_if deep_link @@ H.a_user_data "deep-link" "true"
+    |> Utils.cons_if multi_expand @@ H.a_user_data "multi-expand" "true"
+    |> Utils.cons_if allow_all_closed @@ H.a_user_data "allow-all-closed" "true"
+    |> Utils.cons_if deep_link @@ H.a_user_data "deep-link" "true"
   ) (List.mapi ~f:make_item elements)

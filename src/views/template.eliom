@@ -152,8 +152,8 @@ let top_right_menu user =
       a_user_data "click-open" "true";
     ]
     (
-      Utils.with_if (Option.exists ~f:Auth.Model.User.is_staff user) admin @@
-      Utils.with_opt user ~some:user_menu ~none:connection @@
+      Utils.cons_if (Option.exists ~f:Auth.Model.User.is_staff user) admin @@
+      Utils.cons_if_opt user ~some:user_menu ~none:connection @@
       [search]
     )
 

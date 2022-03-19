@@ -11,7 +11,7 @@ let news_tab_title i news =
   let is_active = i = 0 in
   let open H in
   let slug = tab_slug news in
-  li ~a:[a_class @@ Utils.with_is_active is_active ["tabs-title"]] [
+  li ~a:[a_class @@ Utils.cons_is_active is_active ["tabs-title"]] [
     anchor_a ~anchor:slug ~a:[a_user_data "tabs-target" slug]
       [txt @@ Model.short_title news]
   ]
@@ -98,7 +98,7 @@ let news_tabs_panel ~display_action_icons i news =
   div
     ~a:[
       a_id slug;
-      a_class @@ Utils.with_is_active is_active @@ ["tabs-panel"];
+      a_class @@ Utils.cons_is_active is_active @@ ["tabs-panel"];
     ]
     [
       if display_action_icons
@@ -112,7 +112,7 @@ let button_to_redaction ?(expanded=false) () =
     ~service:Service.redaction
     ~a:[
       a_class @@
-      Utils.with_if expanded "expanded" @@
+      Utils.cons_if expanded "expanded" @@
       ["button"]
     ]
     [txt "Rédiger une actu"]
@@ -122,7 +122,7 @@ let news_tabs ?(vertical=false) all_news =
   let open H in
   ul
     ~a:[
-      a_class @@ Utils.with_vertical vertical ["tabs"];
+      a_class @@ Utils.cons_vertical vertical ["tabs"];
       a_user_data "tabs" ""; a_id "tabs-news"
     ]
     (List.mapi ~f:news_tab_title all_news)
@@ -132,8 +132,8 @@ let news_tabs_content ?(vertical=false) ?(display_action_icons=false) all_news =
   div
     ~a:[
       a_class @@
-      Utils.with_vertical vertical @@
-      Utils.with_if vertical "gapped" @@
+      Utils.cons_vertical vertical @@
+      Utils.cons_if vertical "gapped" @@
       ["tabs-content"];
       a_user_data "tabs-content" "tabs-news";
     ]

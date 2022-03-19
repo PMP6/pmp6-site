@@ -10,8 +10,8 @@ let create
     ~a:(
       a
       |> List.cons @@ H.a_class ["callout"]
-      |> Utils.with_if closable @@ H.a_user_data "closable" ""
-      |> Utils.with_some_map color Foundation_color.to_class
+      |> Utils.cons_if closable @@ H.a_user_data "closable" ""
+      |> Utils.cons_opt_map color Foundation_color.to_class
     )
     contents
 

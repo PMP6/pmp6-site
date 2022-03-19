@@ -54,35 +54,37 @@ let slugify string =
   |> List.rev
   |> String.concat ~sep:"-"
 
-let with_if boolean elt list =
+let cons_if boolean elt list =
   if boolean
   then elt :: list
   else list
 
-let with_if_else boolean ~true_ ~false_ list =
-  if boolean
-  then true_ :: list
-  else false_ :: list
-
-let with_opt opt ~some ~none list =
+let cons_if_opt opt ~some ~none list =
   match opt with
   | None -> none :: list
   | Some _ -> some :: list
 
-let with_some_map opt f list =
+let cons_opt opt list =
+  match opt with
+  | None -> list
+  | Some elt -> elt :: list
+
+let cons_opt_map opt f list =
   match opt with
   | None -> list
   | Some elt -> f elt :: list
 
-let with_vertical is_vertical classes =
-  with_if is_vertical "vertical" classes
+(* TODO: put that in foundation or delete it altogether *)
 
-let with_is_active is_active classes =
-  with_if is_active "is-active" classes
+let cons_vertical is_vertical classes =
+  cons_if is_vertical "vertical" classes
 
-let with_is_active_attrib is_active attribs =
+let cons_is_active is_active classes =
+  cons_if is_active "is-active" classes
+
+let cons_is_active_attrib is_active attribs =
   if is_active
-  then H.a_class (with_is_active is_active []) :: attribs
+  then H.a_class (cons_is_active is_active []) :: attribs
   else attribs
 
 let%shared subpath_of_string = Eliom_lib.Url.split_path
