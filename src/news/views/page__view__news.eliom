@@ -3,7 +3,12 @@ module Widget = Widget__view__news
 
 module H = Html
 
-let list_all all_news =
+let list_all news =
+  let (tabs_titles, tabs_contents) =
+    Widget.news_tabs
+      ~vertical:true
+      ~show_actions:true
+      news in
   Content.page
     ~title:"Toutes les actus"
     [
@@ -12,17 +17,11 @@ let list_all all_news =
         [
           Html.div_classes ["cell"; "large-2"] [
             Widget.button_to_redaction ~expanded:true ();
-
-            Widget.news_tabs
-              ~vertical:true
-              all_news
+            tabs_titles;
           ];
 
           Html.div_classes ["cell"; "large-10"] [
-            Widget.news_tabs_content
-              ~vertical:true
-              ~display_action_icons:true
-              all_news
+            tabs_contents;
           ];
 
         ]

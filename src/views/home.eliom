@@ -49,14 +49,15 @@ let presentation_section () =
       ["Un mola-mola à Banyuls", "mola-mola.jpg"];
   ]
 
-let make_news_section all_news =
+let make_news_section news =
   let open H in
+  let (tabs_titles, tabs_contents) = News.View.Widget.news_tabs news in
   section ~a:[a_id "section-news"; a_class ["news"]] [
     h2 [txt "Suivez l'actu..."];
     hr ();
     div_classes ["grid-x"; "grid-padding-x"] [
       div_classes ["large-auto"; "medium-12"; "cell"]
-        [News.View.Widget.news_tabs all_news; News.View.Widget.news_tabs_content all_news];
+        [ tabs_titles; tabs_contents ] ;
       div_classes ["large-shrink"; "medium-12"; "cell"; "text-center"] [
         F.Callout.create [
           Facebook.page_widget ()

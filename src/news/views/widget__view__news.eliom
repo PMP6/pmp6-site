@@ -91,7 +91,7 @@ let article_with_action_icons news =
       [action_icons_callout news];
   ]
 
-let news_tabs_panel ~display_action_icons i news =
+let news_tabs_panel ~show_actions i news =
   let is_active = i = 0 in
   let open H in
   let slug = tab_slug news in
@@ -101,7 +101,7 @@ let news_tabs_panel ~display_action_icons i news =
       a_class @@ Utils.cons_is_active is_active @@ ["tabs-panel"];
     ]
     [
-      if display_action_icons
+      if show_actions
       then article_with_action_icons news
       else article_ news
     ]
@@ -118,7 +118,7 @@ let button_to_redaction ?(expanded=false) () =
     [txt "Rédiger une actu"]
     ()
 
-let news_tabs ?(vertical=false) all_news =
+let news_tabs_titles ~vertical ~show_actions all_news =
   let open H in
   ul
     ~a:[
@@ -127,7 +127,7 @@ let news_tabs ?(vertical=false) all_news =
     ]
     (List.mapi ~f:news_tab_title all_news)
 
-let news_tabs_content ?(vertical=false) ?(display_action_icons=false) all_news =
+let news_tabs_content ~vertical ~show_actions all_news =
   let open H in
   div
     ~a:[
@@ -137,7 +137,11 @@ let news_tabs_content ?(vertical=false) ?(display_action_icons=false) all_news =
       ["tabs-content"];
       a_user_data "tabs-content" "tabs-news";
     ]
-    (List.mapi ~f:(news_tabs_panel ~display_action_icons) all_news)
+    (List.mapi ~f:(news_tabs_panel ~show_actions) all_news)
+
+let news_tabs ?(vertical=false) ?(show_actions=false) news =
+  news_tabs_titles ~vertical news,
+  news_tabs_content ~vertical ~show_actions news
 
 let redaction_form ?news () =
   (* If news is passed, edition form. Otherwise, redaction. *)
