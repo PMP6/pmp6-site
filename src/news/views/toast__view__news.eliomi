@@ -2,14 +2,8 @@ module Model = Model__news
 
 module H = Html
 
-module Creation : sig
-  val success : Model.t -> [> Html_types.p ] H.elt list
-end
+val created : Model.t -> [> Html_types.p ] H.elt list
 
-module Deletion : sig
-  val success : Model.Item.t -> [> Html_types.p ] H.elt list
-end
+val deleted : Model.Item.t -> [> Html_types.p ] H.elt list
 
-module Update : sig
-  val success : Model.t -> [> Html_types.p ] H.elt list
-end
+val updated : Model.t -> [> Html_types.p ] H.elt list

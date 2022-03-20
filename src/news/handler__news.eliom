@@ -21,7 +21,7 @@ let create =
   fun () (title, (short_title, content)) ->
     let content = Html.Unsafe.data content in
     let%lwt model = Model.create ~title ~short_title ~content ~author in
-    Content.action Toast.push_success (View.Toast.Creation.success model)
+    Content.action Toast.push_success (View.Toast.created model)
 
 let edition =
   let$ _user = Auth.Require.staff in
@@ -35,10 +35,10 @@ let update =
   fun () (id, (title, (short_title, content))) ->
     let content = Html.Unsafe.data content in
     let%lwt model = Model.update_as_new id ~title ~short_title ~content ~author in
-    Content.action Toast.push_success (View.Toast.Update.success model)
+    Content.action Toast.push_success (View.Toast.updated model)
 
 let delete =
   let$ _user = Auth.Require.staff in
   fun () id ->
     let%lwt item = Model.find_and_delete id in
-    Content.action Toast.push_success (View.Toast.Deletion.success item)
+    Content.action Toast.push_success (View.Toast.deleted item)
