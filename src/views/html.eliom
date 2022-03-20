@@ -187,7 +187,7 @@ let time_ ?(a=[]) time_ =
   let attr = a_datetime datetime :: a in
   Eliom_content.Html.C.node
     ~init:(time ~a:attr [txt datetime])
-    Caml.([%client (time ~a:~%attr [txt @@ format_datetime ~%time_])])
+    [%client (time ~a:~%attr [txt @@ format_datetime ~%time_])]
 
 (* Currently this does not allow post parameters. Use this with
    (possibly dynamically created) unit post services. This could be
