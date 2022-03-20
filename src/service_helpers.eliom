@@ -1,6 +1,8 @@
 module P = Eliom_parameter
 module S = Eliom_service
 
+let ( ** ) = P.( ** )
+
 module Timeout = struct
 
   type t = float

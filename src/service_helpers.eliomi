@@ -1,6 +1,12 @@
 module P = Eliom_parameter
 module S = Eliom_service
 
+(** An alias of [P.( ** )] *)
+val ( ** ) :
+  ('a, [ `WithoutSuffix ], 'b) P.params_type ->
+  ('c, [< `Endsuffix | `WithoutSuffix ] as 'd, 'e) P.params_type ->
+  ('a * 'c, 'd, 'b * 'e) P.params_type
+
 module Timeout : sig
   (** Helpers for easier-to-read service timeouts *)
 
