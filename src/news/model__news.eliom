@@ -9,6 +9,7 @@ module Item = struct
     pub_time : Time.t;
     content : Html_types.div_content_fun H.elt;
     author : User.Id.t;
+    is_visible : bool;
   }
 
   let title { title; _ } = title
@@ -16,15 +17,18 @@ module Item = struct
   let pub_time { pub_time; _ } = pub_time
   let content { content; _ } = content
   let author { author; _ } = author
+  let is_visible { is_visible; _ } = is_visible
+
+  let is_invisible news = not (is_visible news)
 
   module Private = struct
-    let build ~title ~short_title ~content ~pub_time ~author =
-      { title; short_title; content; pub_time; author }
+    let build ~title ~short_title ~content ~pub_time ~author ~is_visible =
+      { title; short_title; content; pub_time; author; is_visible }
   end
 
-  let build_new ~title ~short_title ~content ~author =
+  let build_new ~title ~short_title ~content ~author ~is_visible =
     let pub_time = Time.now () in
-    Private.build ~title ~short_title ~content ~pub_time ~author
+    Private.build ~title ~short_title ~content ~pub_time ~author ~is_visible
 
   let slug news =
     Utils.slugify @@ title news
@@ -33,27 +37,29 @@ module Item = struct
     Html.elt_to_string (content item)
 
   type mapping =
-    (string -> string -> Time.t -> string -> User.Id.t -> unit) Db.Hlist.t
+    (string -> string -> Time.t -> string -> User.Id.t -> bool -> unit) Db.Hlist.t
 
   let db_type =
-    Db.Type.(hlist [string; string; time; string; User.Id.db_type])
+    Db.Type.(hlist [ string; string; time; string; User.Id.db_type; bool ])
 
-  let db_unmap Db.Hlist.[title; short_title; pub_time; content; author] =
+  let db_unmap Db.Hlist.[ title; short_title; pub_time; content; author; is_visible ] =
     {
       title;
       short_title;
       pub_time;
       content = Html.Unsafe.data content;
       author;
+      is_visible;
     }
 
-  let db_map { title; short_title; pub_time; content; author } =
+  let db_map { title; short_title; pub_time; content; author; is_visible } =
     Db.Hlist.[
       title;
       short_title;
       pub_time;
       Html.elt_to_string content;
       author;
+      is_visible;
     ]
 end
 
@@ -73,6 +79,12 @@ let pub_time =
 
 let author =
   lift Item.author
+
+let is_visible =
+  lift Item.is_visible
+
+let is_invisible =
+  lift Item.is_invisible
 
 let content_as_string =
   lift Item.content_as_string
@@ -95,8 +107,18 @@ module Request = struct
     Db.collect_all
       ~out:(db_type, db_unmap)
       {|
-        SELECT id, title, short_title, pub_time, content, author
+        SELECT id, title, short_title, pub_time, content, author, is_visible
           FROM news
+          ORDER BY pub_time DESC
+      |}
+
+  let visible =
+    Db.collect_all
+      ~out:(db_type, db_unmap)
+      {|
+        SELECT id, title, short_title, pub_time, content, author, is_visible
+          FROM news
+          WHERE is_visible
           ORDER BY pub_time DESC
       |}
 
@@ -105,7 +127,7 @@ module Request = struct
       ~in_:(Id.db_type, id)
       ~out:(db_type, db_unmap)
       {|
-        SELECT id, title, short_title, pub_time, content, author
+        SELECT id, title, short_title, pub_time, content, author, is_visible
         FROM news
         WHERE id = ?
         LIMIT 1
@@ -116,14 +138,14 @@ module Request = struct
       ~in_:(Item.db_type, Item.db_map item)
       ~out:(db_type, db_unmap)
       {|
-        INSERT INTO news (title, short_title, pub_time, content, author)
-        VALUES (?, ?, ?, ?, ?)
-        RETURNING id, title, short_title, pub_time, content, author
+        INSERT INTO news (title, short_title, pub_time, content, author, is_visible)
+        VALUES (?, ?, ?, ?, ?, ?)
+        RETURNING id, title, short_title, pub_time, content, author, is_visible
       |}
 
-  let create ~title ~short_title ~content ~author =
+  let create ~title ~short_title ~content ~author ~is_visible =
     create_from_item @@
-    Item.build_new ~title ~short_title ~content ~author
+    Item.build_new ~title ~short_title ~content ~author ~is_visible
 
   let update_with_item id item =
     Db.find
@@ -135,14 +157,33 @@ module Request = struct
             short_title = $3,
             pub_time = $4,
             content = $5,
-            author = $6
+            author = $6,
+            is_visible = $7
         WHERE id = $1
-        RETURNING id, title, short_title, pub_time, content, author
+        RETURNING id, title, short_title, pub_time, content, author, is_visible
       |}
 
-  let update_as_new id ~title ~short_title ~content ~author =
-    let item = Item.build_new ~title ~short_title ~content ~author in
-    update_with_item id item
+  let update id ?title ?short_title ?pub_time ?content ?author ?is_visible () =
+    let Pack (types, values, names) = Db.Dyn_param.(
+      empty
+      |> add_opt Db.Type.string title "title"
+      |> add_opt Db.Type.string short_title "short_title"
+      |> add_opt Db.Type.time pub_time "pub_time"
+      |> add_opt Db.Type.string (Option.map ~f:Html.elt_to_string content) "content"
+      |> add_opt Auth.Model.User.Id.db_type author "author"
+      |> add_opt Db.Type.bool is_visible "is_visible"
+    ) in
+    let set_fields = Db.Dyn_param.set ~from:2 names in
+    Db.find
+      ~in_:(Db.Type.(Id.db_type & types), (id, values))
+      ~out:(db_type, db_unmap)
+      (Fmt.str
+         {|
+           UPDATE news
+           SET %s
+           WHERE id = $1
+           RETURNING id, title, short_title, pub_time, content, author, is_visible
+         |} set_fields)
 
   let find_and_delete id =
     Db.find
@@ -151,7 +192,7 @@ module Request = struct
       {|
         DELETE FROM news
         WHERE id = ?
-        RETURNING title, short_title, pub_time, content, author
+        RETURNING title, short_title, pub_time, content, author, is_visible
       |}
 
   let delete id =
@@ -166,20 +207,23 @@ end
 let all () =
   Db.run Request.all
 
+let visible () =
+  Db.run Request.visible
+
 let find id =
   Db.run (Request.find id)
 
 let create_from_item item =
   Db.run (Request.create_from_item item)
 
-let create ~title ~short_title ~content ~author =
-  Db.run (Request.create ~title ~short_title ~content ~author)
+let create ~title ~short_title ~content ~author ~is_visible =
+  Db.run (Request.create ~title ~short_title ~content ~author ~is_visible)
 
 let update_with_item id item =
   Db.run (Request.update_with_item id item)
 
-let update_as_new id ~title ~short_title ~content ~author =
-  Db.run (Request.update_as_new id ~title ~short_title ~content ~author)
+let update id ?title ?short_title ?pub_time ?content ?author ?is_visible () =
+  Db.run (Request.update id ?title ?short_title ?pub_time ?content ?author ?is_visible ())
 
 let find_and_delete id =
   Db.run (Request.find_and_delete id)

@@ -192,6 +192,7 @@ let rentree auth =
     ~pub_time:(deploy_time |> Fn.flip Time.sub Time.Span.minute)
     ~content:(Html.div @@ content_rentree ())
     ~author:(Auth.Model.User.id auth#poulpe)
+    ~is_visible:false
 
 let piscine auth =
   News.Model.Item.Private.build
@@ -200,6 +201,7 @@ let piscine auth =
     ~pub_time:(deploy_time |> Fn.flip Time.sub Time.Span.hour)
     ~content:(Html.div @@ content_piscine ())
     ~author:(Auth.Model.User.id auth#staff)
+    ~is_visible:true
 
 let fosses auth =
   News.Model.Item.Private.build
@@ -208,6 +210,7 @@ let fosses auth =
     ~pub_time:(Time.now () |> Fn.flip Time.sub Time.Span.day)
     ~content:(Html.div @@ content_fosse ())
     ~author:(Auth.Model.User.id auth#staff)
+    ~is_visible:true
 
 let flush () =
   Fixture_utils.delete_all (module News.Model)

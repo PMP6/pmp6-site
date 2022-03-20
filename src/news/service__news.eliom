@@ -32,7 +32,8 @@ let create_into_main =
       P.(
         string "title" **
         string "short_title" **
-        string "content"
+        string "content" **
+        bool "is_visible"
       )
     ()
 
@@ -43,9 +44,11 @@ let update_into_main =
     ~post_params:
       P.(
         Model.Id.param "id" **
+        bool "update_datetime" **
         string "title" **
         string "short_title" **
-        string "content"
+        string "content" **
+        bool "is_visible"
       )
     ()
 

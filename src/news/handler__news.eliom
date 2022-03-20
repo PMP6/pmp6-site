@@ -18,9 +18,9 @@ let redaction =
 let create =
   let$ user = Auth.Require.staff in
   let author = Auth.Model.User.id user in
-  fun () (title, (short_title, content)) ->
+  fun () (title, (short_title, (content, is_visible))) ->
     let content = Html.Unsafe.data content in
-    let%lwt model = Model.create ~title ~short_title ~content ~author in
+    let%lwt model = Model.create ~title ~short_title ~content ~author ~is_visible in
     Content.action Toast.push_success (View.Toast.created model)
 
 let edition =
@@ -32,9 +32,14 @@ let edition =
 let update =
   let$ user = Auth.Require.staff in
   let author = Auth.Model.User.id user in
-  fun () (id, (title, (short_title, content))) ->
+  fun () (id, (update_pubtime, (title, (short_title, (content, is_visible))))) ->
     let content = Html.Unsafe.data content in
-    let%lwt model = Model.update_as_new id ~title ~short_title ~content ~author in
+    let pub_time =
+      if update_pubtime
+      then Some (Time.now ())
+      else None in
+    let%lwt model =
+      Model.update id ~title ~short_title ?pub_time ~content ~author ~is_visible () in
     Content.action Toast.push_success (View.Toast.updated model)
 
 let delete =

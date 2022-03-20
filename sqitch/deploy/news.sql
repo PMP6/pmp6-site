@@ -9,6 +9,7 @@ CREATE TABLE news (
     pub_time INTEGER NOT NULL,
     content TEXT NOT NULL,
     author INTEGER NOT NULL,
+    is_visible INTEGER NOT NULL,
     FOREIGN KEY(author) REFERENCES auth_user(id)
 );
 

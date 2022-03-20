@@ -9,12 +9,15 @@ module Item : sig
   val pub_time : t -> Time.t
   val content : t -> Html_types.div_content_fun Html.elt
   val author : t -> User.Id.t
+  val is_visible : t -> bool
+  val is_invisible : t -> bool
 
   val build_new :
     title:string ->
     short_title:string ->
     content:Html_types.div_content_fun Html.elt ->
     author:User.Id.t ->
+    is_visible:bool ->
     t
 
   val slug : t -> string
@@ -27,6 +30,7 @@ module Item : sig
       content:Html_types.div_content_fun Html.elt ->
       pub_time:Time.t ->
       author:User.Id.t ->
+      is_visible:bool ->
       t
   end
 end
@@ -42,6 +46,8 @@ val short_title : t -> string
 val pub_time : t -> Time.t
 val content : t -> Html_types.div_content_fun Html.elt
 val author : t -> User.Id.t
+val is_visible : t -> bool
+val is_invisible : t -> bool
 
 val slug : t -> string
 val content_as_string : t -> string
@@ -55,6 +61,8 @@ val unique_slug : ?prefix:string -> t -> string
 
 val all : unit -> t list Lwt.t
 
+val visible : unit -> t list Lwt.t
+
 val find : Id.t -> t Lwt.t
 
 val create_from_item : Item.t -> t Lwt.t
@@ -64,16 +72,20 @@ val create :
   short_title:string ->
   content:Html_types.div_content_fun Html.elt ->
   author:User.Id.t ->
+  is_visible:bool ->
   t Lwt.t
 
 val update_with_item : Id.t -> Item.t -> t Lwt.t
 
-val update_as_new :
+val update :
   Id.t ->
-  title:string ->
-  short_title:string ->
-  content:Html_types.div_content_fun Html.elt ->
-  author:User.Id.t ->
+  ?title:string ->
+  ?short_title:string ->
+  ?pub_time:Time.t ->
+  ?content:Html_types.div_content_fun Html.elt ->
+  ?author:User.Id.t ->
+  ?is_visible:bool ->
+  unit ->
   t Lwt.t
 
 val find_and_delete : Id.t -> Item.t Lwt.t
