@@ -1,7 +1,8 @@
 module Hash = struct
+
   type t = Argon2.encoded (* = string *)
 
-  let db_type = Caqti_type.string
+  let db_type = Db.Type.(redacted string)
 
   let ok_or_argon2_error result =
     result
