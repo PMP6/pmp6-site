@@ -29,6 +29,7 @@ let tests = [
   check_bool "enabled foreign keys" Db.check_foreign_keys;
   check_unit "email" Email.check;
   check_ignore "smoke user model" Auth.Model.User.all;
+  check_ignore "smoke news model" News.Model.all;
 ]
 
 let () =
