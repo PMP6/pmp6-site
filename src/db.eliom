@@ -69,6 +69,26 @@ module Type = struct
 
 end
 
+module Dyn_param = struct
+
+  type t = Pack : 'a Type.t * 'a * string list -> t
+
+  let add typ value field (Pack (types, repr, fields)) =
+    Pack (Type.tup2 types typ, (repr, value), fields @ [ field ])
+
+  let add_opt typ value_opt field dyn = match value_opt with
+    | None -> dyn
+    | Some value -> add typ value field dyn
+
+  let empty = Pack (Caqti_type.unit, (), [])
+
+  let set ~from names =
+    names
+    |> List.mapi ~f:(fun i name -> Fmt.str "%s = $%d" name (i + from))
+    |> String.concat ~sep:", "
+
+end
+
 type +'a m = (module C) -> ('a, Caqti_error.t) result Lwt.t
 
 module R = Lwt_result
