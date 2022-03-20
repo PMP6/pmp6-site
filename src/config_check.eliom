@@ -21,9 +21,8 @@ let check_ignore name run_test =
   check_unit name (fun () -> Lwt_monad.ignore_m @@ run_test ())
 
 let check_list tests =
-  Lwt_list.fold_left_s
-    (fun () test -> test ())
-    ()
+  Lwt_list.iter_p
+    (fun test -> test ())
     tests
 
 let tests = [
