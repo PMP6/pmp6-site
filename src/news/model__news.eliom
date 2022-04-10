@@ -202,6 +202,7 @@ module Request = struct
         DELETE FROM news
         WHERE id = ?
       |}
+
 end
 
 let all () =
