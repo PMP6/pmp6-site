@@ -72,9 +72,10 @@ module Dyn_param = struct
 
   let empty = Pack (Caqti_type.unit, (), [])
 
-  let set ~from names =
+  (* todo better name than from? *)
+  let to_columns ~starting_index names =
     names
-    |> List.mapi ~f:(fun i name -> Fmt.str "%s = $%d" name (i + from))
+    |> List.mapi ~f:(fun i name -> Fmt.str "%s = $%d" name (i + starting_index))
     |> String.concat ~sep:", "
 
 end

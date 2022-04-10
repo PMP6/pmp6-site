@@ -173,7 +173,7 @@ module Request = struct
       |> add_opt Auth.Model.User.Id.db_type author "author"
       |> add_opt Db.Type.bool is_visible "is_visible"
     ) in
-    let set_fields = Db.Dyn_param.set ~from:2 names in
+    let columns = Db.Dyn_param.to_columns ~starting_index:2 names in
     Db.find
       ~in_:(Db.Type.(Id.db_type & types), (id, values))
       ~out:(db_type, db_unmap)
@@ -183,7 +183,7 @@ module Request = struct
            SET %s
            WHERE id = $1
            RETURNING id, title, short_title, pub_time, content, author, is_visible
-         |} set_fields)
+         |} columns)
 
   let find_and_delete id =
     Db.find
