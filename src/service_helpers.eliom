@@ -1,5 +1,5 @@
-module P = Eliom_parameter
-module S = Eliom_service
+module%shared P = Eliom_parameter
+module%shared S = Eliom_service
 
 let ( ** ) = P.( ** )
 
