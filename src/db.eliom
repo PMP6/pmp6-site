@@ -6,14 +6,6 @@ let caqti_exn caqti_error =
 let connection_uri =
   Settings.db_uri
 
-module Hlist = struct
-
-  type _ t =
-    | [] : unit t
-    | ( :: ) : 'a * 'b t -> ('a -> 'b) t
-
-end
-
 module Type = struct
   (* Utilities over Caqti_type *)
   include Caqti_type
@@ -51,11 +43,9 @@ module Type = struct
 
   let ( & ) = tup2
 
-  type _ tlist =
-    | [] : unit tlist
-    | ( :: ) : 'a t * 'b tlist -> ('a -> 'b) tlist
+  module Tlist = Hlist.Make (Caqti_type)
 
-  let rec hlist : type a. a tlist -> a Hlist.t t = function
+  let rec hlist : type a. a Tlist.t -> a Hlist.t t = function
     | [] ->
       custom
         ~encode:(fun Hlist.[] -> Ok ())

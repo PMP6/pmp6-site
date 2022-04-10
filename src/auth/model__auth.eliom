@@ -13,7 +13,7 @@ module User = struct
     }
 
     type mapping =
-      (string -> string -> Secret.Hash.t -> bool -> bool -> Time.t -> unit) Db.Hlist.t
+      (string -> string -> Secret.Hash.t -> bool -> bool -> Time.t -> unit) Hlist.t
 
     let username { username; _ } = username
     let email { email; _ } = email
@@ -31,7 +31,7 @@ module User = struct
       Db.Type.(hlist [string; string; Secret.Hash.db_type; bool; bool; time])
 
     let db_unmap
-        Db.Hlist.[username; email; password; is_superuser; is_staff; joined_time] =
+        Hlist.[username; email; password; is_superuser; is_staff; joined_time] =
       {
         username;
         email;
@@ -42,7 +42,7 @@ module User = struct
       }
 
     let db_map { username; email; password; is_superuser; is_staff; joined_time } =
-      Db.Hlist.[
+      Hlist.[
         username;
         email;
         password;
@@ -234,7 +234,7 @@ module Password_token = struct
     }
 
     type mapping =
-      (Secret.Hash.t -> User.Id.t -> Time.t -> unit) Db.Hlist.t
+      (Secret.Hash.t -> User.Id.t -> Time.t -> unit) Hlist.t
 
     let hash { hash; _ } = hash
     let user { user; _ } = user
@@ -247,11 +247,11 @@ module Password_token = struct
     let db_type =
       Db.Type.(hlist [ Secret.Hash.db_type; User.Id.db_type; time ])
 
-    let db_unmap Db.Hlist.[ hash; user; expiry_time ] =
+    let db_unmap Hlist.[ hash; user; expiry_time ] =
       { hash; user; expiry_time}
 
     let db_map { hash; user; expiry_time } =
-      Db.Hlist.[ hash; user; expiry_time ]
+      Hlist.[ hash; user; expiry_time ]
 
   end
 

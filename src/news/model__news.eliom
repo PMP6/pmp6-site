@@ -37,12 +37,12 @@ module Item = struct
     Html.elt_to_string (content item)
 
   type mapping =
-    (string -> string -> Time.t -> string -> User.Id.t -> bool -> unit) Db.Hlist.t
+    (string -> string -> Time.t -> string -> User.Id.t -> bool -> unit) Hlist.t
 
   let db_type =
     Db.Type.(hlist [ string; string; time; string; User.Id.db_type; bool ])
 
-  let db_unmap Db.Hlist.[ title; short_title; pub_time; content; author; is_visible ] =
+  let db_unmap Hlist.[ title; short_title; pub_time; content; author; is_visible ] =
     {
       title;
       short_title;
@@ -53,7 +53,7 @@ module Item = struct
     }
 
   let db_map { title; short_title; pub_time; content; author; is_visible } =
-    Db.Hlist.[
+    Hlist.[
       title;
       short_title;
       pub_time;
