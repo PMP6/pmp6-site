@@ -14,7 +14,7 @@ PKG ppx_jane
 # PKG eliom.ppx.client
 
 PKG eliom.server
-# PKG eliom.ppx.server
+PKG eliom.ppx.server
 
 PKG base64
 PKG argon2
