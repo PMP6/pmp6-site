@@ -81,9 +81,6 @@ let action_icons_callout news =
             ]
           ];
         deletion_icon_and_modal news;
-        div_classes
-          ["cell"; "text-center"; "large-12"; "small-4"]
-          [p [Raw.a [Icon.solid "fa-eye-slash" ()]]];
       ]
     ]
 
