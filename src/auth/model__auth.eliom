@@ -1,5 +1,7 @@
 let ( & ) = Db.Type.( & )
 
+open Db.Let_syntax
+
 module User = struct
 
   module Item = struct
@@ -208,16 +210,19 @@ module User = struct
   let email_exists email =
     Db.run (Request.email_exists email)
 
-  let update_email id email =
-    let open Db.Let_syntax in
-    Db.run @@
+  let with_email_check email request =
     Db.with_transaction (
       if%bind Request.email_exists email
       then return (Error `Email_already_exists)
       else
-        let%map () = Request.update_email_exn id email in
-        Ok ()
+        let%map result = request () in
+        Ok result
     )
+
+  let update_email id email =
+    Db.run @@
+    with_email_check email @@
+    fun () -> Request.update_email_exn id email
 
   let update_password id password =
     Db.run (Request.update_password id password)
