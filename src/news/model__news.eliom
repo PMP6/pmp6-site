@@ -173,7 +173,7 @@ module Request = struct
       |> add_opt Auth.Model.User.Id.db_type author "author"
       |> add_opt Db.Type.bool is_visible "is_visible"
     ) in
-    let columns = Db.Dyn_param.to_columns ~starting_index:2 names in
+    let columns = Db.Dyn_param.to_columns ~sep:`Comma ~starting_index:2 names in
     Db.find
       ~in_:(Db.Type.(Id.db_type & types), (id, values))
       ~out:(db_type, db_unmap)

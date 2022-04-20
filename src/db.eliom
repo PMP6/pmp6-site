@@ -72,11 +72,19 @@ module Dyn_param = struct
 
   let empty = Pack (Caqti_type.unit, (), [])
 
+  let sep_to_string = function
+    | `And -> " AND "
+    | `Or -> " OR "
+    | `Comma -> ", "
+    | `String str -> Fmt.str " %s " str
+    | `Char chr -> Fmt.str " %c " chr
+
   (* todo better name than from? *)
-  let to_columns ~starting_index names =
+  let to_columns ~sep ~starting_index names =
+    let sep = sep_to_string sep in
     names
     |> List.mapi ~f:(fun i name -> Fmt.str "%s = $%d" name (i + starting_index))
-    |> String.concat ~sep:", "
+    |> String.concat ~sep
 
 end
 
