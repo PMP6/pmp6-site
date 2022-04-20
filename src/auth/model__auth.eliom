@@ -160,7 +160,7 @@ module User = struct
         ~out:(Db.Type.bool, Fn.id)
         {| SELECT EXISTS (SELECT 1 FROM auth_user WHERE email = ?) |}
 
-    let try_force_update_email id email =
+    let update_email_exn id email =
       Db.exec
         ~in_:(Id.db_type & Db.Type.string, (id, email))
         {|
@@ -215,7 +215,7 @@ module User = struct
       if%bind Request.email_exists email
       then return (Error `Email_already_exists)
       else
-        let%map () = Request.try_force_update_email id email in
+        let%map () = Request.update_email_exn id email in
         Ok ()
     )
 
