@@ -211,7 +211,7 @@ module User = struct
   let update_email id email =
     let open Db.Let_syntax in
     Db.run @@
-    Db.transaction (
+    Db.with_transaction (
       if%bind Request.email_exists email
       then return (Error `Email_already_exists)
       else
@@ -312,7 +312,7 @@ module Password_token = struct
   let validate_password_reset token ~password =
     let open Db.Let_syntax in
     Db.run @@
-    Db.transaction (
+    Db.with_transaction (
       let%bind valid_tokens = Request.get_all_valid in
       let valid_users =
         List.filter_map
