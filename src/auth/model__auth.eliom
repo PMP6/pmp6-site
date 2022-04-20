@@ -241,10 +241,6 @@ module Password_token = struct
     type mapping =
       (Secret.Hash.t -> User.Id.t -> Time.t -> unit) Hlist.t
 
-    let hash { hash; _ } = hash
-    let user { user; _ } = user
-    let expiry_time { expiry_time; _ } = expiry_time
-
     let build_new ~hash ~user =
       let expiry_time = Time.add (Time.now ()) Time.Span.hour in
       { hash; user; expiry_time }
@@ -261,10 +257,6 @@ module Password_token = struct
   end
 
   include Db_model.With_id (Item)
-
-  let hash = lift Item.hash
-  let user = lift Item.user
-  let expiry_time = lift Item.expiry_time
 
   module Request = struct
 
