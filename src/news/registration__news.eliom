@@ -2,10 +2,10 @@ module Handler = Handler__news
 module Service = Service__news
 
 let routes = Registration_lib.[
-  Service.main, Handler.list_all;
-  Service.redaction, Handler.redaction;
-  Service.create_into_main, Handler.create;
-  Service.edition, Handler.edition;
-  Service.update_into_main, Handler.update;
-  Service.delete, Handler.delete;
+  Service.Admin.main, Handler.Admin.list_all;
+  Service.Admin.redaction, Handler.Admin.redaction;
+  Service.Admin.create_into_main, Handler.Admin.create;
+  Service.Admin.edition, Handler.Admin.edition;
+  Service.Admin.update_into_main, Handler.Admin.update;
+  Service.Admin.delete, Handler.Admin.delete;
 ]

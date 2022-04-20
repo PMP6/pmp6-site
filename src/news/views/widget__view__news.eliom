@@ -49,7 +49,7 @@ let deletion_icon_and_modal news =
        conserver son contenu, il est préférable de la masquer."
       (Model.short_title news) in
   Confirmation_modal.with_modal
-    ~service:Service.delete
+    ~service:Service.Admin.delete
     modal_text
     (fun ~opens_modal modal ->
        div_classes ["cell"; "text-center"; "large-12"; "small-4"] [
@@ -75,7 +75,7 @@ let action_icons_callout news =
           [
             p [
               a
-                ~service:Service.edition
+                ~service:Service.Admin.edition
                 [Icon.solid "fa-edit" ()]
                 (Model.id news)
             ]
@@ -113,7 +113,7 @@ let news_tabs_panel ~show_actions i news =
 let button_to_redaction ?(expanded=false) () =
   let open H in
   a
-    ~service:Service.redaction
+    ~service:Service.Admin.redaction
     ~a:[
       a_class @@
       Utils.cons_if expanded "expanded" @@
@@ -287,6 +287,6 @@ let redaction_form ?news () =
       () in
   match news with
   | Some news ->
-    post_form ~service:Service.update_into_main (edition_form news)
+    post_form ~service:Service.Admin.update_into_main (edition_form news)
   | None ->
-    post_form ~service:Service.create_into_main creation_form
+    post_form ~service:Service.Admin.create_into_main creation_form
