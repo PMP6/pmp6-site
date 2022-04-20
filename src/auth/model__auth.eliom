@@ -162,6 +162,44 @@ module User = struct
         ~out:(Db.Type.bool, Fn.id)
         {| SELECT EXISTS (SELECT 1 FROM auth_user WHERE email = ?) |}
 
+    let find_conflicts id ?username ?email () =
+      let Pack (types, values, names) = Db.Dyn_param.(
+        empty
+        |> add_opt Db.Type.string username "username"
+        |> add_opt Db.Type.string email "email"
+      ) in
+      let columns = Db.Dyn_param.to_columns ~sep:`Or ~starting_index:2 names in
+      Db.collect
+        ~in_:(Id.db_type & types, (id, values))
+        ~out:(db_type, db_unmap)
+        (Fmt.str
+           {|
+             SELECT id, username, email, password, is_superuser, is_staff, joined_time
+             FROM auth_user
+             WHERE (%s) AND id <> $1
+           |} columns)
+
+    let update_exn id ?username ?email ?password ?is_superuser ?is_staff () =
+      let Pack (types, values, names) = Db.Dyn_param.(
+        empty
+        |> add_opt Db.Type.string username "username"
+        |> add_opt Db.Type.string email "email"
+        |> add_opt Secret.Hash.db_type (Option.map ~f:Secret.Hash.encode password) "password"
+        |> add_opt Db.Type.bool is_superuser "is_superuser"
+        |> add_opt Db.Type.bool is_staff "is_staff"
+      ) in
+      let columns = Db.Dyn_param.to_columns ~sep:`Comma ~starting_index:2 names in
+      Db.find
+        ~in_:(Db.Type.(Id.db_type & types), (id, values))
+        ~out:(db_type, db_unmap)
+        (Fmt.str
+           {|
+             UPDATE auth_user
+             SET %s
+             WHERE id = $1
+             RETURNING id, username, email, password, is_superuser, is_staff, joined_time
+           |} columns)
+
     let update_email_exn id email =
       Db.exec
         ~in_:(Id.db_type & Db.Type.string, (id, email))
@@ -219,6 +257,23 @@ module User = struct
         Ok result
     )
 
+  let classify_conflict user user' =
+    []
+    |> Utils.cons_if (String.equal (email user) (email user')) `Email_already_exists
+    |> Utils.cons_if (String.equal (username user) (username user')) `Username_already_exists
+
+  let with_conflict_check id ?username ?email request =
+    Db.with_transaction (
+      match%bind Request.find_conflicts id ?username ?email () with
+      | [] ->
+        let%map result = request () in
+        Ok result
+      | conflicts ->
+        let%map user = Request.find id in
+        let conflicts = List.concat_map ~f:(classify_conflict user) conflicts in
+        Error conflicts
+    )
+
   let update_email id email =
     Db.run @@
     with_email_check email @@
@@ -226,6 +281,11 @@ module User = struct
 
   let update_password id password =
     Db.run (Request.update_password id password)
+
+  let update id ?username ?email ?password ?is_superuser ?is_staff () =
+    Db.run @@
+    with_conflict_check id ?username ?email @@
+    fun () -> Request.update_exn id ?username ?email ?password ?is_superuser ?is_staff ()
 
 end
 

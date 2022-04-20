@@ -62,6 +62,17 @@ module User : sig
 
   val update_password :
     Id.t -> string -> unit Lwt.t
+
+  val update :
+    Id.t ->
+    ?username:string ->
+    ?email:string ->
+    ?password:string ->
+    ?is_superuser:bool ->
+    ?is_staff:bool ->
+    unit ->
+    (t, [> `Email_already_exists | `Username_already_exists ] list) result Lwt.t
+
 end
 
 module Password_token : sig
