@@ -141,9 +141,7 @@ let password_reset_form () =
 
 let password_change_form token =
   let open H in
-  let span_form_error text =
-    H.span ~a:[H.a_class ["form-error"]] [H.txt text]
-  in
+  let module Abide = Foundation.Abide in
   let pwd_input_id = new_id () in
   let make_form new_password =
     [
@@ -152,18 +150,18 @@ let password_change_form token =
         Form.input
           ~input_type:`Password
           ~name:new_password
-          ~a:[a_required (); a_id pwd_input_id]
+          ~a:[Abide.required (); a_id pwd_input_id]
           Form.string;
-        span_form_error "Vous devez entrer un mot de passe.";
+        Abide.form_error "Vous devez entrer un mot de passe.";
       ];
 
       label [
         txt "Confirmez votre mot de passe";
         Form.input
           ~input_type:`Password
-          ~a:[a_required (); a_user_data "equalto" pwd_input_id]
+          ~a:[Abide.required (); Abide.equalto ~id:pwd_input_id]
           Form.string;
-        span_form_error "Les deux mots de passe doivent être identiques !";
+        Abide.form_error "Les deux mots de passe doivent être identiques !";
       ];
 
       Form.button_no_value
@@ -171,12 +169,7 @@ let password_change_form token =
         ~a:[a_class ["button"; "small-only-expanded"]]
         [txt "Enregistrer"];
     ] in
-  Form.post_form
+  Abide.post_form
     ~service:Service.Settings.validate_password_reset
-    ~xhr:false (* Mandatory to go through Abide form validation *)
-    ~a:[
-      a_user_data "abide" "";
-      a_novalidate ();
-    ]
     make_form
     token

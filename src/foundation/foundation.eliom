@@ -1,4 +1,5 @@
 module Accordion = Foundation_accordion
+module Abide = Foundation_abide
 module Callout = Foundation_callout
 module Color = Foundation_color
 module Grid = Foundation_grid

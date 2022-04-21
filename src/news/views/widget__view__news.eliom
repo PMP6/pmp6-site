@@ -187,9 +187,6 @@ let news_tabs ?(vertical=false) ?(show_actions=false) news =
 let redaction_form ?news () =
   (* If news is passed, edition form. Otherwise, redaction. *)
   let open H in
-  let span_form_error text =
-    H.span ~a:[H.a_class ["form-error"]] [H.txt text]
-  in
   let help_text text =
     H.p ~a:[H.a_class ["help-text"]] [H.txt text]
   in
@@ -206,22 +203,17 @@ let redaction_form ?news () =
   let form_with_holes id_hidden_input update_pubtime_checkbox
       (title, (short_title, (content, is_visible))) =
     [
-      F.Callout.alert
-        ~a:[
-          a_user_data "abide-error" "";
-          a_style "display: none";
-        ]
-        [H.txt "Le formulaire contient des erreurs."];
+      F.Abide.abide_error [ H.txt "Le formulaire contient des erreurs." ];
 
       label [
         txt "Titre";
         Form.input
           ~input_type:`Text
           ~name:title
-          ~a:[a_required ()]
+          ~a:[F.Abide.required ()]
           ~value:(prefilled_with Model.title)
           Form.string;
-        span_form_error "Vous devez renseigner le titre.";
+        F.Abide.form_error "Vous devez renseigner le titre.";
       ];
       help_text "Le titre principal, affiché en haut de l'actu.";
 
@@ -230,10 +222,10 @@ let redaction_form ?news () =
         Form.input
           ~input_type:`Text
           ~name:short_title
-          ~a:[a_required ()]
+          ~a:[F.Abide.required ()]
           ~value:(prefilled_with Model.short_title)
           Form.string;
-        span_form_error "Vous devez renseigner le titre court.";
+        F.Abide.form_error "Vous devez renseigner le titre court.";
       ];
       help_text "Un titre plus court pour les onglets.";
 
@@ -241,10 +233,10 @@ let redaction_form ?news () =
         txt "Contenu";
         Form.textarea
           ~name:content
-          ~a:[a_required (); a_rows 10]
+          ~a:[F.Abide.required (); a_rows 10]
           ~value:(prefilled_with Model.content_as_string)
           ();
-        span_form_error "Vous devez renseigner le contenu.";
+        F.Abide.form_error "Vous devez renseigner le contenu.";
       ];
       help_text "Le contenu de la news. HTML autorisé.";
 
@@ -276,12 +268,7 @@ let redaction_form ?news () =
       (Some (update_pubtime_checkbox update_pubtime_checkbox_name))
       names in
   let post_form ~service make_form =
-    Form.post_form
-      ~xhr:false (* Mandatory to go through Abide form validation *)
-      ~a:[
-        a_user_data "abide" "";
-        a_novalidate ();
-      ]
+    F.Abide.post_form
       ~service
       make_form
       () in
