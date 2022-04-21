@@ -144,6 +144,9 @@ let home_service =
     ~meth:(Eliom_service.Get Eliom_parameter.unit)
     ()
 
+let admin_path subpath =
+  Eliom_service.Path ("admin" :: subpath @ [""])
+
 let hierarchy_items =
   [
     Plonger.hierarchy_item;

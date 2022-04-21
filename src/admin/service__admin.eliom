@@ -1,5 +1,4 @@
-let path path =
-  Eliom_service.Path ("admin" :: path @ [""])
+let path = Skeleton.admin_path
 
 let main =
   Eliom_service.create

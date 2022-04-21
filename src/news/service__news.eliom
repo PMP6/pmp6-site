@@ -4,7 +4,7 @@ open Service_helpers
 
 module Admin = struct
 
-  let path subpath = Admin.Service.path ("news" :: subpath)
+  let path subpath = Skeleton.admin_path ("news" :: subpath)
 
   let main =
     S.create
