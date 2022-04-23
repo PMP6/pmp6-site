@@ -8,6 +8,10 @@ module type Id = sig
      [ `WithoutSuffix ],
      [ `One of t ] Eliom_parameter.param_name) Eliom_parameter.params_type
   val form_param : t Html.Form.param
+  val hidden_input :
+    [< t Eliom_parameter.setoneradio ] Eliom_parameter.param_name ->
+    t ->
+    [> Html_types.input ] Html.elt
 end
 
 module type Data = sig
@@ -32,6 +36,12 @@ module type Data_with_id = sig
   val item : t -> item
 
   val lift : (item -> 'a) -> t -> 'a
+
+  val id_hidden_input :
+    [< Id.t Eliom_parameter.setoneradio ] Eliom_parameter.param_name ->
+    t ->
+    [> Html_types.input ] Html.elt
+
 end
 
 module With_id (Item : Data) : Data_with_id with type item := Item.t
@@ -44,6 +54,9 @@ struct
     let param = Eliom_parameter.int
     let pp = Fmt.int
     let form_param = Html.Form.int
+    let hidden_input name value =
+      Html.Form.input ~input_type:`Hidden ~name ~value form_param
+
   end
 
   module Product = struct
@@ -71,4 +84,7 @@ struct
 
   let lift f =
     Fn.compose f item
+
+  let id_hidden_input name x =
+    Id.hidden_input name (id x)
 end

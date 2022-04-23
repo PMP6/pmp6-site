@@ -192,8 +192,6 @@ let redaction_form ?news () =
   in
   let prefilled_with f =
     Option.value_map ~default:"" ~f news in
-  let hidden_input name item =
-      Form.input ~input_type:`Hidden ~name ~value:(Model.id item) Model.Id.form_param in
   let update_pubtime_checkbox name =
     label [
       Form.bool_checkbox_one ~checked:false ~name ();
@@ -264,7 +262,7 @@ let redaction_form ?news () =
   let creation_form names = form_with_holes None None names in
   let edition_form item (hidden_input_name, (update_pubtime_checkbox_name, names)) =
     form_with_holes
-      (Some (hidden_input hidden_input_name item))
+      (Some (Model.id_hidden_input hidden_input_name item))
       (Some (update_pubtime_checkbox update_pubtime_checkbox_name))
       names in
   let post_form ~service make_form =
