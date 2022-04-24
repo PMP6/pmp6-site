@@ -56,7 +56,7 @@ let deletion_icon_and_modal news =
          p [
            Raw.a
              ~a:[opens_modal]
-             [Icon.solid "fa-trash" ()]
+             [Icon.solid "trash" ()]
          ];
          modal;
        ])
@@ -76,7 +76,7 @@ let action_icons_callout news =
             p [
               a
                 ~service:Service.Admin.edition
-                [Icon.solid "fa-edit" ()]
+                [Icon.solid "edit" ()]
                 (Model.id news)
             ]
           ];

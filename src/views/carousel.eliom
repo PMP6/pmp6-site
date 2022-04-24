@@ -69,11 +69,11 @@ let make_elt images =
         div_classes ["orbit-controls"; "show-for-large"] [
           button ~a:[a_class ["orbit-previous"]] [
             span ~a:[a_class ["show-for-sr"]] [txt "Photo précédente"];
-            Icon.solid "fa-chevron-left" ~transform:["grow-10"] ();
+            Icon.solid "chevron-left" ~transform:["grow-10"] ();
           ];
           button ~a:[a_class ["orbit-next"]] [
             span ~a:[a_class ["show-for-sr"]] [txt "Photo suivante"];
-            Icon.solid "fa-chevron-right" ~transform:["grow-10"] ();
+            Icon.solid "chevron-right" ~transform:["grow-10"] ();
           ]
         ];
         ul ~a:[a_class ["orbit-container"]] (slides images)

@@ -5,7 +5,7 @@ module H = Html
 module Widget = struct
 
   let interface_icon () =
-    let icon = Icon.solid ~a:[H.a_class ["icon"; "show-for-large"]] "fa-cog" () in
+    let icon = Icon.solid ~a:[H.a_class ["icon"; "show-for-large"]] "cog" () in
     H.a
       ~service:Service.main
       [icon; H.span ~a:[H.a_class ["hide-for-large"]] [H.txt "Administration"]]

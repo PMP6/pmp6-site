@@ -12,7 +12,7 @@ let contact_page () () =
       mailto_a
         "delegues@pmp6.fr"
         [
-          Icon.solid "fa-envelope" ();
+          Icon.solid "envelope" ();
           txt " delegues@pmp6.fr";
         ]
     ];
@@ -24,14 +24,14 @@ let contact_page () () =
       a
         ~service:(Facebook.page_service ())
         ~a:[a_target "_blank"] [
-        Icon.brands "fa-facebook-square" ();
+        Icon.brands "facebook-square" ();
         txt " as.pmp6";
       ] ();
       br ();
       a
         ~service:(Facebook.messenger_service ())
         ~a:[a_target "_blank"] [
-        Icon.brands "fa-facebook-messenger" ();
+        Icon.brands "facebook-messenger" ();
         txt " as.pmp6";
       ] ();
     ]

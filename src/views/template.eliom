@@ -128,7 +128,7 @@ let search_form () =
       div_classes ["input-group-button"] [
         Form.button_no_value
           ~button_type:`Submit ~a:[a_class ["button"]]
-          [Icon.solid "fa-search" ()];
+          [Icon.solid "search" ()];
       ]
     ]
   ]
@@ -187,7 +187,7 @@ let footer =
             a
               ~service:(Facebook.page_service ())
               ~a:[a_target "_blank"]
-              [Icon.brands "fa-facebook-f" ()] ();
+              [Icon.brands "facebook-f" ()] ();
           ]
         ]
       ];
@@ -202,7 +202,7 @@ let footer =
 
       div_classes ["cell"; "small-1"; "small-offset-2"; "large-offset-3"; "icons"] [
         anchor_a ~anchor:"top" ~a:[a_user_data "smooth-scroll" ""] [
-          Icon.solid "fa-chevron-up" ()
+          Icon.solid "chevron-up" ()
         ]
       ]
     ]

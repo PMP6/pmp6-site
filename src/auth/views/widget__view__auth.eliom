@@ -4,7 +4,7 @@ module Service = Service__auth
 module H = Html
 
 let connection_icon () =
-  let icon = Icon.solid ~a:[H.a_class ["icon"; "action"; "show-for-large"]] "fa-user" () in
+  let icon = Icon.solid ~a:[H.a_class ["icon"; "action"; "show-for-large"]] "user" () in
   H.a
     ~service:(Service.connection)
     [icon; H.span ~a:[H.a_class ["hide-for-large"]] [H.txt "Connexion"]]
@@ -17,7 +17,7 @@ let logout_button () =
     ()
 
 let user_menu_icon () =
-    Icon.solid ~a:[H.a_class ["icon"; "action"]] "fa-user-cog" ()
+    Icon.solid ~a:[H.a_class ["icon"; "action"]] "user-cog" ()
 
 let user_menu () =
   H.li
