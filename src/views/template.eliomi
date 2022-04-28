@@ -1,1 +1,1 @@
-val return_page : Content.page -> Pmp6.App.page Lwt.t
+val return_page : Content.page_components -> Pmp6.App.page Lwt.t
