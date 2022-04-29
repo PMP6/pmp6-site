@@ -6,7 +6,7 @@ let app_js_script =
 let gfont_uri =
   let fonts = [
     "Muli";
-    "Kaushan+Script";
+    "Coiny";
     "Open+Sans";
     "Oswald";
     "Inconsolata";
