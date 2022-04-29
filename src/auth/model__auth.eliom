@@ -162,7 +162,7 @@ module User = struct
         ~out:(Db.Type.bool, Fn.id)
         {| SELECT EXISTS (SELECT 1 FROM auth_user WHERE email = ?) |}
 
-    let find_conflicts id ?username ?email () =
+    let find_conflicts ?exclude ?username ?email () =
       let Pack (types, values, names) = Db.Dyn_param.(
         empty
         |> add_opt Db.Type.string username "username"
@@ -170,13 +170,13 @@ module User = struct
       ) in
       let columns = Db.Dyn_param.to_columns ~sep:`Or ~starting_index:2 names in
       Db.collect
-        ~in_:(Id.db_type & types, (id, values))
+        ~in_:(Db.Type.option Id.db_type & types, (exclude, values))
         ~out:(db_type, db_unmap)
         (Fmt.str
            {|
              SELECT id, username, email, password, is_superuser, is_staff, joined_time
              FROM auth_user
-             WHERE (%s) AND id <> $1
+             WHERE (%s) AND id IS NOT $1
            |} columns)
 
     let update_exn id ?username ?email ?password ?is_superuser ?is_staff () =
@@ -233,12 +233,6 @@ module User = struct
   let find_by_email email =
     Db.run (Request.find_by_email email)
 
-  let create_from_item item =
-    Db.run (Request.create_from_item item)
-
-  let create ~username ~email ~password ~is_superuser ~is_staff =
-    Db.run (Request.create ~username ~email ~password ~is_superuser ~is_staff)
-
   let find_and_delete id =
     Db.run (Request.find_and_delete id)
 
@@ -257,22 +251,38 @@ module User = struct
         Ok result
     )
 
-  let classify_conflict user user' =
+  let classify_conflict ?username:username_ ?email:email_ existing_user =
     []
-    |> Utils.cons_if (String.equal (email user) (email user')) `Email_already_exists
-    |> Utils.cons_if (String.equal (username user) (username user')) `Username_already_exists
+    |> Utils.cons_if
+      (Option.equal String.equal email_ (Some (email existing_user)))
+      `Email_already_exists
+    |> Utils.cons_if
+      (Option.equal String.equal username_ (Some (username existing_user)))
+      `Username_already_exists
 
-  let with_conflict_check id ?username ?email request =
+  let with_conflict_check ?exclude ?username ?email request =
     Db.with_transaction (
-      match%bind Request.find_conflicts id ?username ?email () with
+      match%bind Request.find_conflicts ?exclude ?username ?email () with
       | [] ->
         let%map result = request () in
         Ok result
-      | conflicts ->
-        let%map user = Request.find id in
-        let conflicts = List.concat_map ~f:(classify_conflict user) conflicts in
-        Error conflicts
+      | existing_users ->
+        let conflicts =
+          List.concat_map ~f:(classify_conflict ?username ?email) existing_users in
+        return (Error conflicts)
     )
+
+  let create_from_item_exn ({ Item.email; username; _ } as item) =
+    Lwt_result.get_exn @@
+    Lwt_result.map_err (fun _ -> Failure "Conflict") @@
+    Db.run @@
+    with_conflict_check ~username ~email @@ fun () ->
+    Request.create_from_item item
+
+  let create ~username ~email ~password ~is_superuser ~is_staff =
+    Db.run @@
+    with_conflict_check ~username ~email @@ fun () ->
+    Request.create ~username ~email ~password ~is_superuser ~is_staff
 
   let update_email id email =
     Db.run @@
@@ -284,8 +294,8 @@ module User = struct
 
   let update id ?username ?email ?password ?is_superuser ?is_staff () =
     Db.run @@
-    with_conflict_check id ?username ?email @@
-    fun () -> Request.update_exn id ?username ?email ?password ?is_superuser ?is_staff ()
+    with_conflict_check ~exclude:id ?username ?email @@ fun () ->
+    Request.update_exn id ?username ?email ?password ?is_superuser ?is_staff ()
 
 end
 

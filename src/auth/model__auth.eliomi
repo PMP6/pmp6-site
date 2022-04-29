@@ -41,7 +41,8 @@ module User : sig
 
   val find_by_email : string -> t option Lwt.t
 
-  val create_from_item : Item.t -> t Lwt.t
+  (** Will raise on conflict *)
+  val create_from_item_exn : Item.t -> t Lwt.t
 
   val create :
     username:string ->
@@ -49,7 +50,7 @@ module User : sig
     password:string ->
     is_superuser:bool ->
     is_staff:bool ->
-    t Lwt.t
+    (t, [> `Email_already_exists | `Username_already_exists ] list) result Lwt.t
 
   val find_and_delete : Id.t -> Item.t Lwt.t
 

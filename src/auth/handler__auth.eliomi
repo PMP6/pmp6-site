@@ -21,3 +21,11 @@ module Settings : sig
   val validate_password_reset : Secret.Token.t -> string -> Content.page
 
 end
+
+module Admin : sig
+
+  val user_creation : unit -> unit -> Content.page
+
+  val create_user : unit -> (string * (string * (string * (bool * (bool))))) -> Content.action
+
+end

@@ -71,3 +71,31 @@ module Settings = struct
       ()
 
 end
+
+module Admin = struct
+
+  let path subpath = Skeleton.admin_path ("auth" :: subpath)
+
+  let user_creation =
+    S.create
+      ~path:(path ["creation"])
+      ~meth:(S.Get P.unit)
+      ()
+
+  let create_user =
+    S.create
+      ~path:No_path
+      ~csrf_safe:true
+      ~meth:
+        (S.Post
+           (P.unit,
+            P.(
+              string "username" **
+              string "email" **
+              string "password" **
+              bool "is_superuser" **
+              bool "is_staff"
+            )))
+      ()
+
+end

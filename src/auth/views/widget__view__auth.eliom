@@ -2,6 +2,7 @@ module Model = Model__auth
 module Service = Service__auth
 
 module H = Html
+module F = Foundation
 
 let connection_icon () =
   let icon = Icon.solid ~a:[H.a_class ["icon"; "action"; "show-for-large"]] "user" () in
@@ -173,3 +174,92 @@ let password_change_form token =
     ~service:Service.Settings.validate_password_reset
     make_form
     token
+
+let user_admin_form ?user () =
+  (* If user is passed, edition form. Otherwise, creation. *)
+  let open H in
+  let help_text text =
+    H.p ~a:[H.a_class ["help-text"]] [H.txt text]
+  in
+  let is_creation = Option.is_none user in
+  let prefilled_with f =
+    Option.value_map ~default:"" ~f user in
+  let prechecked_with f =
+    Option.value_map ~default:false ~f user in
+  let form (username, (email, (password, (is_superuser, (is_staff))))) =
+    [
+      F.Abide.abide_error [ H.txt "Le formulaire contient des erreurs." ];
+
+      label [
+        txt "Nom d'utilisateur";
+        Form.input
+          ~input_type:`Text
+          ~name:username
+          ~a:[F.Abide.required ()]
+          ~value:(prefilled_with Model.User.username)
+          Form.string;
+        F.Abide.form_error "Vous devez renseigner un nom d'utilisateur.";
+      ];
+
+      label [
+        txt "Adresse email";
+        Form.input
+          ~input_type:`Email
+          ~name:email
+          ~a:[F.Abide.required ()]
+          ~value:(prefilled_with Model.User.email)
+          Form.string;
+        F.Abide.form_error "Vous devez renseigner une adresse email.";
+      ];
+
+      label [
+        txt "Mot de passe";
+        Form.input
+          ~a:(if is_creation then [ F.Abide.required () ] else [])
+          ~input_type:`Password
+          ~name:password
+          Form.string;
+        F.Abide.form_error "Vous devez renseigner un mot de passe.";
+      ];
+    ]
+    @ (if is_creation
+       then []
+       else [ help_text "Laissez vide pour ne pas changer le mot de passe." ])
+    @
+    [
+      fieldset ~legend:(legend [txt "Permissions"]) (
+        [
+          label [
+            Form.bool_checkbox_one
+              ~checked:(prechecked_with Model.User.is_superuser)
+              ~name:is_superuser
+              ();
+
+            txt "Super-utilisateur";
+          ];
+          help_text "Confère automatiquement toutes les permissions.";
+
+          label [
+            Form.bool_checkbox_one
+              ~checked:(prechecked_with Model.User.is_staff)
+              ~name:is_staff
+              ();
+
+            txt "Membre de l'équipe";
+          ];
+          help_text "Donne accès à la plupart des fonctionnalités du site.";
+
+        ]
+      );
+
+      Form.button_no_value
+        ~button_type:`Submit
+        ~a:[a_class ["button"; "small-only-expanded"]]
+        [txt "Valider"];
+    ]
+  in
+  match user with
+  | Some user ->
+    F.Abide.post_form ~service:Service.Admin.update_user form (Model.User.id user)
+  | None ->
+    F.Abide.post_form ~service:Service.Admin.create_user form ()

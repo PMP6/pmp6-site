@@ -150,3 +150,26 @@ module Settings = struct
         View.Page.successful_password_reset ()
 
 end
+
+module Admin = struct
+
+  let user_creation =
+    let$ _user = Require.superuser in
+    fun () () ->
+      View.Page.user_creation ()
+
+  let create_user =
+    let$ _user = Require.superuser in
+    fun () (username, (email, (password, (is_superuser, (is_staff))))) ->
+      match%lwt
+        Model.User.create ~username ~email ~password ~is_superuser ~is_staff
+      with
+      | Ok model ->
+        let%lwt () = Toast.push (View.Toast.user_created model) in
+        Content.redirection Service.Admin.main
+      | Error errors ->
+        Content.action
+          (Lwt_list.iter_p (fun e -> Toast.push @@ View.Toast.conflict e))
+          errors
+
+end

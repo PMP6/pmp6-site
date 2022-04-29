@@ -114,3 +114,11 @@ let successful_password_reset () =
                  maintenant continuer à naviguer sur le site.";
         ]
     ]
+
+let user_creation () =
+  Content.page
+    ~title:"Nouvel utilisateur"
+    [
+      H.h1 [H.txt "Nouvel utilisateur"];
+      Widget.user_admin_form ();
+    ]
