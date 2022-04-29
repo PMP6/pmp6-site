@@ -125,4 +125,12 @@ module Admin = struct
           bool "is_staff"
         )
       ()
+
+  let delete_user =
+    S.create_attached_post
+      ~fallback:main
+      ~csrf_safe:true
+      ~post_params:(Model.User.Id.param "id")
+      ()
+
 end

@@ -197,4 +197,11 @@ module Admin = struct
         Content.action
           (Lwt_list.iter_p (fun e -> Toast.push @@ View.Toast.conflict e))
           errors
+
+  let delete_user =
+    let$ _user = Require.superuser in
+    fun () id ->
+      let%lwt item = Model.User.find_and_delete id in
+      Content.action Toast.push (View.Toast.user_deleted item)
+
 end

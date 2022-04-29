@@ -39,4 +39,6 @@ module Admin : sig
     string * (string * (string option * (bool * bool))) ->
     Content.action
 
+  val delete_user : unit -> Model.User.Id.t -> Content.action
+
 end

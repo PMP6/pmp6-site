@@ -49,3 +49,10 @@ let user_updated user =
     H.em [ H.txt @@ Model.User.username user ];
     H.txt " a bien été mis à jour.";
   ]
+
+let user_deleted user =
+  Toast.success [
+    H.txt "L'utilisateur ";
+    H.em [ H.txt @@ Model.User.Item.username user ];
+    H.txt " a bien été supprimé.";
+  ]

@@ -17,4 +17,5 @@ let routes = Registration_lib.[
   Service.Admin.user_edition, Handler.Admin.user_edition;
   Service.Admin.create_user, Handler.Admin.create_user;
   Service.Admin.update_user, Handler.Admin.update_user;
+  Service.Admin.delete_user, Handler.Admin.delete_user;
 ]

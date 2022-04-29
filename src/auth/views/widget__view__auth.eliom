@@ -254,6 +254,28 @@ let button_to_creation ?(expanded=false) () =
     [txt "Ajouter un utilisateur"]
     ()
 
+let deletion_icon_and_modal user =
+  let open H in
+  let modal_text =
+    Fmt.str
+      "Voulez-vous vraiment supprimer l'utilisateur %s ? Cette action \
+       est définitive. Si vous avez un doute, il est préférable de \
+       désactiver ses permissions."
+      (Model.User.username user) in
+  Confirmation_modal.with_modal
+    ~service:Service.Admin.delete_user
+    modal_text
+    (fun ~opens_modal modal ->
+       [
+         H.Raw.a
+           ~a:[ opens_modal; H.a_class [ "dangerous" ] ]
+           [ Icon.solid "trash" () ];
+         modal;
+       ])
+    ()
+    (Model.User.id user)
+    Model.User.Id.form_param
+
 let edition_icon user =
   H.a
     ~service:Service.Admin.user_edition
@@ -280,7 +302,7 @@ let all_users_table users =
     H.td [
       F.Grid.x [
         F.Grid.cell ~small:6 [ edition_icon user ];
-        F.Grid.cell ~small:6 [ H.Raw.a [ Icon.solid "trash" () ] ];
+        F.Grid.cell ~small:6 (deletion_icon_and_modal user);
       ]
     ];
   ] in
