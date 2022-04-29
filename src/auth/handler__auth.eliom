@@ -133,8 +133,8 @@ module Settings = struct
       | Error (`Token_absent_or_expired | `Unexpected)->
         View.Page.failed_password_reset ()
       | Ok user_id ->
-        let%lwt () = Session.login_id user_id in
-        let%lwt user = Model.User.find user_id in
+        let%lwt user = Model.User.find_exn user_id in
+        let%lwt () = Session.login user in
         let () =
           Usermail.send_async
             ~user
@@ -167,7 +167,7 @@ module Admin = struct
   let user_edition =
     let$ _user = Require.superuser in
     fun id () ->
-      let%lwt user = Model.User.find id in
+      let%lwt user = Model.User.find_or_404 id in
       View.Page.user_edition user
 
   let create_user =

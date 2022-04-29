@@ -35,7 +35,11 @@ module User : sig
 
   val all : unit -> t list Lwt.t
 
-  val find : Id.t -> t Lwt.t
+  val find : Id.t -> t option Lwt.t
+
+  val find_exn : Id.t -> t Lwt.t
+
+  val find_or_404 : Id.t -> t Lwt.t
 
   val find_by_username : string -> t option Lwt.t
 

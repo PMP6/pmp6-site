@@ -92,7 +92,7 @@ module User = struct
         |}
 
     let find id =
-      Db.find
+      Db.find_opt
         ~in_:(Id.db_type, id)
        ~out:(db_type, db_unmap)
        {|
@@ -226,6 +226,12 @@ module User = struct
 
   let find id =
     Db.run (Request.find id)
+
+  let find_exn id =
+    Lwt_option.get_exn @@ find id
+
+  let find_or_404 id =
+    Lwt_option.get_or_404 @@ find id
 
   let find_by_username username =
     Db.run (Request.find_by_username username)
