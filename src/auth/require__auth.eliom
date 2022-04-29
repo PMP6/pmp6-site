@@ -27,25 +27,54 @@ module Fallback = struct
 
 end
 
-let auth_with_predicate perm handler =
+module Permission : sig
+
+  type t
+
+  val make : (Model.User.t -> bool) -> t
+
+  val check : t -> Model.User.t -> bool
+
+  val authenticated : t
+
+  val superuser : t
+
+  val staff : t
+
+end
+=
+struct
+
+  type t = Model.User.t -> bool
+
+  let make f = f
+
+  let check perm user =
+    perm user ||
+    Model.User.is_superuser user
+
+  let authenticated = make (Fn.const true)
+
+  let superuser = make (Fn.const false)
+
+  let staff = make Model.User.is_staff
+
+end
+
+let has_permission perm handler =
   Eliom_tools.wrap_handler
     Session.get_user
     Fallback.login_required
     (fun user gp pp ->
-       if perm user
+       if Permission.check perm user
        then handler user gp pp
        else Fallback.forbidden gp pp)
 
-let has_permission perm handler =
-  auth_with_predicate
-    (fun user -> perm user || Model.User.is_superuser user)
-    handler
+let authenticated handler = has_permission Permission.authenticated handler
 
-let authenticated handler = has_permission (Fn.const true) handler
+let superuser handler = has_permission Permission.superuser handler
 
-let superuser handler = has_permission (Fn.const false) handler
-
-let staff handler = has_permission Model.User.is_staff handler
+let staff handler = has_permission Permission.staff handler
 
 let unauthenticated handler =
   Eliom_tools.wrap_handler
