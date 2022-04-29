@@ -45,7 +45,7 @@ let login_form ~next () =
         Form.input
           ~input_type:`Text
           ~name:username
-          ~a:[a_required ()]
+          ~a:[F.Abide.required ()]
           Form.string;
         span_form_error "Vous devez renseigner votre nom d'utilisateur.";
       ];
@@ -55,7 +55,7 @@ let login_form ~next () =
         Form.input
           ~input_type:`Password
           ~name:password
-          ~a:[a_required ()]
+          ~a:[F.Abide.required ()]
           Form.string;
         span_form_error "Vous devez renseigner votre mot de passe.";
       ];
@@ -65,15 +65,7 @@ let login_form ~next () =
         ~a:[a_class ["button"; "small-only-expanded"]]
         [txt "Se connecter"];
     ] in
-  Form.post_form
-    ~service:Service.login
-    ~xhr:false (* Mandatory to go through Abide form validation *)
-    ~a:[
-      a_user_data "abide" "";
-      a_novalidate ();
-    ]
-    make_form
-    next
+  F.Abide.post_form ~service:Service.login make_form next
 
 let email_edition_form user =
   let open H in
@@ -85,10 +77,10 @@ let email_edition_form user =
       label [
         txt "Mon adresse email";
         Form.input
-          ~input_type:`Text
+          ~input_type:`Email
           ~name:new_email
           ~value:(Model.User.email user)
-          ~a:[a_required (); a_pattern "email"]
+          ~a:[F.Abide.required ()]
           Form.string;
         span_form_error "Vous devez entrer une adresse email valide.";
       ];
@@ -98,15 +90,7 @@ let email_edition_form user =
         ~a:[a_class ["button"; "small-only-expanded"]]
         [txt "Enregistrer"];
     ] in
-  Form.post_form
-    ~service:Service.Settings.save_email
-    ~xhr:false (* Mandatory to go through Abide form validation *)
-    ~a:[
-      a_user_data "abide" "";
-      a_novalidate ();
-    ]
-    make_form
-    ()
+  F.Abide.post_form ~service:Service.Settings.save_email make_form ()
 
 let password_reset_form () =
   let open H in
@@ -118,9 +102,9 @@ let password_reset_form () =
       label [
         txt "Votre adresse email";
         Form.input
-          ~input_type:`Text
+          ~input_type:`Email
           ~name:new_email
-          ~a:[a_required (); a_pattern "email"]
+          ~a:[F.Abide.required ()]
           Form.string;
         span_form_error "Vous devez entrer une adresse email valide.";
       ];
@@ -130,19 +114,13 @@ let password_reset_form () =
         ~a:[a_class ["button"; "small-only-expanded"]]
         [txt "Envoyer"];
     ] in
-  Form.post_form
+  F.Abide.post_form
     ~service:Service.Settings.request_password_token
-    ~xhr:false (* Mandatory to go through Abide form validation *)
-    ~a:[
-      a_user_data "abide" "";
-      a_novalidate ();
-    ]
     make_form
     ()
 
 let password_change_form token =
   let open H in
-  let module Abide = Foundation.Abide in
   let pwd_input_id = new_id () in
   let make_form new_password =
     [
@@ -151,18 +129,18 @@ let password_change_form token =
         Form.input
           ~input_type:`Password
           ~name:new_password
-          ~a:[Abide.required (); a_id pwd_input_id]
+          ~a:[F.Abide.required (); a_id pwd_input_id]
           Form.string;
-        Abide.form_error "Vous devez entrer un mot de passe.";
+        F.Abide.form_error "Vous devez entrer un mot de passe.";
       ];
 
       label [
         txt "Confirmez votre mot de passe";
         Form.input
           ~input_type:`Password
-          ~a:[Abide.required (); Abide.equalto ~id:pwd_input_id]
+          ~a:[F.Abide.required (); F.Abide.equalto ~id:pwd_input_id]
           Form.string;
-        Abide.form_error "Les deux mots de passe doivent être identiques !";
+        F.Abide.form_error "Les deux mots de passe doivent être identiques !";
       ];
 
       Form.button_no_value
@@ -170,7 +148,7 @@ let password_change_form token =
         ~a:[a_class ["button"; "small-only-expanded"]]
         [txt "Enregistrer"];
     ] in
-  Abide.post_form
+  F.Abide.post_form
     ~service:Service.Settings.validate_password_reset
     make_form
     token

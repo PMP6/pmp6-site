@@ -10,6 +10,8 @@ let required () = H.a_required ()
 
 let equalto ~id = H.a_user_data "equalto" id
 
+let pattern = H.a_pattern
+
 (* Form should also have xhr:false *)
 let form_attribs () =
   [ H.a_user_data "abide" ""; H.a_novalidate () ]

@@ -265,13 +265,8 @@ let redaction_form ?news () =
       (Some (Model.id_hidden_input hidden_input_name item))
       (Some (update_pubtime_checkbox update_pubtime_checkbox_name))
       names in
-  let post_form ~service make_form =
-    F.Abide.post_form
-      ~service
-      make_form
-      () in
   match news with
   | Some news ->
-    post_form ~service:Service.Admin.update_into_main (edition_form news)
+    F.Abide.post_form ~service:Service.Admin.update_into_main (edition_form news) ()
   | None ->
-    post_form ~service:Service.Admin.create_into_main creation_form
+    F.Abide.post_form ~service:Service.Admin.create_into_main creation_form ()
