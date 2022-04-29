@@ -55,7 +55,7 @@ let deletion_icon_and_modal news =
        div_classes ["cell"; "text-center"; "large-12"; "small-4"] [
          p [
            Raw.a
-             ~a:[opens_modal]
+             ~a:[opens_modal; a_class ["dangerous"]]
              [Icon.solid "trash" ()]
          ];
          modal;

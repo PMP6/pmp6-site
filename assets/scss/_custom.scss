@@ -25,6 +25,10 @@
     border-left: solid 1px $tab-content-border;
 }
 
+.dangerous:hover {
+    color: get-color(alert);
+}
+
 .link {
     @extend a;
 }
