@@ -153,6 +153,12 @@ end
 
 module Admin = struct
 
+  let main =
+    let$ _user = Require.superuser in
+    fun () () ->
+      let%lwt all_users = Model.User.all () in
+      View.Page.admin_main all_users
+
   let user_creation =
     let$ _user = Require.superuser in
     fun () () ->

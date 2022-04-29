@@ -241,3 +241,41 @@ let user_admin_form ?user () =
     F.Abide.post_form ~service:Service.Admin.update_user form (Model.User.id user)
   | None ->
     F.Abide.post_form ~service:Service.Admin.create_user form ()
+
+let button_to_creation ?(expanded=false) () =
+  let open H in
+  a
+    ~service:Service.Admin.user_creation
+    ~a:[
+      a_class @@
+      Utils.cons_if expanded "expanded" @@
+      ["button"]
+    ]
+    [txt "Ajouter un utilisateur"]
+    ()
+
+let all_users_table users =
+  let head = H.tr [
+    H.th [ H.txt "Nom d'utilisateur" ];
+    H.th [ H.txt "Adresse email" ];
+    H.th [ H.txt "Équipe" ];
+    H.th [ H.txt "Super-utilisateur" ];
+    H.th [ H.txt "Actions" ];
+  ] in
+  let thead = H.thead [ head ] in
+  let yes () = Icon.solid "check" () in
+  let no () = Icon.solid "xmark" () in
+  let one_user_row user =
+  H.tr [
+    H.td [ H.txt @@ Model.User.username user ];
+    H.td [ H.email (Model.User.email user) () ];
+    H.td [ if Model.User.is_staff user then yes () else no () ];
+    H.td [ if Model.User.is_superuser user then yes () else no () ];
+    H.td [
+      F.Grid.x [
+        F.Grid.cell ~small:6 [ H.Raw.a [ Icon.solid "pen" () ] ];
+        F.Grid.cell ~small:6 [ H.Raw.a [ Icon.solid "trash" () ] ];
+      ]
+    ];
+  ] in
+  H.tablex ~thead [ H.tbody (List.map ~f:one_user_row users) ]

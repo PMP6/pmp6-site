@@ -76,6 +76,14 @@ module Admin = struct
 
   let path subpath = Skeleton.admin_path ("auth" :: subpath)
 
+  let main =
+    S.create
+      ~path:(path [])
+      ~meth:(S.Get P.unit)
+      ()
+
+  let _ : unit Lwt.t = Admin_module.attach "Auth" main
+
   let user_creation =
     S.create
       ~path:(path ["creation"])

@@ -24,6 +24,8 @@ end
 
 module Admin : sig
 
+  val main : unit -> unit -> Content.page
+
   val user_creation : unit -> unit -> Content.page
 
   val create_user : unit -> (string * (string * (string * (bool * (bool))))) -> Content.action

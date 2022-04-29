@@ -115,6 +115,15 @@ let successful_password_reset () =
         ]
     ]
 
+let admin_main all_users =
+  Content.page
+    ~title:"Utilisateurs & permissions"
+    [
+      H.h1 [H.txt "Utilisateurs"];
+      Widget.button_to_creation ();
+      Widget.all_users_table all_users;
+    ]
+
 let user_creation () =
   Content.page
     ~title:"Nouvel utilisateur"
