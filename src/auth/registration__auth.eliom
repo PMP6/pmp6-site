@@ -14,5 +14,7 @@ let routes = Registration_lib.[
   Service.Settings.validate_password_reset, Handler.Settings.validate_password_reset;
   Service.Admin.main, Handler.Admin.main;
   Service.Admin.user_creation, Handler.Admin.user_creation;
+  Service.Admin.user_edition, Handler.Admin.user_edition;
   Service.Admin.create_user, Handler.Admin.create_user;
+  Service.Admin.update_user, Handler.Admin.update_user;
 ]

@@ -90,6 +90,12 @@ module Admin = struct
       ~meth:(S.Get P.unit)
       ()
 
+  let user_edition =
+    S.create
+      ~path:(path ["edition"])
+      ~meth:(S.Get (P.suffix @@ Model.User.Id.param "id"))
+      ()
+
   let create_user =
     S.create
       ~path:No_path
@@ -106,4 +112,17 @@ module Admin = struct
             )))
       ()
 
+  let update_user =
+    S.create_attached_post
+      ~fallback:user_edition
+      ~csrf_safe:true
+      ~post_params:
+        P.(
+          string "username" **
+          string "email" **
+          neopt (string "password") **
+          bool "is_superuser" **
+          bool "is_staff"
+        )
+      ()
 end

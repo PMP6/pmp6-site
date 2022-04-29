@@ -42,3 +42,10 @@ let user_created user =
     H.em [ H.txt @@ Model.User.username user ];
     H.txt " a bien été créé.";
   ]
+
+let user_updated user =
+  Toast.success [
+    H.txt "L'utilisateur ";
+    H.em [ H.txt @@ Model.User.username user ];
+    H.txt " a bien été mis à jour.";
+  ]

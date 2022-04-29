@@ -254,6 +254,12 @@ let button_to_creation ?(expanded=false) () =
     [txt "Ajouter un utilisateur"]
     ()
 
+let edition_icon user =
+  H.a
+    ~service:Service.Admin.user_edition
+    [ Icon.solid "pen" () ]
+    (Model.User.id user)
+
 let all_users_table users =
   let head = H.tr [
     H.th [ H.txt "Nom d'utilisateur" ];
@@ -273,7 +279,7 @@ let all_users_table users =
     H.td [ if Model.User.is_superuser user then yes () else no () ];
     H.td [
       F.Grid.x [
-        F.Grid.cell ~small:6 [ H.Raw.a [ Icon.solid "pen" () ] ];
+        F.Grid.cell ~small:6 [ edition_icon user ];
         F.Grid.cell ~small:6 [ H.Raw.a [ Icon.solid "trash" () ] ];
       ]
     ];

@@ -131,3 +131,11 @@ let user_creation () =
       H.h1 [H.txt "Nouvel utilisateur"];
       Widget.user_admin_form ();
     ]
+
+let user_edition user =
+  Content.page
+    ~title:"Modifier un utilisateur"
+    [
+      H.h1 [H.txt "Modifier un utilisateur"];
+      Widget.user_admin_form ~user ();
+    ]

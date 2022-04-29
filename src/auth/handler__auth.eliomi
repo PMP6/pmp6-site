@@ -1,3 +1,5 @@
+module Model := Model__auth
+
 val login : Eliom_lib.Url.path option -> string * string -> Content.page
 
 val logout : unit -> unit -> Content.action
@@ -28,6 +30,13 @@ module Admin : sig
 
   val user_creation : unit -> unit -> Content.page
 
+  val user_edition : Model.User.Id.t -> unit -> Content.page
+
   val create_user : unit -> (string * (string * (string * (bool * (bool))))) -> Content.action
+
+  val update_user :
+    Model.User.Id.t ->
+    string * (string * (string option * (bool * bool))) ->
+    Content.action
 
 end

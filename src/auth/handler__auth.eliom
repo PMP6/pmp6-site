@@ -164,6 +164,12 @@ module Admin = struct
     fun () () ->
       View.Page.user_creation ()
 
+  let user_edition =
+    let$ _user = Require.superuser in
+    fun id () ->
+      let%lwt user = Model.User.find id in
+      View.Page.user_edition user
+
   let create_user =
     let$ _user = Require.superuser in
     fun () (username, (email, (password, (is_superuser, (is_staff))))) ->
@@ -178,4 +184,17 @@ module Admin = struct
           (Lwt_list.iter_p (fun e -> Toast.push @@ View.Toast.conflict e))
           errors
 
+  let update_user =
+    let$ _user = Require.superuser in
+    fun id (username, (email, (password, (is_superuser, (is_staff))))) ->
+      match%lwt
+        Model.User.update id ~username ~email ?password ~is_superuser ~is_staff ()
+      with
+      | Ok model ->
+        let%lwt () = Toast.push (View.Toast.user_updated model) in
+        Content.redirection Service.Admin.main
+      | Error errors ->
+        Content.action
+          (Lwt_list.iter_p (fun e -> Toast.push @@ View.Toast.conflict e))
+          errors
 end
