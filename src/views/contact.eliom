@@ -10,12 +10,13 @@ let contact_page () () =
            mail :";
     ];
     p ~a:[a_class ["text-center"]] [
-      mailto_a
+      email
         "delegues@pmp6.fr"
-        [
+        ~content:[
           Icon.solid "envelope" ();
           txt " delegues@pmp6.fr";
         ]
+        ()
     ];
     p [
       txt "Vous pouvez également nous contacter directement sur notre \
