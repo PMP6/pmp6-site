@@ -28,7 +28,7 @@ let header_ news =
   (* Title and pub-time must belong to the same hn class to be
      vertically aligned *)
   header ~a:[a_class ["grid-x"; "align-bottom"]] [
-    h3 ~a:[a_class ["h4"; "cell"; "auto"]] [txt @@ Model.title news];
+    h1 ~a:[a_class ["h4"; "cell"; "auto"]] [txt @@ Model.title news];
     div_classes ["h4"; "subheader"; "cell"; "shrink"] [
       time_ ~a:[a_class ["pub-time"]] @@ Model.pub_time news
     ]

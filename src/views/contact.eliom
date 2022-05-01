@@ -2,6 +2,7 @@ module H = Html
 
 let contact_page () () =
   Content.page ~title:"Contact" H.[
+    h1 [txt "Contact"];
     p [
       txt "Vous voulez vous inscrire, avez des questions sur nos \
            activités ou souhaitez des renseignements supplémentaires \

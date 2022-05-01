@@ -6,16 +6,18 @@ module F = Foundation
 open%client Js_of_ocaml
 open%client Js_of_ocaml_lwt
 
-let presentation_section () =
+let page_title () =
   let open H in
   let poulpe () =
     img
       ~src:(Skeleton.Static.img_uri ["pmp6-poulpe.png"])
       ~alt:"Le poulpe, notre mascotte"
       () in
+  h1 [poulpe (); txt " Bienvenue à PMP6 ! "; poulpe ()]
+
+let presentation_section () =
+  let open H in
   section ~a:[a_id "presentation"] [
-    h1 [poulpe (); txt " Bienvenue à PMP6 ! "; poulpe ()];
-    hr ();
     p [
       txt "Club de plongée associatif de Sorbonne Université, nous \
            sommes ouverts à tous les étudiants et personnels de \
@@ -73,6 +75,8 @@ let fetch_and_make_news_section () =
 let home_page () () =
   let%lwt news_section = fetch_and_make_news_section () in
   Content.page ~title:"PMP6" [
+    page_title ();
+    H.hr ();
     presentation_section ();
     news_section;
   ]
