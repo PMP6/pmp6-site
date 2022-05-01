@@ -233,7 +233,11 @@ let redaction_form ?news () =
           ();
         F.Abide.form_error "Vous devez renseigner le contenu.";
       ];
-      F.Form.help_txt "Le contenu de la news. HTML autorisé.";
+      F.Form.help_text [
+        H.txt "Le contenu de la news. HTML et ";
+        H.raw_a ~href:"https://www.markdownguide.org/cheat-sheet/" [H.txt "Markdown"];
+        H.txt " autorisés.";
+      ];
 
       fieldset ~legend:(legend [txt "Options"]) (
         [

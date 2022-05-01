@@ -20,6 +20,10 @@ let id_to_href id =
 let anchor_a ?(a=[]) ~anchor =
   Raw.a ~a:(id_to_href anchor :: a)
 
+let raw_a ?(a=[]) ~href content =
+  let href = uri_of_string (fun () -> href) in
+  Raw.a ~a:(a_href href :: a) content
+
 let mailto_a address ?(a=[]) content =
   let mailto () =
     Printf.sprintf "mailto:%s" address in
