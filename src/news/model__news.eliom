@@ -1,5 +1,3 @@
-module H = Html
-
 module User = Auth.Model.User
 
 module Item = struct
@@ -7,7 +5,7 @@ module Item = struct
     title : string;
     short_title : string;
     pub_time : Time.t;
-    content : Html_types.div_content_fun H.elt;
+    content : Doc.t;
     author : User.Id.t;
     is_visible : bool;
   }
@@ -33,21 +31,27 @@ module Item = struct
   let slug news =
     Utils.slugify @@ title news
 
-  let content_as_string item =
-    Html.elt_to_string (content item)
+  let content_as_md item =
+    Doc.to_md @@ content item
+
+  let content_as_html item =
+    Doc.to_html @@ content item
+
+  let content_as_html_string item =
+    Doc.to_html_string @@ content item
 
   type mapping =
-    (string -> string -> Time.t -> string -> User.Id.t -> bool -> unit) Hlist.t
+    (string -> string -> Time.t -> Doc.t -> User.Id.t -> bool -> unit) Hlist.t
 
   let db_type =
-    Db.Type.(hlist [ string; string; time; string; User.Id.db_type; bool ])
+    Db.Type.(hlist [ string; string; time; Doc.db_type; User.Id.db_type; bool ])
 
   let db_unmap Hlist.[ title; short_title; pub_time; content; author; is_visible ] =
     {
       title;
       short_title;
       pub_time;
-      content = Html.Unsafe.data content;
+      content;
       author;
       is_visible;
     }
@@ -57,7 +61,7 @@ module Item = struct
       title;
       short_title;
       pub_time;
-      Html.elt_to_string content;
+      content;
       author;
       is_visible;
     ]
@@ -86,8 +90,14 @@ let is_visible =
 let is_invisible =
   lift Item.is_invisible
 
-let content_as_string =
-  lift Item.content_as_string
+let content_as_md =
+  lift Item.content_as_md
+
+let content_as_html =
+  lift Item.content_as_html
+
+let content_as_html_string =
+  lift Item.content_as_html_string
 
 let slug =
   lift Item.slug
@@ -169,7 +179,7 @@ module Request = struct
       |> add_opt Db.Type.string title "title"
       |> add_opt Db.Type.string short_title "short_title"
       |> add_opt Db.Type.time pub_time "pub_time"
-      |> add_opt Db.Type.string (Option.map ~f:Html.elt_to_string content) "content"
+      |> add_opt Doc.db_type content "content"
       |> add_opt Auth.Model.User.Id.db_type author "author"
       |> add_opt Db.Type.bool is_visible "is_visible"
     ) in

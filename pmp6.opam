@@ -21,6 +21,7 @@ depends: [
   "lwt"
   "lwt_ppx"
   "ocsipersist-dbm"
+  "omd"
   "ppx_jane"
   "tyxml"
   "tyxml-ppx"

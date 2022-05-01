@@ -21,7 +21,7 @@ module Admin = struct
     let$ user = Auth.Require.staff in
     let author = Auth.Model.User.id user in
     fun () (title, (short_title, (content, is_visible))) ->
-      let content = Html.Unsafe.data content in
+      let content = Doc.of_md content in
       let%lwt model = Model.create ~title ~short_title ~content ~author ~is_visible in
       Content.action Toast.push_success (View.Toast.created model)
 
@@ -35,7 +35,7 @@ module Admin = struct
     let$ user = Auth.Require.staff in
     let author = Auth.Model.User.id user in
     fun () (id, (update_pubtime, (title, (short_title, (content, is_visible))))) ->
-      let content = Html.Unsafe.data content in
+      let content = Doc.of_md content in
       let pub_time =
         if update_pubtime
         then Some (Time.now ())

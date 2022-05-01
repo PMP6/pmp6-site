@@ -20,6 +20,7 @@ PKG base64
 PKG argon2
 PKG async_smtp
 PKG fmt
+PKG omd
 PKG uucp
 PKG uuseg
 PKG uuseg.string

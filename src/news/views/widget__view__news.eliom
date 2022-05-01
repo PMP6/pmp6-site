@@ -37,7 +37,7 @@ let header_ news =
 let article_ news =
   H.article [
     header_ news;
-    Model.content news;
+    Model.content_as_html news;
   ]
 
 let deletion_icon_and_modal news =
@@ -232,7 +232,7 @@ let redaction_form ?news () =
         Form.textarea
           ~name:content
           ~a:[F.Abide.required (); a_rows 10]
-          ~value:(prefilled_with Model.content_as_string)
+          ~value:(prefilled_with Model.content_as_md)
           ();
         F.Abide.form_error "Vous devez renseigner le contenu.";
       ];

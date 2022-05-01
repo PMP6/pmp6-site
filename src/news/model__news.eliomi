@@ -7,7 +7,7 @@ module Item : sig
   val title : t -> string
   val short_title : t -> string
   val pub_time : t -> Time.t
-  val content : t -> Html_types.div_content_fun Html.elt
+  val content : t -> Doc.t
   val author : t -> User.Id.t
   val is_visible : t -> bool
   val is_invisible : t -> bool
@@ -15,19 +15,18 @@ module Item : sig
   val build_new :
     title:string ->
     short_title:string ->
-    content:Html_types.div_content_fun Html.elt ->
+    content:Doc.t ->
     author:User.Id.t ->
     is_visible:bool ->
     t
 
   val slug : t -> string
-  val content_as_string : t -> string
 
   module Private : sig
     val build :
       title:string ->
       short_title:string ->
-      content:Html_types.div_content_fun Html.elt ->
+      content:Doc.t ->
       pub_time:Time.t ->
       author:User.Id.t ->
       is_visible:bool ->
@@ -44,13 +43,16 @@ include Db_model.Data_with_id with type item := Item.t
 val title : t -> string
 val short_title : t -> string
 val pub_time : t -> Time.t
-val content : t -> Html_types.div_content_fun Html.elt
+val content : t -> Doc.t
 val author : t -> User.Id.t
 val is_visible : t -> bool
 val is_invisible : t -> bool
 
 val slug : t -> string
-val content_as_string : t -> string
+
+val content_as_md : t -> string
+val content_as_html : t -> Html_types.div_content_fun Html.elt
+val content_as_html_string : t -> string
 
 (** {2 Misc } *)
 
@@ -70,7 +72,7 @@ val create_from_item : Item.t -> t Lwt.t
 val create :
   title:string ->
   short_title:string ->
-  content:Html_types.div_content_fun Html.elt ->
+  content:Doc.t ->
   author:User.Id.t ->
   is_visible:bool ->
   t Lwt.t
@@ -82,7 +84,7 @@ val update :
   ?title:string ->
   ?short_title:string ->
   ?pub_time:Time.t ->
-  ?content:Html_types.div_content_fun Html.elt ->
+  ?content:Doc.t ->
   ?author:User.Id.t ->
   ?is_visible:bool ->
   unit ->
