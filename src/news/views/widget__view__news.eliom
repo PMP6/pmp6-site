@@ -187,9 +187,6 @@ let news_tabs ?(vertical=false) ?(show_actions=false) news =
 let redaction_form ?news () =
   (* If news is passed, edition form. Otherwise, redaction. *)
   let open H in
-  let help_text text =
-    H.p ~a:[H.a_class ["help-text"]] [H.txt text]
-  in
   let prefilled_with f =
     Option.value_map ~default:"" ~f news in
   let update_pubtime_checkbox name =
@@ -213,7 +210,7 @@ let redaction_form ?news () =
           Form.string;
         F.Abide.form_error "Vous devez renseigner le titre.";
       ];
-      help_text "Le titre principal, affiché en haut de l'actu.";
+      F.Form.help_txt "Le titre principal, affiché en haut de l'actu.";
 
       label [
         txt "Titre court";
@@ -225,7 +222,7 @@ let redaction_form ?news () =
           Form.string;
         F.Abide.form_error "Vous devez renseigner le titre court.";
       ];
-      help_text "Un titre plus court pour les onglets.";
+      F.Form.help_txt "Un titre plus court pour les onglets.";
 
       label [
         txt "Contenu";
@@ -236,7 +233,7 @@ let redaction_form ?news () =
           ();
         F.Abide.form_error "Vous devez renseigner le contenu.";
       ];
-      help_text "Le contenu de la news. HTML autorisé.";
+      F.Form.help_txt "Le contenu de la news. HTML autorisé.";
 
       fieldset ~legend:(legend [txt "Options"]) (
         [

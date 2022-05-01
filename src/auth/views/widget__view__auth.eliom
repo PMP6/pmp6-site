@@ -156,9 +156,6 @@ let password_change_form token =
 let user_admin_form ?user () =
   (* If user is passed, edition form. Otherwise, creation. *)
   let open H in
-  let help_text text =
-    H.p ~a:[H.a_class ["help-text"]] [H.txt text]
-  in
   let is_creation = Option.is_none user in
   let prefilled_with f =
     Option.value_map ~default:"" ~f user in
@@ -202,7 +199,7 @@ let user_admin_form ?user () =
     ]
     @ (if is_creation
        then []
-       else [ help_text "Laissez vide pour ne pas changer le mot de passe." ])
+       else [ F.Form.help_txt "Laissez vide pour ne pas changer le mot de passe." ])
     @
     [
       fieldset ~legend:(legend [txt "Permissions"]) (
@@ -215,7 +212,7 @@ let user_admin_form ?user () =
 
             txt "Super-utilisateur";
           ];
-          help_text "Confère automatiquement toutes les permissions.";
+          F.Form.help_txt "Confère automatiquement toutes les permissions.";
 
           label [
             Form.bool_checkbox_one
@@ -225,7 +222,7 @@ let user_admin_form ?user () =
 
             txt "Membre de l'équipe";
           ];
-          help_text "Donne accès à la plupart des fonctionnalités du site.";
+          F.Form.help_txt "Donne accès à la plupart des fonctionnalités du site.";
 
         ]
       );
