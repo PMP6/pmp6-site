@@ -1,3 +1,5 @@
+[%%shared.start]
+
 type t =
   | Primary
   | Secondary

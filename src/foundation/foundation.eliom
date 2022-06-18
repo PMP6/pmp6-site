@@ -1,3 +1,4 @@
+[%%shared.start]
 module Accordion = Foundation_accordion
 module Abide = Foundation_abide
 module Callout = Foundation_callout

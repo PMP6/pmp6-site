@@ -1,3 +1,5 @@
+[%%shared.start]
+
 module H = Html
 
 let create
