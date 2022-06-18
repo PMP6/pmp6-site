@@ -1,4 +1,4 @@
-module H = Eliom_content.Html.D
+module%shared H = Eliom_content.Html.D
 
 let clean_uchar uchar =
   (* Returns a string containing the lowercase version of an unicode
@@ -54,6 +54,8 @@ let slugify string =
   |> List.rev
   |> String.concat ~sep:"-"
 
+[%%shared
+
 let cons_if boolean elt list =
   if boolean
   then elt :: list
@@ -86,17 +88,18 @@ let cons_is_active_attrib is_active attribs =
   if is_active
   then H.a_class (cons_is_active is_active []) :: attribs
   else attribs
+]
 
 let%shared subpath_of_string = Eliom_lib.Url.split_path
 let%shared subpath_to_string = Eliom_lib.Url.string_of_url_path ~encode:false
 
 let subpath_param name =
   let client_to_and_of =
-      [%client
-      Eliom_parameter.{
-        of_string = subpath_of_string;
-        to_string = subpath_to_string;
-      }] in
+    [%client
+    Eliom_parameter.{
+      of_string = subpath_of_string;
+      to_string = subpath_to_string;
+    }] in
   Eliom_parameter.user_type
     ~client_to_and_of
     ~of_string:subpath_of_string
