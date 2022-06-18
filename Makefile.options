@@ -18,7 +18,7 @@ SRC_FILES := $(shell find $(SRC_DIR) -name *.eliom -o -name *.eliomi)
 
 FIXTURES_FILES := $(shell find $(FIXTURES_DIR) -name *.eliom -o -name *.eliomi)
 
-WARNINGS := +a-4-40-41-42-44-45-48-58-59
+WARNINGS := +a-4-40-41-42-44-45-48-58-59-70
 OPENFLAGS := -open Base -open Core_kernel
 CFLAGS := -strict-formats -short-paths
 

@@ -9,6 +9,8 @@ dev-repo: "git+https://github.com/PMP6/pmp6-site.git"
 bug-reports: "https://github.com/PMP6/pmp6-site/issues"
 depends: [
   "argon2"
+  "async"
+  "async_smtp"
   "camlzip"
   "caqti"
   "caqti-driver-sqlite3"
