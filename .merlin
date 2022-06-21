@@ -6,7 +6,7 @@ B _server/**/*
 
 # Apparently only one ppx works at a time
 PKG lwt_ppx
-PKG tyxml-ppx
+# PKG tyxml-ppx
 # PKG js_of_ocaml.ppx
 PKG ppx_jane
 
