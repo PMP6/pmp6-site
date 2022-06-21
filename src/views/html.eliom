@@ -207,6 +207,23 @@ let post_pseudo_link ~service content gp =
   let form, button = split_post_pseudo_link ~service content gp in
   div [ form; button ]
 
+let filter_content_signal signal = match signal with
+  | `Comment _
+  | `Start_element _
+  | `End_element
+  | `Text _ as content_signal -> Some content_signal
+  | _ -> None
+
+let parse txt =
+  let signals =
+    Markup.string txt
+    |> Markup.parse_html
+    |> Markup.signals
+  in
+  Caml.Seq.of_dispenser (fun () -> Markup.next signals)
+  |> Caml.Seq.filter_map filter_content_signal
+  |> Eliom_content.Html.F.of_seq
+
 [%%server.start]
 
 let pp_elt =

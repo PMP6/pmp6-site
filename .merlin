@@ -13,6 +13,8 @@ PKG ppx_jane
 # PKG eliom.client
 # PKG eliom.ppx.client
 
+PKG markup
+
 PKG eliom.server
 PKG eliom.ppx.server
 

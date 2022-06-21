@@ -22,6 +22,7 @@ depends: [
   "js_of_ocaml"
   "lwt"
   "lwt_ppx"
+  "markup"
   "ocsipersist-dbm"
   "omd"
   "ppx_jane"
