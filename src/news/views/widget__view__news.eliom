@@ -1,8 +1,8 @@
 module Model = Model__news
 module Service = Service__news
 
-module F = Foundation
-module H = Html
+module%shared F = Foundation
+module%shared H = Html
 
 let tab_slug news =
   Model.unique_slug ~prefix:"news" news
@@ -184,6 +184,13 @@ let news_tabs ?(vertical=false) ?(show_actions=false) news =
   news_tabs_titles ~vertical ~show_actions news,
   news_tabs_content ~vertical ~show_actions news
 
+let%shared make_preview_callout content = match content with
+  | None ->
+    H.div []
+  | Some content ->
+    F.Callout.primary
+      (H.h2 ~a:[H.a_class ["h4"]] [H.txt "Aperçu"] :: content)
+
 let redaction_form ?news () =
   (* If news is passed, edition form. Otherwise, redaction. *)
   let open H in
@@ -197,6 +204,32 @@ let redaction_form ?news () =
   in
   let form_with_holes id_hidden_input update_pubtime_checkbox
       (title, (short_title, (content, is_visible))) =
+    let content_textarea =
+      Form.textarea
+        ~name:content
+        ~a:[F.Abide.required (); a_rows 10]
+        ~value:(prefilled_with Model.content_as_md)
+        ()
+    in
+    let preview_button =
+      H.Form.button_no_value
+        ~button_type:`Button
+        ~a:[H.a_class ["button"; "secondary"; "small-only-expanded"]]
+        [H.txt "Prévisualiser"] in
+    let (content, refresh_content) = Eliom_shared.React.S.create None in
+    let _ : unit Lwt.t Eliom_client_value.t =
+      [%client
+      Js_of_ocaml_lwt.Lwt_js_events.clicks
+        (Eliom_content.Html.To_dom.of_element ~%preview_button)
+        (fun _ _ ->
+           let content = Html.textarea_content ~%content_textarea in
+           let%lwt content_html = Doc.render_from_md content in
+           ~%refresh_content (Some content_html);
+           Lwt.return ())
+      ] in
+    let preview_callout =
+      Eliom_shared.React.S.map [%shared make_preview_callout] content
+    in
     [
       F.Abide.abide_error [ H.txt "Le formulaire contient des erreurs." ];
 
@@ -226,11 +259,7 @@ let redaction_form ?news () =
 
       label [
         txt "Contenu";
-        Form.textarea
-          ~name:content
-          ~a:[F.Abide.required (); a_rows 10]
-          ~value:(prefilled_with Model.content_as_md)
-          ();
+        content_textarea;
         F.Abide.form_error "Vous devez renseigner le contenu.";
       ];
       F.Form.help_text [
@@ -253,10 +282,18 @@ let redaction_form ?news () =
         |> Utils.cons_opt update_pubtime_checkbox
       );
 
-      Form.button_no_value
-        ~button_type:`Submit
-        ~a:[a_class ["button"; "small-only-expanded"]]
-        [txt "Valider"];
+      H.div_class "button-group" [
+
+        Form.button_no_value
+          ~button_type:`Submit
+          ~a:[a_class ["button"; "small-only-expanded"]]
+          [txt "Valider"];
+
+        preview_button;
+
+      ];
+
+      Eliom_content.Html.R.node preview_callout;
     ]
     |> Utils.cons_opt id_hidden_input
   in
