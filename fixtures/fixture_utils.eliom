@@ -10,7 +10,3 @@ let delete_all (module Model : Standard_model) =
   let%lwt all = Model.all () in
   let delete x = Model.(delete @@ id x) in
   Lwt_list.iter_s delete all
-
-let clean_load flush load load_input =
-  let%lwt () = flush () in
-  load load_input

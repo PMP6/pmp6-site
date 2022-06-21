@@ -1,10 +1,8 @@
-let clean_load (flush, load) load_input =
-  let%lwt result = Fixture_utils.clean_load flush load load_input in
-  Lwt.return result
-
 let clean_load_all () =
-  let%lwt auth = clean_load Auth__fixtures.(flush, load) () in
-  let%lwt _news = clean_load News__fixtures.(flush, load) auth in
+  News__fixtures.flush ();%lwt
+  Auth__fixtures.flush ();%lwt
+  let%lwt auth = Auth__fixtures.load () in
+  let%lwt _news = News__fixtures.load auth in
   Lwt.return ()
 
 [@@@warning "-5"]
