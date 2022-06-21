@@ -176,8 +176,22 @@ module Admin = struct
       match%lwt
         Model.User.create ~username ~email ~password ~is_superuser ~is_staff
       with
-      | Ok model ->
-        let%lwt () = Toast.push (View.Toast.user_created model) in
+      | Ok new_user ->
+        let () =
+          Usermail.send_async
+            ~user:new_user
+            ~subject:"Création de votre compte"
+            ~content:
+              (Fmt.str
+                 "Bonjour %s, \
+                  @.@. \
+                  Votre compte vient d'être créé sur notre site. Si vous \
+                  pensez qu'il s'agit d'une erreur, veuillez contacter \
+                  l'administrateur du site."
+                 username)
+            ()
+        in
+        let%lwt () = Toast.push (View.Toast.user_created new_user) in
         Content.redirection Service.Admin.main
       | Error errors ->
         Content.action
