@@ -15,6 +15,7 @@ PKG ppx_jane
 
 PKG markup
 
+PKG js_of_ocaml-ppx_deriving_json
 PKG eliom.server
 PKG eliom.ppx.server
 

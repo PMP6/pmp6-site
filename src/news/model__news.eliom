@@ -37,8 +37,8 @@ module Item = struct
   let content_as_html item =
     Doc.to_html @@ content item
 
-  let content_as_html_string item =
-    Doc.to_html_string @@ content item
+  let content_as_div item =
+    Doc.to_div @@ content item
 
   type mapping =
     (string -> string -> Time.t -> Doc.t -> User.Id.t -> bool -> unit) Hlist.t
@@ -96,8 +96,8 @@ let content_as_md =
 let content_as_html =
   lift Item.content_as_html
 
-let content_as_html_string =
-  lift Item.content_as_html_string
+let content_as_div =
+  lift Item.content_as_div
 
 let slug =
   lift Item.slug

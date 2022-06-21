@@ -37,7 +37,7 @@ let header_ news =
 let article_ news =
   H.article [
     header_ news;
-    Model.content_as_html news;
+    Model.content_as_div news;
   ]
 
 let deletion_icon_and_modal news =

@@ -51,8 +51,8 @@ val is_invisible : t -> bool
 val slug : t -> string
 
 val content_as_md : t -> string
-val content_as_html : t -> Html_types.div_content_fun Html.elt
-val content_as_html_string : t -> string
+val content_as_html : t -> [> Html_types.div_content ] Html.elt list
+val content_as_div : t -> [> Html_types.div ] Html.elt
 
 (** {2 Misc } *)
 
