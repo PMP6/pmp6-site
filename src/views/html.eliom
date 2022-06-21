@@ -231,3 +231,15 @@ let pp_elt =
 
 let elt_to_string elt =
   Fmt.str "%a" (pp_elt ()) elt
+
+[%%client.start]
+
+open Js_of_ocaml
+
+let textarea_content elt =
+  let dom_elt =
+    Eliom_content.Html.To_dom.of_element elt
+    |> Dom_html.CoerceTo.textarea
+    |> Fn.flip Js.Opt.get (fun () -> assert false) in
+  let content = dom_elt##.value in
+  Js.to_string content
