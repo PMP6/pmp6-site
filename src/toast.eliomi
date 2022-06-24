@@ -24,15 +24,6 @@ val warning_msg : string -> t
 val alert_msg : string -> t
 
 val push : t -> unit Lwt.t
-val create_and_push : Foundation.Color.t -> div_content -> unit Lwt.t
-
-val push_primary : div_content -> unit Lwt.t
-val push_secondary : div_content -> unit Lwt.t
-val push_success : div_content -> unit Lwt.t
-val push_warning : div_content -> unit Lwt.t
-val push_alert : div_content -> unit Lwt.t
-
-val push_msg : Foundation.Color.t -> string -> unit Lwt.t
 
 val push_primary_msg : string -> unit Lwt.t
 val push_secondary_msg : string -> unit Lwt.t

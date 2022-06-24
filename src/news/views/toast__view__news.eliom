@@ -3,7 +3,7 @@ module Model = Model__news
 module H = Html
 
 let created news =
-  [
+  Toast.success [
     H.p [
       H.txt "L'actu ";
       H.em [H.txt @@ Model.short_title news];
@@ -12,7 +12,7 @@ let created news =
   ]
 
 let deleted item =
-  [
+  Toast.success [
     H.p [
       H.txt "L'actu ";
       H.em [H.txt @@ Model.Item.short_title item];
@@ -22,7 +22,7 @@ let deleted item =
   ]
 
 let updated news =
-  [
+  Toast.success [
     H.p [
       H.txt "L'actu ";
       H.em [H.txt @@ Model.short_title news];

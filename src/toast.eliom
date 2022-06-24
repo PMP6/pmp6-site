@@ -46,15 +46,6 @@ let fetch_and_render () =
   let%lwt all = fetch () in
   Lwt.return @@ List.map ~f:render all
 
-let create_and_push color content =
-  create color content |> push
-
-let push_primary = create_and_push Primary
-let push_secondary = create_and_push Secondary
-let push_success = create_and_push Success
-let push_warning = create_and_push Warning
-let push_alert = create_and_push Alert
-
 let push_msg color msg_ = push (msg color msg_)
 
 let push_primary_msg = push_msg Primary
