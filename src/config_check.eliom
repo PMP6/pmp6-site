@@ -1,3 +1,5 @@
+[%%server.start]
+
 let check_unit name run_test () =
   Log.logf "Running config check `%s`..." name;
   match%lwt run_test () with

@@ -1,3 +1,5 @@
+[%%server.start]
+
 let skeleton_routes = Registration_lib.[
   Skeleton.home_service, Home.home_page;
   Skeleton.Plonger.Services.formations, Formations.formation_page;

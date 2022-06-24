@@ -1,3 +1,5 @@
+[%%server.start]
+
 type routes =
   | [] : routes
   | ( :: ) :

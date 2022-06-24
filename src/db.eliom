@@ -1,3 +1,5 @@
+[%%server.start]
+
 module type C = Caqti_lwt.CONNECTION
 
 let caqti_exn caqti_error =
