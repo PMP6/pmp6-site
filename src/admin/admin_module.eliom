@@ -4,11 +4,31 @@ type service =
    unit, Eliom_service.non_ocaml)
     Eliom_service.t
 
-let modules : (string * service) list Eliom_reference.eref =
+type t = {
+  name : string;
+  service : service;
+  is_visible : unit -> bool Lwt.t;
+}
+
+let name { name; _ } = name
+
+let service { service; _ } = service
+
+let modules : t list Eliom_reference.eref =
   Eliom_reference.eref ~scope:Eliom_common.global_scope []
 
 let all () =
   Eliom_reference.get modules
 
-let attach name service =
-  Eliom_reference.modify modules (fun modules -> (name, service) :: modules)
+let all_visible () =
+  let%lwt all_modules = all () in
+  Lwt_list.filter_s (fun m -> m.is_visible ()) all_modules
+
+let attach ?(is_visible = fun () -> Lwt.return true) name service =
+  Eliom_reference.modify
+    modules
+    (fun modules -> { name; service; is_visible } :: modules)
+
+module Private = struct
+  let all = all
+end

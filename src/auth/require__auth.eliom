@@ -35,6 +35,9 @@ module Permission : sig
 
   val check : t -> Model.User.t -> bool
 
+  (* Always return false if unauthenticated *)
+  val session_check : t -> bool Lwt.t
+
   val authenticated : t
 
   val superuser : t
@@ -52,6 +55,11 @@ struct
   let check perm user =
     perm user ||
     Model.User.is_superuser user
+
+  let session_check perm =
+    match%map.Lwt Session.get_user () with
+    | None -> false
+    | Some user -> check perm user
 
   let authenticated = make (Fn.const true)
 

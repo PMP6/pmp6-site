@@ -1,8 +1,11 @@
 module Model = Model__news
+module Service = Service__news
 module View = View__news
 
 open Lwt.Infix
 open Auth.Require.Syntax
+
+let _ : unit Lwt.t = Admin_module.attach "News" Service.Admin.main
 
 module Admin = struct
 

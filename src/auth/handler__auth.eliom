@@ -7,6 +7,12 @@ module View = View__auth
 
 open Require.Syntax
 
+let _ : unit Lwt.t =
+  Admin_module.attach
+    ~is_visible:(fun () -> Require.Permission.(session_check superuser))
+    "Auth"
+    Service.Admin.main
+
 let login =
   let$ () = Require.unauthenticated in
   fun next (username, password) ->

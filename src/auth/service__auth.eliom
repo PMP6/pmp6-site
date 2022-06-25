@@ -82,8 +82,6 @@ module Admin = struct
       ~meth:(S.Get P.unit)
       ()
 
-  let _ : unit Lwt.t = Admin_module.attach "Auth" main
-
   let user_creation =
     S.create
       ~path:(path ["creation"])

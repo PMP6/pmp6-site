@@ -14,9 +14,11 @@ module Widget = struct
 end
 
 let main () =
-  let make_li_elt name service =
+  let make_li_elt module_ =
+    let service = Admin_module.service module_ in
+    let name = Admin_module.name module_ in
     Html.li [Html.a ~service [Html.txt name] ()] in
-  let%lwt all_modules = Admin_module.all () in
+  let%lwt all_modules = Admin_module.all_visible () in
   Content.page
     ~title:"Administration"
     [
@@ -24,5 +26,5 @@ let main () =
       H.p [H.txt "Cliquez sur un lien pour accéder à l'administration \
                   de ce module."];
       Html.ul ~a:[Html.a_class ["menu"]] @@
-      List.map ~f:(Tuple2.uncurry make_li_elt) all_modules
+      List.map ~f:make_li_elt all_modules
     ]

@@ -12,8 +12,6 @@ module Admin = struct
       ~meth:(S.Get P.unit)
       ()
 
-  let _ : unit Lwt.t = Admin_module.attach "News" main
-
   let redaction =
     S.create
       ~path:(path ["redaction"])
