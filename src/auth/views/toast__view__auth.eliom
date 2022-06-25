@@ -36,6 +36,10 @@ let email_successfully_changed () =
      de confirmation. Dans le cas contraire, contactez \
      l'administrateur."
 
+let password_successfully_changed () =
+  Toast.success_msg
+    "Votre mot de passe a bien été modifié."
+
 let user_created user =
   Toast.success [
     H.txt "L'utilisateur ";

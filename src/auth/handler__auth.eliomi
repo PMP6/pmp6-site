@@ -10,9 +10,11 @@ val forbidden : unit -> unit -> Content.page
 
 module Settings : sig
 
-  val email_edition : unit -> unit -> Content.page
+  val main : unit -> unit -> Content.page
 
   val save_email : unit -> string -> Content.action
+
+  val save_password : unit -> string -> Content.action
 
   val forgotten_password : unit -> unit -> Content.page
 

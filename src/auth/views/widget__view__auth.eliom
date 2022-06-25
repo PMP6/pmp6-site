@@ -28,7 +28,7 @@ let user_menu () =
       H.ul
         ~a:[H.a_class ["menu"]]
         [
-          H.li [H.a ~service:Service.Settings.email_edition [H.txt "Paramètres"] ()];
+          H.li [H.a ~service:Service.Settings.main [H.txt "Paramètres"] ()];
           H.li [logout_button ()];
         ]
     ]
@@ -119,7 +119,7 @@ let password_reset_form () =
     make_form
     ()
 
-let password_change_form token =
+let password_change_form ~service srv_gp =
   let open H in
   let pwd_input_id = new_id () in
   let make_form new_password =
@@ -149,9 +149,9 @@ let password_change_form token =
         [txt "Enregistrer"];
     ] in
   F.Abide.post_form
-    ~service:Service.Settings.validate_password_reset
+    ~service
     make_form
-    token
+    srv_gp
 
 let user_admin_form ?user () =
   (* If user is passed, edition form. Otherwise, creation. *)

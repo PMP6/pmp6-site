@@ -32,12 +32,15 @@ let already_connected () =
     ~title:"Vous êtes déjà connecté"
     [ F.Callout.warning [ H.txt "Vous êtes déjà connecté." ] ]
 
-let email_edition user =
+let settings user =
   Content.page
-    ~title:"Modifier mon adresse email"
+    ~title:"Paramètres utilisateur"
     [
-      H.h1 [H.txt "Modifier mon adresse email"];
-      Widget.email_edition_form user
+      H.h1 [H.txt "Modifier mes paramètres"];
+      Widget.email_edition_form user;
+      Widget.password_change_form
+        ~service:Service.Settings.save_password
+        ();
     ]
 
 let forgotten_password () =
@@ -80,7 +83,9 @@ let password_reset token =
     ~title:"Réinitialisation du mot de passe"
     [
       H.h1 [H.txt "Réinitialisation du mot de passe"];
-      Widget.password_change_form token;
+      Widget.password_change_form
+        ~service:Service.Settings.validate_password_reset
+        token;
     ]
 
 let failed_password_reset () =

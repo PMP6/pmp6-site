@@ -47,10 +47,10 @@ let forbidden () () =
 
 module Settings = struct
 
-  let email_edition =
+  let main =
     let$ user = Require.authenticated in
     fun () () ->
-      View.Page.email_edition user
+      View.Page.settings user
 
   let save_email =
     let$ user = Require.authenticated in
@@ -68,12 +68,28 @@ module Settings = struct
               ~content:
                 "Votre adresse email a bien été modifiée. Si vous \
                  n'êtes pas à l'origine de cette demande, veuillez \
-                 contacter l'administrateur du site."
+                 contacter immédiatement l'administrateur du site."
               ()
           in
           Content.action Toast.push (View.Toast.email_successfully_changed ())
         | Error `Email_already_exists ->
           Content.action Toast.push (View.Toast.email_not_available ())
+
+  let save_password =
+    let$ user = Require.authenticated in
+    fun () new_password ->
+      let%lwt () = Model.User.update_password (Model.User.id user) new_password in
+      let () =
+        Usermail.send_async
+          ~user
+          ~subject:"Modification de votre mot de passe"
+          ~content:
+            "Votre mot de passe a bien été modifié. Si vous n'êtes pas \
+             à l'origine de cette demande, veuillez contacter \
+             immédiatement l'administrateur du site."
+          ()
+      in
+      Content.action Toast.push (View.Toast.password_successfully_changed ())
 
   let forgotten_password =
     let$ () = Require.unauthenticated in

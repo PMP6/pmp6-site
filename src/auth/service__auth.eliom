@@ -33,17 +33,23 @@ module Settings = struct
 
   let path subpath = path ("parametres" :: subpath)
 
-  let email_edition =
+  let main =
     S.create
-      ~path:(path ["email"])
+      ~path:(path [])
       ~meth:(S.Get P.unit)
       ()
 
   let save_email =
     S.create_attached_post
-      ~fallback:email_edition
+      ~fallback:main
       ~csrf_safe:true
       ~post_params:(P.string "email")
+      ()
+
+  let save_password =
+    S.create_attached_post
+      ~fallback:main
+      ~post_params:(P.string "password")
       ()
 
   let forgotten_password =
