@@ -1,6 +1,7 @@
 let commands =
   [
     "fixtures", Fixtures.main;
+    "superuser", Superuser.main;
   ]
 
 let help () =

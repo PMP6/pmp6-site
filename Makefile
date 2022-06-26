@@ -245,6 +245,9 @@ $(TEST_PREFIX)$(LIBDIR)/$(MANAGE_PROJECT_NAME).cma: $(call objs,$(ELIOM_SERVER_D
 
 manage: fixtures-media manage.byte
 
+superuser :
+	$(MAKE) MANAGE_COMMAND=superuser manage
+
 fixtures:
 	$(MAKE) MANAGE_COMMAND=fixtures manage
 

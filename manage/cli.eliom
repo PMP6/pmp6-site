@@ -19,6 +19,28 @@ let pp_error = fmt_error Fmt.text
 let pr_cmd_name name =
   Fmt.pr "@[<v>@;@[%a@]@]@." (fmt_heading @@ Fmt.fmt "=== %s ===") name
 
+let rec ask ?allow_empty msg =
+  Fmt.pr "@[@[%a@]@ @]@?" Fmt.text msg;
+  let answer = Caml.read_line () in
+  match answer, allow_empty with
+  | "", None -> ask ?allow_empty msg
+  | _ -> answer
+
+let ask_password msg =
+  let tios = Caml_unix.tcgetattr Caml_unix.stdin in
+  Caml_unix.(tcsetattr stdin TCSANOW { tios with c_echo = false; c_echonl = true });
+  let rec loop () =
+    let answer = ask msg in
+    let answer2 = ask ("[CONFIRM] " ^ msg) in
+    if String.(answer <> answer2) then begin
+      Fmt.pr "@[%a@]@." pp_warning "Answers do not match, try again.";
+      loop ()
+    end
+    else answer in
+  let answer = loop () in
+  Caml_unix.(tcsetattr stdin TCSANOW tios);
+  answer
+
 let rec ask_confirmation ?default msg =
   let hint =
     match default with
