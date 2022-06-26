@@ -245,6 +245,9 @@ $(TEST_PREFIX)$(LIBDIR)/$(MANAGE_PROJECT_NAME).cma: $(call objs,$(ELIOM_SERVER_D
 
 manage: fixtures-media manage.byte
 
+fixtures:
+	$(MAKE) MANAGE_COMMAND=fixtures manage
+
 fixtures-media: $(FIXTURES_DIR)/media
 	mkdir -p $(LOCAL_STATIC)/media
 	cp -r $(FIXTURES_DIR)/media/* $(LOCAL_STATIC)/media
