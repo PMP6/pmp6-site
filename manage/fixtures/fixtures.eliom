@@ -6,8 +6,7 @@ let clean_load_all () =
   Lwt.return ()
 
 let main () =
-  Fmt.set_style_renderer Fmt.stdout `Ansi_tty;
-  Fmt.pr "@[<v>@;@[%a@]@]@." Cli.pp_heading "=== Fixture loading ===";
+  Cli.pr_cmd_name "Fixture loading";
   let answer =
     Cli.ask_confirmation
       ~default:false

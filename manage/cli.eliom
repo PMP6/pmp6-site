@@ -1,16 +1,23 @@
 [@@@warning "-5"]
 
-let pp_heading =
-  Fmt.(styled `Bold @@ styled (`Fg `Cyan) @@ text)
+let fmt_heading pp = Fmt.(styled `Bold @@ styled (`Fg `Cyan) @@ pp)
 
-let pp_warning =
-  Fmt.(styled (`Fg `Yellow) @@ text)
+let pp_heading = fmt_heading Fmt.text
 
-let pp_success =
-  Fmt.(styled (`Fg `Green) @@ text)
+let fmt_warning pp = Fmt.styled (`Fg `Yellow) pp
 
-let pp_error =
-  Fmt.(styled (`Fg `Red) @@ text)
+let pp_warning = fmt_warning Fmt.text
+
+let fmt_success pp = Fmt.(styled (`Fg `Green) @@ pp)
+
+let pp_success = fmt_success Fmt.text
+
+let fmt_error pp = Fmt.(styled (`Fg `Red) @@ pp)
+
+let pp_error = fmt_error Fmt.text
+
+let pr_cmd_name name =
+  Fmt.pr "@[<v>@;@[%a@]@]@." (fmt_heading @@ Fmt.fmt "=== %s ===") name
 
 let rec ask_confirmation ?default msg =
   let hint =
