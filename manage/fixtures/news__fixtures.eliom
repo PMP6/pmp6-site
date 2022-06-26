@@ -102,6 +102,15 @@ formulaire envoyé par mail avant chaque séance.
 
 let deploy_time = Time.now ()
 
+let expo_photo auth =
+  News.Model.Item.Private.build
+    ~title:"Expo photos"
+    ~short_title:"Expo photos"
+    ~pub_time:(deploy_time |> Fn.flip Time.sub Time.Span.minute)
+    ~content:(Doc.of_md content_expo_photos)
+    ~author:(Auth.Model.User.id auth#poulpe)
+    ~is_visible:true
+
 let rentree auth =
   News.Model.Item.Private.build
     ~title:"Rentrée 2020"
@@ -136,7 +145,10 @@ let load auth =
   let%lwt rentree = News.Model.create_from_item @@ rentree auth in
   let%lwt piscine = News.Model.create_from_item @@ piscine auth in
   let%lwt fosses = News.Model.create_from_item @@ fosses auth in
+  let%lwt expo_photo = News.Model.create_from_item @@ expo_photo auth in
+
   Lwt.return @@ object
+    method expo_photo = expo_photo
     method rentree = rentree
     method piscine = piscine
     method fosses = fosses
