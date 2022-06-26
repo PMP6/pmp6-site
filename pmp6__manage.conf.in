@@ -23,7 +23,7 @@
     <host defaulthostname="%%HOSTNAME%%" hostfilter="*">
       <static dir="%%STATICDIR%%" />
       <static dir="%%ELIOMSTATICDIR%%" />
-      <eliommodule module="%%LIBDIR%%/%%PROJECT_FIXTURES_NAME%%.cma" />
+      <eliommodule module="%%LIBDIR%%/%%MANAGE_PROJECT_NAME%%.cma" />
       <eliom>
       </eliom>
     </host>

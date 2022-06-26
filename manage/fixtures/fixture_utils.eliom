@@ -10,3 +10,5 @@ let delete_all (module Model : Standard_model) =
   let%lwt all = Model.all () in
   let delete x = Model.(delete @@ id x) in
   Lwt_list.iter_s delete all
+
+let print x = print_endline ("hello" ^ x)

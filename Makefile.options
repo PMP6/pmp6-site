@@ -7,16 +7,17 @@ PROJECT_NAME := pmp6
 # If you modify this, make sure you don't use a git-tracked file.
 SECRETS_ENV_FILE := secrets.env
 
-# Name of the mock eliom module for fixtures installation
-PROJECT_FIXTURES_NAME := $(PROJECT_NAME)__fixtures
+# Name of the mock eliom module for manage installation
+MANAGE_PROJECT_NAME := $(PROJECT_NAME)__manage
 
 # Root dir for source files.
 SRC_DIR := src
-FIXTURES_DIR := fixtures
+MANAGE_DIR := manage
+FIXTURES_DIR := ${MANAGE_DIR}/fixtures
 
 SRC_FILES := $(shell find $(SRC_DIR) -name *.eliom -o -name *.eliomi)
 
-FIXTURES_FILES := $(shell find $(FIXTURES_DIR) -name *.eliom -o -name *.eliomi)
+MANAGE_FILES := $(shell find $(MANAGE_DIR) -name *.eliom -o -name *.eliomi)
 
 WARNINGS := +a-4-40-41-42-44-45-48-58-59-70
 OPENFLAGS := -open Base -open Core_kernel
@@ -106,7 +107,7 @@ ETCDIR := etc/${PROJECT_NAME}
 LIBDIR := lib/${PROJECT_NAME}
 # Command pipe, eg. $ echo reload > $(INSTALL_PREFIX)$(CMDPIPE)
 CMDPIPE := var/run/${PROJECT_NAME}-cmd
-FIXTURESCMDPIPE := var/run/${PROJECT_FIXTURES_NAME}-cmd
+MANAGECMDPIPE := var/run/${MANAGE_PROJECT_NAME}-cmd
 # Ocsigenserver's logging files
 LOGDIR := var/log/${PROJECT_NAME}
 # Ocsigenserver's persistent data files

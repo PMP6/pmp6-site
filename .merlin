@@ -1,6 +1,7 @@
 SUFFIX .eliom .eliomi
 
 S src/**/*
+S manage/**/*
 B _server/**/*
 # B _client/**/*
 
