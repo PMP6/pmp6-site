@@ -6,4 +6,4 @@ let smtp_port = 587
 
 let smtp_credentials = Some ("noreply@pmp6.fr", Config.Env.require "SMTP_PASSWORD")
 
-let db_uri = "sqlite3:/var/local/pmp6/pmp6.db"
+let db_uri = "sqlite3:pmp6_beta.db"

@@ -19,6 +19,9 @@ SRC_FILES := $(shell find $(SRC_DIR) -name *.eliom -o -name *.eliomi)
 
 MANAGE_FILES := $(shell find $(MANAGE_DIR) -name *.eliom -o -name *.eliomi)
 
+PROFILE_FILE := $(SRC_DIR)/settings/settings_profile.mlh
+SETTINGS_FILE := $(SRC_DIR)/settings/settings.eliom
+
 WARNINGS := +a-4-40-41-42-44-45-48-58-59-70
 OPENFLAGS := -open Base -open Core_kernel
 CFLAGS := -strict-formats -short-paths
@@ -44,6 +47,7 @@ COMMON_PACKAGES := \
 	lwt_ppx \
 	omd \
 	ppx_let \
+	ppx_optcomp \
 	js_of_ocaml-ppx_deriving_json
 
 # OCamlfind packages for the server

@@ -1,0 +1,2 @@
+(* Valid values are "test", "beta" or "prod" *)
+[%%define profile "test"]
