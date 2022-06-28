@@ -39,16 +39,17 @@ module Maps = struct
         ~meth:(Eliom_service.Get (Eliom_parameter.string "pb"))
         () in
     let src = make_uri ~service pb in
-    Foundation.responsive_embed @@
-    iframe
-      ~a:[
-        a_src src;
-        a_width 500;
-        a_height 450;
-        a_style "border:0";
-        Unsafe.string_attrib "allow" "fullscreen";
-      ]
-      []
+    Foundation.Responsive_embed.create [
+      iframe
+        ~a:[
+          a_src src;
+          a_width 500;
+          a_height 450;
+          a_style "border:0";
+          Unsafe.string_attrib "allow" "fullscreen";
+        ]
+        []
+    ]
 
 end
 
@@ -76,16 +77,17 @@ module YouTube = struct
         ~meth:(Get Eliom_parameter.(suffix (string "v")))
         () in
     let src = make_uri ~service v in
-    Foundation.responsive_embed @@
-    iframe ~a:[
-      a_width width;
-      a_height height;
-      a_src src;
-      a_style "border: 0;";
-      Unsafe.string_attrib
-        "allow"
-        "accelerometer; autoplay; encrypted-media; \
-         gyroscope; picture-in-picture; fullscreen";
-    ] []
+    Foundation.Responsive_embed.create [
+      iframe ~a:[
+        a_width width;
+        a_height height;
+        a_src src;
+        a_style "border: 0;";
+        Unsafe.string_attrib
+          "allow"
+          "accelerometer; autoplay; encrypted-media; \
+           gyroscope; picture-in-picture; fullscreen";
+      ] []
+    ]
 
 end

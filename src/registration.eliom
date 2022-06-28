@@ -1,24 +1,19 @@
-let ( => ) service page =
-  Pmp6.App.register
-    ~service
-    (fun () () ->
-       let _ = [%client (Foundation.init () : unit)] in
-       Lwt.return @@ page ())
+[%%server.start]
+
+let skeleton_routes = Registration_lib.[
+  Skeleton.home_service, Home.home_page;
+  Skeleton.Plonger.Services.formations, Formations.formation_page;
+  Skeleton.Plonger.Services.stages, Stages.stage_page;
+  Skeleton.Informations.Services.piscine, Piscine.piscine_page;
+  Skeleton.Informations.Services.fosse, Fosse.fosse_page;
+  Skeleton.Informations.Services.inscription, Inscription.inscription_page;
+  Skeleton.Espace_membre.Services.boutique, Boutique.boutique_page;
+  Skeleton.Contact.service, Contact.contact_page;
+]
 
 let () =
-  Skeleton.home_service => Home.home_page;
-  Skeleton.Plonger.Services.formations => Formations.formation_page;
-  Skeleton.Plonger.Services.stages => Stages.stage_page;
-  Skeleton.Informations.Services.piscine => Piscine.piscine_page;
-  Skeleton.Informations.Services.fosse => Fosse.fosse_page;
-  Skeleton.Informations.Services.inscription => Inscription.inscription_page;
-  Skeleton.Espace_membre.Services.boutique => Boutique.boutique_page;
-  Skeleton.Contact.service => Contact.contact_page;
+  Registration_lib.register_routes Template.return_page skeleton_routes;
+  Registration_lib.register_routes Template.return_page Admin.Registration.routes;
+  Registration_lib.register_routes Template.return_page Auth.Registration.routes;
+  Registration_lib.register_routes Template.return_page News.Registration.routes;
   ()
-
-let () =
-  Eliom_registration.set_exn_handler
-    (fun e -> match e with
-       | Eliom_common.Eliom_Wrong_parameter ->
-         Eliom_registration.Redirection.(send @@ Redirection Skeleton.home_service)
-       | _ -> Lwt.fail e)

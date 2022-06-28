@@ -1,4 +1,4 @@
-module H = Eliom_content.Html.D
+module%shared H = Eliom_content.Html.D
 
 let clean_uchar uchar =
   (* Returns a string containing the lowercase version of an unicode
@@ -54,12 +54,60 @@ let slugify string =
   |> List.rev
   |> String.concat ~sep:"-"
 
-let is_active_class is_active =
-  if is_active
-  then ["is-active"]
-  else []
+[%%shared
 
-let is_active_attrib is_active =
+let cons_if boolean elt list =
+  if boolean
+  then elt :: list
+  else list
+
+let cons_if_opt opt ~some ~none list =
+  match opt with
+  | None -> none :: list
+  | Some _ -> some :: list
+
+let cons_opt opt list =
+  match opt with
+  | None -> list
+  | Some elt -> elt :: list
+
+let cons_opt_map opt f list =
+  match opt with
+  | None -> list
+  | Some elt -> f elt :: list
+
+(* TODO: put that in foundation or delete it altogether *)
+
+let cons_vertical is_vertical classes =
+  cons_if is_vertical "vertical" classes
+
+let cons_is_active is_active classes =
+  cons_if is_active "is-active" classes
+
+let cons_is_active_attrib is_active attribs =
   if is_active
-  then [H.a_class (is_active_class is_active)]
-  else []
+  then H.a_class (cons_is_active is_active []) :: attribs
+  else attribs
+]
+
+let%shared subpath_of_string = Eliom_lib.Url.split_path
+let%shared subpath_to_string = Eliom_lib.Url.string_of_url_path ~encode:false
+
+let subpath_param name =
+  let client_to_and_of =
+    [%client
+    Eliom_parameter.{
+      of_string = subpath_of_string;
+      to_string = subpath_to_string;
+    }] in
+  Eliom_parameter.user_type
+    ~client_to_and_of
+    ~of_string:subpath_of_string
+    ~to_string:subpath_to_string
+    name
+
+let path_srv path =
+  Eliom_service.create
+    ~path:(Eliom_service.Path path)
+    ~meth:(Eliom_service.Get Eliom_parameter.unit)
+    ()

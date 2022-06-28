@@ -19,16 +19,9 @@ let images =
     ]
 
 let slide ~is_active ~src ~caption =
-  let _figcaption =
-    `Bottom (
-      H.figcaption
-        ~a:[H.a_class ["orbit-caption"]]
-        [H.txt caption]
-    ) in
-  H.li ~a:[H.a_class ("orbit-slide" :: Utils.is_active_class is_active)] [
+  H.li ~a:[H.a_class @@ Utils.cons_is_active is_active ["orbit-slide"]] [
     H.figure
       ~a:[H.a_class ["orbit-figure"]]
-      (* ~figcaption *)
       [H.img ~a:[H.a_class ["orbit-image"]] ~src ~alt:caption ()]
   ]
 
@@ -41,8 +34,8 @@ let slides =
 
 let bullet ~is_active ~caption ~slide_number =
   H.button
-    ~a:(H.a_user_data "slide" (Int.to_string slide_number) ::
-        Utils.is_active_attrib is_active)
+    ~a:(Utils.cons_is_active_attrib is_active @@
+        [H.a_user_data "slide" (Int.to_string slide_number)])
     (H.span ~a:[H.a_class ["show-for-sr"]] [H.txt caption] ::
      if is_active
      then [H.span ~a:[H.a_class ["show-for-sr"]] [H.txt "Photo en cours"]]
@@ -76,11 +69,11 @@ let make_elt images =
         div_classes ["orbit-controls"; "show-for-large"] [
           button ~a:[a_class ["orbit-previous"]] [
             span ~a:[a_class ["show-for-sr"]] [txt "Photo précédente"];
-            Icon.solid "fa-chevron-left" ~transform:["grow-10"] ();
+            Icon.solid "chevron-left" ~transform:["grow-10"] ();
           ];
           button ~a:[a_class ["orbit-next"]] [
             span ~a:[a_class ["show-for-sr"]] [txt "Photo suivante"];
-            Icon.solid "fa-chevron-right" ~transform:["grow-10"] ();
+            Icon.solid "chevron-right" ~transform:["grow-10"] ();
           ]
         ];
         ul ~a:[a_class ["orbit-container"]] (slides images)

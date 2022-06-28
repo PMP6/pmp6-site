@@ -1,7 +1,7 @@
 module H = Eliom_content.Html.D
 
 let thumbnails location =
-  Template.thumbnail_row ~subdir:["stages"; location]
+  Widget.thumbnail_row ~subdir:["stages"; location]
 
 let intro =
   H.(
@@ -192,8 +192,8 @@ let provence =
     ]
   ]
 
-let stage_page () =
-  Template.make_page ~title:"Stages"
+let stage_page () () =
+  Content.page ~title:"Stages"
     H.[
       h1 [txt "Stages"];
       intro;

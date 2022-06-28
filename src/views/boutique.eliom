@@ -62,8 +62,8 @@ let boutique =
     Hello_asso.event_widget "boutique-des-plongeurs";
   ]
 
-let boutique_page () =
-  Template.make_page ~title:"Boutique"
+let boutique_page () () =
+  Content.page ~title:"Boutique"
     H.[
       h1 [txt "Boutique"];
       section intro;

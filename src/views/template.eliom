@@ -3,40 +3,10 @@ module H = Html
 let app_js_script =
   Skeleton.Static.js_script ~a:[H.a_async ()] ["app.js"] ()
 
-let thumbnail alt path =
-  let open H in
-  img
-    ~a:[a_class ["thumbnail"]]
-    ~src:(Skeleton.Static.img_uri path)
-    ~alt
-    ()
-
-let thumbnail_row ?(max_size=12) ~subdir alt_and_filenames =
-  let nb_thumbnails =
-    List.length alt_and_filenames in
-  let thumbnail_size =
-    min max_size (12 / nb_thumbnails) in
-  let large_size =
-    sprintf "large-%d" thumbnail_size in
-  let make_cell (alt, filename) =
-    H.div_classes [
-      "cell";
-      "medium-5"; "small-10"; large_size;
-      "text-center";
-    ] [
-      thumbnail alt (subdir @ [filename])
-    ]
-  in
-  H.div_classes [
-    "grid-x"; "grid-padding-x";
-    "medium-up-2"; "small-up-1";
-    "align-center-middle";
-  ] (List.map ~f:make_cell alt_and_filenames)
-
 let gfont_uri =
   let fonts = [
     "Muli";
-    "Kaushan+Script";
+    "Coiny";
     "Open+Sans";
     "Oswald";
     "Inconsolata";
@@ -106,7 +76,7 @@ let menu_toggle () =
     div_class "title-bar-title" [menu_title ()];
   ]
 
-let top_menu items =
+let top_left_menu items =
   let open H in
   let rec entry (content, hierarchical_site_item) =
     match hierarchical_site_item with
@@ -142,88 +112,117 @@ let top_menu items =
   ] @@
   menu_title_entry () :: List.filter_map ~f:entry items
 
-let search_form =
-  let create_form =
-    let open H in
-    fun (as_sitesearch, q) ->
-      [
-        Form.input ~input_type:`Hidden ~name:as_sitesearch ~value:"pmp6.fr" Form.string;
-        div_classes ["input-group"] [
-          Form.input
-            ~input_type:`Search ~name:q
-            ~a:[a_placeholder "Rechercher"; a_class ["input-group-field"]]
-            Form.string;
-          div_classes ["input-group-button"] [
-            Form.button_no_value
-              ~button_type:`Submit ~a:[a_class ["button"]]
-              [Icon.solid "fa-search" ()];
-          ]
-        ]
+let search_form () =
+  let open H in
+  H.Form.get_form
+    ~a:[a_class ["search-form"]]
+    ~service:Google.Search.service
+  @@ fun (as_sitesearch, q) ->
+  [
+    Form.input ~input_type:`Hidden ~name:as_sitesearch ~value:"pmp6.fr" Form.string;
+    div_classes ["input-group"] [
+      Form.input
+        ~input_type:`Search ~name:q
+        ~a:[a_placeholder "Rechercher"; a_class ["input-group-field"]]
+        Form.string;
+      div_classes ["input-group-button"] [
+        Form.button_no_value
+          ~button_type:`Submit ~a:[a_class ["button"]]
+          [Icon.solid "search" ()];
       ]
-  in H.Form.get_form ~service:(Google.Search.service) create_form
+    ]
+  ]
 
-let header =
+let top_right_menu user =
+  let open H in
+  let connection =
+    li [Auth.View.Widget.connection_icon ()] in
+  let user_menu =
+    Auth.View.Widget.user_menu () in
+  let admin =
+    li [Admin.View.Widget.interface_icon ()] in
+  let search =
+    li ~a:[a_class ["menu-text"; "search-form"]] [search_form ()] in
+  ul
+    ~a:[
+      a_class ["menu"; "vertical"; "large-horizontal"];
+      a_user_data
+        "responsive-menu"
+        "accordion large-dropdown";
+      a_user_data "click-open" "true";
+    ]
+    (
+      Utils.cons_if (Option.exists ~f:Auth.Require.Permission.(check staff) user) admin @@
+      Utils.cons_if_opt user ~some:user_menu ~none:connection @@
+      [search]
+    )
+
+let header user =
   let open H in
   header [
     menu_toggle ();
     div ~a:[a_class ["top-bar"; "stacked-for-medium"]; a_id "top-menu"] [
-      nav ~a:[a_class ["top-bar-left"]] [top_menu Skeleton.hierarchy_items];
-      div ~a:[a_class ["top-bar-right"]] [search_form];
+      nav ~a:[a_class ["top-bar-left"]] [top_left_menu Skeleton.hierarchy_items];
+      div ~a:[a_class ["top-bar-right"]] [top_right_menu user];
     ]
   ]
 
 let carousel =
   Carousel.elt ()
 
-let main ~content =
+let main ~toasts ~content =
   let open H in
   H.main
     ~a:[a_class ["grid-container"; "content"]]
-    content
+    (toasts @ content)
 
 let footer =
   let open H in
   footer [
     div_classes ["grid-x"; "grid-padding-x"; "align-left"] [
 
-      div_classes ["cell"; "large-4"; "small-1"; "icons"] [
+      div_classes ["cell"; "small-1"; "medium-2"; "large-4"; "icons"] [
         div_classes ["grid-x"; "grid-padding-x"] [
           div_classes ["cell"; "auto"] [
             a
               ~service:(Facebook.page_service ())
               ~a:[a_target "_blank"]
-              [Icon.brands "fa-facebook-f" ()] ();
+              [Icon.brands "facebook-f" ()] ();
           ]
         ]
       ];
 
-      div_classes ["cell"; "large-4"; "small-10"] ~a:[a_id "immatriculation"] [
+      div_classes
+        ["cell"; "small-6"; "small-offset-2"; "medium-8"; "medium-offset-0"; "large-4"]
+        ~a:[a_id "immatriculation"] [
         txt "ASSU SIM";
         br ();
         txt "FFESSM 07750038";
       ];
 
-      div_classes ["cell"; "small-1"; "icons"; "large-offset-3"] [
-        anchor_a
-          ~anchor:"top"
-          ~a:[a_user_data "smooth-scroll" ""]
-          [Icon.solid "fa-chevron-up" ()];
-      ];
-
+      div_classes ["cell"; "small-1"; "small-offset-2"; "large-offset-3"; "icons"] [
+        anchor_a ~anchor:"top" ~a:[a_user_data "smooth-scroll" ""] [
+          Icon.solid "chevron-up" ()
+        ]
+      ]
     ]
   ]
 
-let make_body content =
+let make_body user toasts content =
   (* empty anchor does not work for smooth scroll *)
   H.body ~a:[H.a_id "top"] [
-    header;
+    header user;
     carousel;
-    main ~content;
+    main ~toasts ~content;
     footer;
   ]
 
-let make_page ?(other_head=[]) ~title content =
+let return_page { Content.title; in_head; in_body } =
+  let _ : unit Eliom_client_value.t = [%client Foundation.init ()] in
+  let%lwt toasts = Toast.fetch_and_render () in
+  let%lwt user = Auth.Session.get_user () in
+  Lwt.return @@
   H.html
     ~a:[H.a_lang "fr"; H.a_class ["no-js"]]
-    (head ~other_head ~title ())
-    (make_body content)
+    (head ~other_head:in_head ~title ())
+    (make_body user toasts in_body)

@@ -10,8 +10,8 @@ let gmaps_embed () =
      +104+Rue+Adolphe+Pajeaud%2C+92160+Antony!3m2!1d48.7431596!2d2.286931!\
      5e0!3m2!1sfr!2sfr!4v1557852774857!5m2!1sfr!2sfr\""
 
-let fosse_page () =
-  Template.make_page ~title:"Fosse"
+let fosse_page () () =
+  Content.page ~title:"Fosse"
     H.[
       h1 [txt "Fosse"];
       p ~a:[a_class["callout"; "alert"]] [
@@ -82,7 +82,7 @@ let fosse_page () =
           gmaps_embed ()
         ];
       ];
-      Template.thumbnail_row ~subdir:["fosse"] [
+      Widget.thumbnail_row ~subdir:["fosse"] [
         "Le tube de 20m vu de haut", "fosse_1.JPG";
         "Exercices à 6m", "fosse_2.JPG";
         "Ensemble sur le bord du tube", "fosse_3.JPG";

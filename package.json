@@ -6,7 +6,8 @@
     "scripts": {
         "start": "gulp",
         "build": "gulp build --production",
-        "watch": "gulp watch"
+        "watch": "gulp watch",
+        "clean": "gulp clean"
     },
     "author": "Thibault Suzanne <thi.suzanne@gmail.com>",
     "license": "MIT",

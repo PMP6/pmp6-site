@@ -1,7 +1,7 @@
 module H = Html
 
 let thumbnail ~alt filename =
-  Template.thumbnail_row ~max_size:4 ~subdir:["formations"] [alt, filename]
+  Widget.thumbnail_row ~max_size:4 ~subdir:["formations"] [alt, filename]
 
 let intro =
   H.(
@@ -197,8 +197,8 @@ let autres =
     thumbnail ~alt:"Le pacha et l'oursin" "Alain.jpg";
   ]
 
-let formation_page () =
-  Template.make_page ~title:"Formations"
+let formation_page () () =
+  Content.page ~title:"Formations"
     H.[
       h1 [txt "Formations"];
       intro;

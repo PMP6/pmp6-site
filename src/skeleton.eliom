@@ -4,13 +4,13 @@ let main_page service =
   Eliom_tools.Main_page (Srv service)
 
 let hierarchy_leaf service =
-  Eliom_tools.(Site_tree (main_page service, []))
+  Eliom_tools.Site_tree (main_page service, [])
 
 module SubLeaf (Config : sig val path_root : string end) = struct
   let service =
     let open Eliom_service in
     create
-      ~path:(Path ([Config.path_root; ""]))
+      ~path:(Path [Config.path_root; ""])
       ~meth:(Get Eliom_parameter.unit)
       ()
 
@@ -27,17 +27,6 @@ module SubTree (Config : sig val path_root : string end) = struct
   (* Currently works only for one level. *)
 
   let path_root = Config.path_root
-
-  let void_service subpath =
-    let open Eliom_service in
-    let service = create
-      ~path:(Path (path_root :: subpath @ [""]))
-      ~meth:(Get Eliom_parameter.unit)
-      ()
-    in
-    Eliom_registration.Html_text.register ~service
-      (fun () () -> Lwt.return @@ String.concat ~sep:"/" (path_root :: subpath));
-    service
 
   let sub_service subpath =
     let open Eliom_service in
@@ -119,9 +108,20 @@ module Contact = struct
     make_hierarchy_item "Nous contacter" []
 end
 
+module Media = struct
+  let uri path =
+    Html.make_uri
+      ~absolute_path:true
+      ~service:(Eliom_service.static_dir ())
+      ("media" :: path)
+end
+
 module Static = struct
   let uri path =
-    H.make_uri ~service:(Eliom_service.static_dir ()) path
+    H.make_uri
+      ~absolute_path:true
+      ~service:(Eliom_service.static_dir ())
+      ("static" :: path)
 
   let subdir_uri subdir path =
     uri (subdir :: path)
@@ -143,6 +143,9 @@ let home_service =
     ~path:(Eliom_service.Path [""])
     ~meth:(Eliom_service.Get Eliom_parameter.unit)
     ()
+
+let admin_path subpath =
+  Eliom_service.Path ("admin" :: subpath @ [""])
 
 let hierarchy_items =
   [

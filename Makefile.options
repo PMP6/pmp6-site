@@ -4,34 +4,60 @@
 
 PROJECT_NAME := pmp6
 
+# If you modify this, make sure you don't use a git-tracked file.
+SECRETS_ENV_FILE := secrets.env
+
+# Name of the mock eliom module for manage installation
+MANAGE_PROJECT_NAME := $(PROJECT_NAME)__manage
+
 # Root dir for source files.
-SRCDIR := src
+SRC_DIR := src
+MANAGE_DIR := manage
+FIXTURES_DIR := ${MANAGE_DIR}/fixtures
 
-ALL_FILES := $(shell find $(SRCDIR) -name *.eliom -o -name *.eliomi)
+SRC_FILES := $(shell find $(SRC_DIR) -name *.eliom -o -name *.eliomi)
 
-WARNINGS := +a-4-40-41-42-44-45-48-58-59
-CFLAGS := -open Base -open Core_kernel -strict-formats -short-paths
+MANAGE_FILES := $(shell find $(MANAGE_DIR) -name *.eliom -o -name *.eliomi)
+
+PROFILE_FILE := $(SRC_DIR)/settings/settings_profile.mlh
+SETTINGS_FILE := $(SRC_DIR)/settings/settings.eliom
+
+WARNINGS := +a-4-40-41-42-44-45-48-58-59-70
+OPENFLAGS := -open Base -open Core_kernel
+CFLAGS := -strict-formats -short-paths
 
 # Source files for the server
-SERVER_FILES := $(ALL_FILES)
+SERVER_FILES := $(SRC_FILES)
 # Source files for the client
-CLIENT_FILES := $(ALL_FILES)
+CLIENT_FILES := $(SRC_FILES)
 
 # OCamlfind packages used for both server and client
 COMMON_PACKAGES := \
 	base \
+	base64 \
 	core_kernel \
+	markup \
+	fmt \
 	uucp \
 	uuseg \
 	uuseg.string \
 	uunf \
 	uunf.string \
 	tyxml-ppx \
-	lwt_ppx
+	lwt_ppx \
+	omd \
+	ppx_let \
+	ppx_optcomp \
+	js_of_ocaml-ppx_deriving_json
 
 # OCamlfind packages for the server
 SERVER_PACKAGES := \
-	$(COMMON_PACKAGES)
+	$(COMMON_PACKAGES) \
+	async \
+	async_smtp \
+	argon2 \
+	caqti-driver-sqlite3 \
+	caqti-lwt
 
 # OCamlfind packages for the client
 CLIENT_PACKAGES := \
@@ -85,6 +111,7 @@ ETCDIR := etc/${PROJECT_NAME}
 LIBDIR := lib/${PROJECT_NAME}
 # Command pipe, eg. $ echo reload > $(INSTALL_PREFIX)$(CMDPIPE)
 CMDPIPE := var/run/${PROJECT_NAME}-cmd
+MANAGECMDPIPE := var/run/${MANAGE_PROJECT_NAME}-cmd
 # Ocsigenserver's logging files
 LOGDIR := var/log/${PROJECT_NAME}
 # Ocsigenserver's persistent data files

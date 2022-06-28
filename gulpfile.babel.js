@@ -29,6 +29,12 @@ function loadConfig() {
     return yaml.load(ymlFile);
 }
 
+// Remove the generated files
+gulp.task(
+    'clean',
+    clean
+);
+
 // Build the "dist" folder by running all of the below tasks
 gulp.task(
     'build',
