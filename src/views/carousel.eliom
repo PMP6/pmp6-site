@@ -7,12 +7,12 @@ let images =
     ~f:(Tuple2.map_fst ~f:img_uri)
     [
       "port.jpeg", "Le port de Banyuls";
-      "galathée.jpeg", "Galathée";
+      "galathee.jpeg", "Galathée";
       "plongeur.jpeg", "Un plongeur";
       "crevettes.jpeg", "Crevettes";
       "blennie.jpeg", "Blennie";
       "denti.jpeg", "Denti";
-      "murène.jpeg", "Murène";
+      "murene.jpeg", "Murène";
       "nudibranche.jpeg", "Nudibranche";
       "phoque.jpeg", "Phoque";
       "serpule.jpeg", "Serpule";
