@@ -17,10 +17,22 @@ Check that the profile is correct. In any case, running the beta
 
 cat src/settings/settings_profile.mlh
 
+* Get env
+
+rm -fr _opam
+opam update
+opam switch create . --locked --deps-only
+eval $(opam env)
+
+rm -fr node_modules
+yarn
+
 * Compile backend
 
+Note: opt compiles, but running doesn't seem to work right now due to an async issue.
+
 make distclean
-make opt
+make byte # Don't use -j as this will oom
 
 * Compile frontend
 
@@ -46,13 +58,13 @@ No need to install
 
 ** PROD
 
-sudo make install.opt
+sudo make install.byte
 
 * Run
 
 ** BETA
 
-make test.opt
+./test
 
 ** PROD
 
