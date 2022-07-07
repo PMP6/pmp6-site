@@ -1,9 +1,9 @@
 module H = Html
 
-let app_js_script =
+let app_js_script () =
   Skeleton.Static.js_script ~a:[H.a_async ()] ["app.js"] ()
 
-let gfont_uri =
+let gfont_uri () =
   let fonts = [
     "Muli";
     "Coiny";
@@ -34,8 +34,8 @@ let head ?(other_head=[]) ~title () =
     meta ~a:[a_name "viewport"; a_content "width=device-width, initial-scale=1.0"] ();
     meta ~a:[a_name "theme-color"; a_content "#ffffff"] ();
     css_link ~uri:(Skeleton.Static.css_uri ["app.css"]) ();
-    css_link ~uri:gfont_uri ();
-    app_js_script;
+    css_link ~uri:(gfont_uri ()) ();
+    app_js_script ();
     favicon_link ~size:16;
     favicon_link ~size:32;
     Google.Analytics.gtag_manager ();
@@ -167,7 +167,7 @@ let header user =
     ]
   ]
 
-let carousel =
+let carousel () =
   Carousel.elt ()
 
 let main ~toasts ~content =
@@ -176,7 +176,7 @@ let main ~toasts ~content =
     ~a:[a_class ["grid-container"; "content"]]
     (toasts @ content)
 
-let footer =
+let footer () =
   let open H in
   footer [
     div_classes ["grid-x"; "grid-padding-x"; "align-left"] [
@@ -212,9 +212,9 @@ let make_body user toasts content =
   (* empty anchor does not work for smooth scroll *)
   H.body ~a:[H.a_id "top"] [
     header user;
-    carousel;
+    carousel ();
     main ~toasts ~content;
-    footer;
+    footer ();
   ]
 
 let return_page { Content.title; in_head; in_body } =

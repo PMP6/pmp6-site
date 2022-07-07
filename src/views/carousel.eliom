@@ -1,6 +1,6 @@
 module H = Html
 
-let images =
+let images () =
   let img_uri filename =
     Skeleton.Static.img_uri ["carousel"; filename] in
   List.map
@@ -25,12 +25,13 @@ let slide ~is_active ~src ~caption =
       [H.img ~a:[H.a_class ["orbit-image"]] ~src ~alt:caption ()]
   ]
 
-let slides =
+let slides images =
   List.mapi
     ~f:(
       fun i (src, caption) ->
         slide ~is_active:(i = 0) ~src ~caption
     )
+    images
 
 let bullet ~is_active ~caption ~slide_number =
   H.button
@@ -82,4 +83,4 @@ let make_elt images =
     ]
 
 let elt () =
-  make_elt images
+  make_elt @@ images ()

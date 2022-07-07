@@ -1,2 +1,2 @@
 sudo rm -f /usr/local/var/data/pmp6/ocsipersist/socket # Otherwise sometimes ocsidbm won't work
-sudo PATH=$PATH OCAMLPATH=$OCAMLPATH CAML_LD_LIBRARY_PATH=$CAML_LD_LIBRARY_PATH make test.byte
+sudo PATH=$PATH OCAMLPATH=$OCAMLPATH LD_LIBRARY_PATH=$LD_LIBRARY_PATH CAML_LD_LIBRARY_PATH=$CAML_LD_LIBRARY_PATH make test.byte

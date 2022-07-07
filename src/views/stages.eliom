@@ -3,7 +3,7 @@ module H = Eliom_content.Html.D
 let thumbnails location =
   Widget.thumbnail_row ~subdir:["stages"; location]
 
-let intro =
+let intro () =
   H.(
     p [
       txt "Entre Manche et Méditerranée, nous organisons au cours de \
@@ -13,7 +13,7 @@ let intro =
     ]
   )
 
-let banyuls =
+let banyuls () =
   H.[
     header [
       h2 [txt "Banyuls-sur-mer"];
@@ -69,7 +69,7 @@ let banyuls =
     ];
   ]
 
-let carantec =
+let carantec () =
   H.[
     header [
       h2 [txt "Carantec"];
@@ -104,7 +104,7 @@ let carantec =
     ];
   ]
 
-let dieppe =
+let dieppe () =
   H.[
     header [
       h2 [txt "Dieppe"];
@@ -130,7 +130,7 @@ let dieppe =
     ];
   ]
 
-let groix =
+let groix () =
   H.[
     header [
       h2 [txt "Île de Groix"];
@@ -163,7 +163,7 @@ let groix =
     ];
   ]
 
-let provence =
+let provence () =
   H.[
     header [
       h2 [txt "Provence"];
@@ -196,10 +196,10 @@ let stage_page () () =
   Content.page ~title:"Stages"
     H.[
       h1 [txt "Stages"];
-      intro;
-      section banyuls;
-      section carantec;
-      section dieppe;
-      section groix;
-      section provence;
+      intro ();
+      section @@ banyuls ();
+      section @@ carantec ();
+      section @@ dieppe ();
+      section @@ groix ();
+      section @@ provence ();
     ]
