@@ -217,8 +217,10 @@ let redaction_form ?news () =
         ~a:[H.a_class ["button"; "secondary"; "small-only-expanded"]]
         [H.txt "Prévisualiser"] in
     let (content, refresh_content) = Eliom_shared.React.S.create None in
-    let _ : unit Lwt.t Eliom_client_value.t =
+    let _ : unit Eliom_client_value.t =
       [%client
+      Eliom_client.onload @@ fun () ->
+      Lwt.async @@ fun () ->
       Js_of_ocaml_lwt.Lwt_js_events.clicks
         (Eliom_content.Html.To_dom.of_element ~%preview_button)
         (fun _ _ ->

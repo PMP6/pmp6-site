@@ -18,8 +18,10 @@ let db_type = Db.Type.string
 
 let param = Eliom_parameter.string
 
-let render_from_md str =
-  Lwt.return @@ to_html @@ of_md str
+let render_from_md =
+  Eliom_client.server_function
+    [%json:string]
+    (fun str -> Lwt.return @@ to_html @@ of_md str)
 
-let%client render_from_md =
-  ~%(Eliom_client.server_function [%json:string] render_from_md)
+let%client render_from_md str =
+  ~%render_from_md str
