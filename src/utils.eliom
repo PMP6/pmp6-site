@@ -90,15 +90,15 @@ let cons_is_active_attrib is_active attribs =
   else attribs
 ]
 
-let%shared subpath_of_string = Eliom_lib.Url.split_path
-let%shared subpath_to_string = Eliom_lib.Url.string_of_url_path ~encode:false
+let subpath_of_string x = Eliom_lib.Url.split_path x
+let subpath_to_string x = Eliom_lib.Url.string_of_url_path ~encode:false x
 
 let subpath_param name =
   let client_to_and_of =
     [%client
     Eliom_parameter.{
-      of_string = subpath_of_string;
-      to_string = subpath_to_string;
+      of_string = (fun x -> Eliom_lib.Url.split_path x);
+      to_string = (fun x -> Eliom_lib.Url.string_of_url_path ~encode:false x);
     }] in
   Eliom_parameter.user_type
     ~client_to_and_of
