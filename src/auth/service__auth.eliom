@@ -7,7 +7,7 @@ let path subpath = S.Path ("auth" :: subpath @ [""])
 let connection =
   S.create
     ~path:(path ["connexion"])
-    ~meth:(S.Get P.(opt @@ Utils.subpath_param "next"))
+    ~meth:(S.Get P.(opt @@ Subpath.param "next"))
     ()
 
 let login =

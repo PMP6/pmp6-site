@@ -17,7 +17,7 @@ module Fallback = struct
     Content.redirection
       (Eliom_service.preapply
          ~service:Service.connection
-         (Option.try_with Eliom_request_info.get_current_sub_path))
+         (Service_helpers.Subpath.current ()))
 
   let forbidden _gp _pp =
     Content.redirection Service.forbidden

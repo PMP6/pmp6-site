@@ -25,7 +25,10 @@ let login =
       then
         let%lwt () = Session.login user in
         let srv_next =
-          Option.value_map ~default:Skeleton.home_service ~f:Utils.path_srv next in
+          Option.value_map
+            ~default:Skeleton.home_service
+            ~f:Service_helpers.Subpath.get_service
+            next in
         let%lwt () = Toast.push @@ View.Toast.login_success () in
         Content.redirection srv_next
       else

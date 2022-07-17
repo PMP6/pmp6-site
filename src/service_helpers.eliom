@@ -1,7 +1,26 @@
-module%shared P = Eliom_parameter
-module%shared S = Eliom_service
+module P = Eliom_parameter
+module S = Eliom_service
 
 let ( ** ) = P.( ** )
+
+module Subpath = struct
+
+  type t = string
+
+  let param = P.string
+
+  let get_service path =
+    let path = Eliom_lib.Url.split_path path in
+    Eliom_service.create
+      ~path:(Eliom_service.Path path)
+      ~meth:(Eliom_service.Get Eliom_parameter.unit)
+      ()
+
+  let current () =
+    Option.try_with Eliom_request_info.get_current_sub_path
+    |> Option.map ~f:(Eliom_lib.Url.string_of_url_path ~encode:false)
+
+end
 
 module Timeout = struct
 

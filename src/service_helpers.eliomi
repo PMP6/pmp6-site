@@ -1,11 +1,25 @@
-module%shared P = Eliom_parameter
-module%shared S = Eliom_service
+module P = Eliom_parameter
+module S = Eliom_service
 
 (** An alias of [P.( ** )] *)
 val ( ** ) :
   ('a, [ `WithoutSuffix ], 'b) P.params_type ->
   ('c, [< `Endsuffix | `WithoutSuffix ] as 'd, 'e) P.params_type ->
   ('a * 'c, 'd, 'b * 'e) P.params_type
+
+module Subpath : sig
+  type t
+
+  val param : string ->
+    (t, [ `WithoutSuffix ], [ `One of string ] P.param_name) P.params_type
+
+  val get_service :
+    t ->
+    (unit, unit, S.get, S.att, S.non_co, S.non_ext, S.reg, [ `WithoutSuffix ],
+     unit, unit, S.non_ocaml) S.t
+
+  val current : unit -> t option
+end
 
 module Timeout : sig
   (** Helpers for easier-to-read service timeouts *)

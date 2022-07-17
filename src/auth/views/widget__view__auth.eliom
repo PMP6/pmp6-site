@@ -9,7 +9,7 @@ let connection_icon () =
   H.a
     ~service:(Service.connection)
     [icon; H.span ~a:[H.a_class ["hide-for-large"]] [H.txt "Connexion"]]
-    (Option.try_with Eliom_request_info.get_current_sub_path)
+    (Service_helpers.Subpath.current ())
 
 let logout_button () =
   H.post_pseudo_link

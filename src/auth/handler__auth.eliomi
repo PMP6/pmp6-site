@@ -1,10 +1,10 @@
 module Model := Model__auth
 
-val login : Eliom_lib.Url.path option -> string * string -> Content.page
+val login : Service_helpers.Subpath.t option -> string * string -> Content.page
 
 val logout : unit -> unit -> Content.action
 
-val connection : Eliom_lib.Url.path option -> unit -> Content.page
+val connection : Service_helpers.Subpath.t option -> unit -> Content.page
 
 val forbidden : unit -> unit -> Content.page
 

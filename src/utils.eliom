@@ -89,25 +89,3 @@ let cons_is_active_attrib is_active attribs =
   then H.a_class (cons_is_active is_active []) :: attribs
   else attribs
 ]
-
-let subpath_of_string x = Eliom_lib.Url.split_path x
-let subpath_to_string x = Eliom_lib.Url.string_of_url_path ~encode:false x
-
-let subpath_param name =
-  let client_to_and_of =
-    [%client
-    Eliom_parameter.{
-      of_string = (fun x -> Eliom_lib.Url.split_path x);
-      to_string = (fun x -> Eliom_lib.Url.string_of_url_path ~encode:false x);
-    }] in
-  Eliom_parameter.user_type
-    ~client_to_and_of
-    ~of_string:subpath_of_string
-    ~to_string:subpath_to_string
-    name
-
-let path_srv path =
-  Eliom_service.create
-    ~path:(Eliom_service.Path path)
-    ~meth:(Eliom_service.Get Eliom_parameter.unit)
-    ()
