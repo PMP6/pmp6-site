@@ -15,8 +15,6 @@ SRC_DIR := src
 MANAGE_DIR := manage
 FIXTURES_DIR := ${MANAGE_DIR}/fixtures
 
-SRC_FILES := $(shell find $(SRC_DIR) -name *.eliom -o -name *.eliomi)
-
 MANAGE_FILES := $(shell find $(MANAGE_DIR) -name *.eliom -o -name *.eliomi)
 
 PROFILE_FILE := $(SRC_DIR)/settings/settings_profile.mlh
@@ -27,9 +25,11 @@ OPENFLAGS := -open Base -open Core_kernel
 CFLAGS := -strict-formats -short-paths
 
 # Source files for the server
-SERVER_FILES := $(SRC_FILES)
+SERVER_FILES := $(shell find $(SRC_DIR) -name *.eliom -o -name *.eliomi)
+
 # Source files for the client
-CLIENT_FILES := $(SRC_FILES)
+# Only files that contains "client" or "shared" (should be safe)
+CLIENT_FILES := $(shell grep --include=*.eliom --include=*.eliomi -E "client|shared" --recursive -l $(SRC_DIR))
 
 # OCamlfind packages used for both server and client
 COMMON_PACKAGES := \
