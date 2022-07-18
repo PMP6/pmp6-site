@@ -4,14 +4,21 @@ let thumbnails location =
   Widget.thumbnail_row ~subdir:["stages"; location]
 
 let intro () =
-  H.(
+  H.[
     p [
       txt "Entre Manche et Méditerranée, nous organisons au cours de \
            l'année plusieurs stages de plongée en mer. Certains sont \
            conçus en priorité pour le passage de niveau, alors que \
            d'autres sont plutôt orientés vers la plongée plaisir.";
-    ]
-  )
+    ];
+    p [
+      txt "En voici quelques exemples. Selon les années et la \
+           disponibilité des structures d'accueil, d'autres \
+           propositions peuvent venir remplacer celles-ci ou s'y \
+           ajouter. Et bien entendu, tous les plongeurs volontaires \
+           sont encouragés à organiser d'autres sorties !"
+    ];
+  ]
 
 let banyuls () =
   H.[
@@ -34,7 +41,8 @@ let banyuls () =
       txt ".";
     ];
     p [
-      txt "Les stages à Banyuls sont organisés sur deux périodes de l'année :"
+      txt "Les stages à Banyuls sont parfois organisés sur deux \
+           périodes de l'année :"
     ];
     ul [
       li [
@@ -196,7 +204,7 @@ let stage_page () () =
   Content.page ~title:"Stages"
     H.[
       h1 [txt "Stages"];
-      intro ();
+      section @@ intro ();
       section @@ banyuls ();
       section @@ carantec ();
       section @@ dieppe ();
