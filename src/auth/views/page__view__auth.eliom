@@ -9,6 +9,11 @@ let connection ~next () =
     ~title:"Connexion"
     [
       H.h1 [H.txt "Connexion"];
+        H.p [
+          H.txt "La connexion au site n'est disponible que pour ses \
+                 administrateurs. Même sans compte utilisateur, vous \
+                 avez déjà accès à tout le contenu disponible."
+        ];
       Widget.login_form ~next ();
       H.a
         ~service:Service.Settings.forgotten_password
