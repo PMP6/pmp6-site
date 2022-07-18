@@ -62,9 +62,9 @@ let banyuls () =
            résidence d'accueil de l'observatoire Arago.";
     ];
     thumbnails "banyuls" [
-      "Baudroie", "baudroie close up.jpg";
+      "Baudroie", "baudroie_close_up.jpg";
       "Banyuls-sur-mer", "Banyuls-sur-mer.jpeg";
-      "Mérou", "mérou.jpg";
+      "Mérou", "merou.jpg";
       "Murène", "murene.jpg";
     ];
   ]
@@ -98,7 +98,7 @@ let carantec () =
     ];
     thumbnails "carantec" [
       "Roussette", "roussette.jpg";
-      "Baie de Morlaix", "baie de morlaix.jpg";
+      "Baie de Morlaix", "baie_de_morlaix.jpg";
       "Homard", "homard.jpg";
       "Macropode", "macropode.jpg";
     ];
@@ -156,9 +156,9 @@ let groix () =
            aussi être organisées."
     ];
     thumbnails "groix" [
-      "Araignée de mer", "araignée.JPG";
+      "Araignée de mer", "araignee.JPG";
       "Groix", "groix.JPG";
-      "Araignée sur une épave", "araignée_tôle.JPG";
+      "Araignée sur une épave", "araignee_tole.JPG";
       "Œil de congre", "oeil_congre.JPG";
     ];
   ]
