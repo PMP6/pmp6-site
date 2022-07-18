@@ -1,0 +1,1 @@
+echo shutdown | sudo tee local/var/run/pmp6-cmd
