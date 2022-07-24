@@ -26,7 +26,8 @@ module Admin = struct
     fun () (title, (short_title, (content, is_visible))) ->
       let content = Doc.of_md content in
       let%lwt model = Model.create ~title ~short_title ~content ~author ~is_visible in
-      Content.action Toast.push (View.Toast.created model)
+      let%lwt () = Toast.push (View.Toast.created model) in
+      Content.action_reload ()
 
   let edition =
     let$ _user = Auth.Require.staff in
@@ -45,12 +46,14 @@ module Admin = struct
         else None in
       let%lwt model =
         Model.update id ~title ~short_title ?pub_time ~content ~author ~is_visible () in
-      Content.action Toast.push (View.Toast.updated model)
+      let%lwt () = Toast.push (View.Toast.updated model) in
+      Content.action_reload ()
 
   let delete =
     let$ _user = Auth.Require.staff in
     fun () id ->
       let%lwt item = Model.find_and_delete id in
-      Content.action Toast.push (View.Toast.deleted item)
+      let%lwt () = Toast.push (View.Toast.deleted item) in
+      Content.action_reload ()
 
 end

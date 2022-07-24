@@ -25,6 +25,10 @@ let redirection srv =
 let reload () =
   redirection Eliom_service.reload_action
 
+(* Force type variable to prevent weak type variables issues *)
+let action_reload () : action =
+  reload ()
+
 let unit () =
   Lwt.return Unit
 
