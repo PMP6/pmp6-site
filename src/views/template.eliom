@@ -1,7 +1,7 @@
 module H = Html
 
 let app_js_script () =
-  Skeleton.Static.js_script ~a:[H.a_async ()] ["app.js"] ()
+  Skeleton.Static.js_script ~a:[H.a_defer ()] ["app.js"] ()
 
 let gfont_uri () =
   let fonts = [
