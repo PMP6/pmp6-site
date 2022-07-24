@@ -61,7 +61,9 @@ module Settings = struct
     fun () new_email ->
       let new_email = String.strip new_email in
       if String.(new_email = Model.User.email user)
-      then Content.action Toast.push (View.Toast.email_is_the_same ())
+      then
+        let%lwt () = Toast.push (View.Toast.email_is_the_same ()) in
+        Content.reload ()
       else
         match%lwt Model.User.update_email (Model.User.id user) new_email with
         | Ok () ->
@@ -76,9 +78,11 @@ module Settings = struct
                  contacter immédiatement l'administrateur du site."
               ()
           in
-          Content.action Toast.push (View.Toast.email_successfully_changed ())
+          let%lwt () = Toast.push (View.Toast.email_successfully_changed ()) in
+          Content.reload ()
         | Error `Email_already_exists ->
-          Content.action Toast.push (View.Toast.email_not_available ())
+          let%lwt () = Toast.push (View.Toast.email_not_available ()) in
+          Content.reload ()
 
   let save_password =
     let$ user = Require.authenticated in
@@ -212,21 +216,17 @@ module Admin = struct
             ~user:new_user
             ~subject:"Création de votre compte"
             ~content:
-              (Fmt.str
-                 "Bonjour %s, \
-                  @.@. \
-                  Votre compte vient d'être créé sur notre site. Si vous \
-                  pensez qu'il s'agit d'une erreur, veuillez contacter \
-                  l'administrateur du site."
-                 username)
+              "Votre compte vient d'être créé sur notre site. Si vous \
+               pensez qu'il s'agit d'une erreur, veuillez contacter \
+               l'administrateur du site."
             ()
         in
         let%lwt () = Toast.push (View.Toast.user_created new_user) in
         Content.redirection Service.Admin.main
       | Error errors ->
-        Content.action
-          (Lwt_list.iter_p (fun e -> Toast.push @@ View.Toast.conflict e))
-          errors
+        let%lwt () =
+          Lwt_list.iter_p (fun e -> Toast.push @@ View.Toast.conflict e) errors in
+        Content.reload ()
 
   let update_user =
     let$ _user = Require.superuser in
@@ -240,14 +240,15 @@ module Admin = struct
         let%lwt () = Toast.push (View.Toast.user_updated model) in
         Content.redirection Service.Admin.main
       | Error errors ->
-        Content.action
-          (Lwt_list.iter_p (fun e -> Toast.push @@ View.Toast.conflict e))
-          errors
+        let%lwt () =
+          Lwt_list.iter_p (fun e -> Toast.push @@ View.Toast.conflict e) errors in
+        Content.reload ()
 
   let delete_user =
     let$ _user = Require.superuser in
     fun () id ->
       let%lwt item = Model.User.find_and_delete id in
-      Content.action Toast.push (View.Toast.user_deleted item)
+      let%lwt () = Toast.push (View.Toast.user_deleted item) in
+      Content.reload ()
 
 end

@@ -17,7 +17,6 @@ let deleted item =
       H.txt "L'actu ";
       H.em [H.txt @@ Model.Item.short_title item];
       H.txt " a bien été supprimée.";
-      H.Raw.a [H.txt "TODO: Annuler."];
     ]
   ]
 
