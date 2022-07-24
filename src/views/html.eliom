@@ -190,7 +190,7 @@ let time_ ?(a=[]) time_ =
   let attr = a_datetime datetime :: a in
   Eliom_content.Html.C.node
     ~init:(time ~a:attr [txt datetime])
-    [%client (time ~a:~%attr [txt @@ format_datetime ~%time_])]
+    Caml.([%client time ~a:~%attr [txt @@ format_datetime ~%time_]])
 
 (* Currently this does not allow post parameters. Use this with
    (possibly dynamically created) unit post services. This could be
@@ -214,13 +214,24 @@ let filter_content_signal signal = match signal with
   | `Text _ as content_signal -> Some content_signal
   | _ -> None
 
+let seq_of_dispenser it =
+  (* Caml.Seq.of_dispenser on up-to-date versions *)
+  let rec c () =
+    match it() with
+    | None ->
+      Seq.Nil
+    | Some x ->
+      Seq.Cons (x, c)
+  in
+  c
+
 let parse txt =
   let signals =
     Markup.string txt
     |> Markup.parse_html
     |> Markup.signals
   in
-  Caml.Seq.of_dispenser (fun () -> Markup.next signals)
+  seq_of_dispenser (fun () -> Markup.next signals)
   |> Caml.Seq.filter_map filter_content_signal
   |> Eliom_content.Html.F.of_seq
 

@@ -14,7 +14,7 @@ let help () =
 
 let get_cmd name =
   Option.value ~default:help @@
-  let%bind.Option name in
+  let%bind.Option name = name in
   List.Assoc.find ~equal:String.equal commands name
 
 let () =

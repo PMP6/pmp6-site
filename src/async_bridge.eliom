@@ -3,5 +3,5 @@ let run f =
 
 let run_exn f =
   run f
-  |> Lwt_result.map_err Error.to_exn
+  |> Lwt_result.map_error Error.to_exn
   |> Lwt_result.get_exn

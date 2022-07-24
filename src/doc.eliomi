@@ -18,5 +18,6 @@ val param :
   (t, [ `WithoutSuffix ],
    [ `One of t ] Eliom_parameter.param_name) Eliom_parameter.params_type
 
+[%%client.start]
 (** Rendering is done on the server *)
-val%client render_from_md : string -> [> Html_types.div_content ] Html.elt list Lwt.t
+val render_from_md : string -> [> Html_types.div_content ] Html.elt list Lwt.t

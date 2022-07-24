@@ -23,7 +23,6 @@ depends: [
   "lwt"
   "lwt_ppx"
   "markup"
-  "ocsipersist-dbm"
   "omd"
   "ppx_jane"
   "tyxml"
