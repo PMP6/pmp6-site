@@ -16,6 +16,7 @@ let _ : unit Lwt.t =
 let login =
   let$ () = Require.unauthenticated in
   fun next (username, password) ->
+    let username = String.strip username in
     match%lwt Model.User.find_by_username username with
     | None ->
       let%lwt () = Toast.push @@ View.Toast.non_existent_user () in
@@ -58,6 +59,7 @@ module Settings = struct
   let save_email =
     let$ user = Require.authenticated in
     fun () new_email ->
+      let new_email = String.strip new_email in
       if String.(new_email = Model.User.email user)
       then Content.action Toast.push (View.Toast.email_is_the_same ())
       else
@@ -102,6 +104,7 @@ module Settings = struct
   let request_password_token =
     let$ () = Require.unauthenticated in
     fun () email ->
+      let email = String.strip email in
       match%lwt Model.User.find_by_email email with
       | None ->
         let%lwt () = Toast.push @@ View.Toast.non_existent_email () in
@@ -198,6 +201,8 @@ module Admin = struct
   let create_user =
     let$ _user = Require.superuser in
     fun () (username, (email, (password, (is_superuser, (is_staff))))) ->
+      let username = String.strip username in
+      let email = String.strip email in
       match%lwt
         Model.User.create ~username ~email ~password ~is_superuser ~is_staff
       with
@@ -226,6 +231,8 @@ module Admin = struct
   let update_user =
     let$ _user = Require.superuser in
     fun id (username, (email, (password, (is_superuser, (is_staff))))) ->
+      let username = String.strip username in
+      let email = String.strip email in
       match%lwt
         Model.User.update id ~username ~email ?password ~is_superuser ~is_staff ()
       with
