@@ -11,13 +11,12 @@ import webpackStream from 'webpack-stream';
 import webpack2      from 'webpack';
 import named         from 'vinyl-named';
 import autoprefixer  from 'autoprefixer';
-import dartCompiler  from 'sass';
 
 // Load all Gulp plugins into one variable
 const $ = plugins();
 
 // Use (dart-)sass compiler
-$.sass.compiler = dartCompiler;
+const sass = require('gulp-sass')(require('sass'));
 
 // Check for --production flag
 const PRODUCTION = !!(yargs.argv.production);
@@ -30,13 +29,19 @@ function loadConfig() {
     return yaml.load(ymlFile);
 }
 
+// Remove the generated files
+gulp.task(
+    'clean',
+    clean
+);
+
 // Build the "dist" folder by running all of the below tasks
 gulp.task(
     'build',
     gulp.series(
         clean,
         gulp.parallel(
-            sass,
+            sassBuild,
             javascript,
             images,
             copy
@@ -78,7 +83,7 @@ function copy() {
 
 // Compile Sass into CSS
 // In production, the CSS is compressed
-function sass() {
+function sassBuild() {
     const postCssPlugins = [
         // Autoprefixer
         autoprefixer(),
@@ -86,7 +91,7 @@ function sass() {
 
     return gulp.src(PATHS.sass_entries)
         .pipe($.sourcemaps.init())
-        .pipe($.sass({includePaths: PATHS.sass}).on('error', $.sass.logError))
+        .pipe(sass({includePaths: PATHS.sass}).on('error', sass.logError))
         .pipe($.postcss(postCssPlugins))
         .pipe($.if(PRODUCTION, $.cleanCss({ compatibility: 'ie9' })))
         .pipe($.if(!PRODUCTION, $.sourcemaps.write()))
@@ -151,7 +156,7 @@ function reload(done) {
 // Watch for changes to static assets, pages, Sass, and JavaScript
 function watch() {
     gulp.watch(PATHS.assets, copy);
-    gulp.watch('assets/scss/**/*.scss').on('all', sass);
+    gulp.watch('assets/scss/**/*.scss').on('all', sassBuild);
     gulp.watch('assets/js/**/*.js').on('all', gulp.series(javascript, browser.reload));
     gulp.watch('assets/img/**/*').on('all', gulp.series(images, browser.reload));
 }

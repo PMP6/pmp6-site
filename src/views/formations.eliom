@@ -1,9 +1,9 @@
 module H = Html
 
 let thumbnail ~alt filename =
-  Template.thumbnail_row ~max_size:4 ~subdir:["formations"] [alt, filename]
+  Widget.thumbnail_row ~max_size:4 ~subdir:["formations"] [alt, filename]
 
-let intro =
+let intro () =
   H.(
     p [
       txt "Chaque année, nous organisons des formations du Niveau 1 au \
@@ -15,7 +15,7 @@ let intro =
     ]
   )
 
-let niveau_1 =
+let niveau_1 () =
   H.[
     header [
       h2 [txt "Niveau 1"];
@@ -47,7 +47,7 @@ let niveau_1 =
     thumbnail ~alt:"Une joyeuse palanquée" "n1.jpg";
   ]
 
-let niveau_2 =
+let niveau_2 () =
   H.[
     header [
       h2 [txt "Niveau 2"];
@@ -84,7 +84,7 @@ let niveau_2 =
     thumbnail ~alt:"Au palier à Banyuls" "n2.jpg";
   ]
 
-let niveau_3 =
+let niveau_3 () =
   H.[
     header [
       h2 [txt "Niveau 3"];
@@ -130,7 +130,7 @@ let niveau_3 =
     thumbnail ~alt:"Exploration d'une faille" "n3.jpg";
   ]
 
-let autres =
+let autres () =
   let tapsec_service =
     Eliom_service.extern
       ~prefix:"http://www.fc.upmc.fr"
@@ -197,13 +197,13 @@ let autres =
     thumbnail ~alt:"Le pacha et l'oursin" "Alain.jpg";
   ]
 
-let formation_page () =
-  Template.make_page ~title:"Formations"
+let formation_page () () =
+  Content.page ~title:"Formations"
     H.[
       h1 [txt "Formations"];
-      intro;
-      section niveau_1;
-      section niveau_2;
-      section niveau_3;
-      section autres;
+      intro ();
+      section @@ niveau_1 ();
+      section @@ niveau_2 ();
+      section @@ niveau_3 ();
+      section @@ autres ();
     ]

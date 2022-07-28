@@ -1,19 +1,26 @@
 module H = Eliom_content.Html.D
 
 let thumbnails location =
-  Template.thumbnail_row ~subdir:["stages"; location]
+  Widget.thumbnail_row ~subdir:["stages"; location]
 
-let intro =
-  H.(
+let intro () =
+  H.[
     p [
       txt "Entre Manche et Méditerranée, nous organisons au cours de \
            l'année plusieurs stages de plongée en mer. Certains sont \
            conçus en priorité pour le passage de niveau, alors que \
            d'autres sont plutôt orientés vers la plongée plaisir.";
-    ]
-  )
+    ];
+    p [
+      txt "En voici quelques exemples. Selon les années et la \
+           disponibilité des structures d'accueil, d'autres \
+           propositions peuvent venir remplacer celles-ci ou s'y \
+           ajouter. Et bien entendu, tous les plongeurs volontaires \
+           sont encouragés à organiser d'autres sorties !"
+    ];
+  ]
 
-let banyuls =
+let banyuls () =
   H.[
     header [
       h2 [txt "Banyuls-sur-mer"];
@@ -34,7 +41,8 @@ let banyuls =
       txt ".";
     ];
     p [
-      txt "Les stages à Banyuls sont organisés sur deux périodes de l'année :"
+      txt "Les stages à Banyuls sont parfois organisés sur deux \
+           périodes de l'année :"
     ];
     ul [
       li [
@@ -62,14 +70,14 @@ let banyuls =
            résidence d'accueil de l'observatoire Arago.";
     ];
     thumbnails "banyuls" [
-      "Baudroie", "baudroie close up.jpg";
+      "Baudroie", "baudroie_close_up.jpg";
       "Banyuls-sur-mer", "Banyuls-sur-mer.jpeg";
-      "Mérou", "mérou.jpg";
+      "Mérou", "merou.jpg";
       "Murène", "murene.jpg";
     ];
   ]
 
-let carantec =
+let carantec () =
   H.[
     header [
       h2 [txt "Carantec"];
@@ -98,13 +106,13 @@ let carantec =
     ];
     thumbnails "carantec" [
       "Roussette", "roussette.jpg";
-      "Baie de Morlaix", "baie de morlaix.jpg";
+      "Baie de Morlaix", "baie_de_morlaix.jpg";
       "Homard", "homard.jpg";
       "Macropode", "macropode.jpg";
     ];
   ]
 
-let dieppe =
+let dieppe () =
   H.[
     header [
       h2 [txt "Dieppe"];
@@ -130,7 +138,7 @@ let dieppe =
     ];
   ]
 
-let groix =
+let groix () =
   H.[
     header [
       h2 [txt "Île de Groix"];
@@ -156,14 +164,14 @@ let groix =
            aussi être organisées."
     ];
     thumbnails "groix" [
-      "Araignée de mer", "araignée.JPG";
+      "Araignée de mer", "araignee.JPG";
       "Groix", "groix.JPG";
-      "Araignée sur une épave", "araignée_tôle.JPG";
+      "Araignée sur une épave", "araignee_tole.JPG";
       "Œil de congre", "oeil_congre.JPG";
     ];
   ]
 
-let provence =
+let provence () =
   H.[
     header [
       h2 [txt "Provence"];
@@ -192,14 +200,14 @@ let provence =
     ]
   ]
 
-let stage_page () =
-  Template.make_page ~title:"Stages"
+let stage_page () () =
+  Content.page ~title:"Stages"
     H.[
       h1 [txt "Stages"];
-      intro;
-      section banyuls;
-      section carantec;
-      section dieppe;
-      section groix;
-      section provence;
+      section @@ intro ();
+      section @@ banyuls ();
+      section @@ carantec ();
+      section @@ dieppe ();
+      section @@ groix ();
+      section @@ provence ();
     ]

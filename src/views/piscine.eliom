@@ -9,8 +9,8 @@ let gmaps_embed () =
      Jean-Taris%2C+16+Rue+Thouin!3m2!1d48.8447257!2d2.\
      3479414!5e0!3m2!1sfr!2sfr!4v1566935487391!5m2!1sfr!2sfr"
 
-let piscine_page () =
-  Template.make_page ~title:"Piscine"
+let piscine_page () () =
+  Content.page ~title:"Piscine"
     H.[
       h1 [txt "Piscine"];
       p [
@@ -50,7 +50,7 @@ let piscine_page () =
           gmaps_embed ()
         ];
       ];
-      Template.thumbnail_row ~subdir:["piscine"] [
+      Widget.thumbnail_row ~subdir:["piscine"] [
         "Un élève en formation", "piscine_1.JPG";
         "Des attractions ludiques pour la piscine", "piscine_2.JPG";
         "Des baptêmes pour le Téléthon", "piscine_3.JPG";

@@ -18,8 +18,8 @@ let caci_service =
     ~meth:(Eliom_service.Get Eliom_parameter.unit)
     ()
 
-let inscription_page () =
-  Template.make_page ~title:"Inscription"
+let inscription_page () () =
+  Content.page ~title:"Inscription"
     H.[
       h1 [txt "Inscription au club"];
       h2 [txt "Qui ?"];

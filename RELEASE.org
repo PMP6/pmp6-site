@@ -1,0 +1,74 @@
+* Fetch the source
+
+** BETA
+
+git checkout develop
+git pull
+
+** PROD
+
+git checkout master
+git pull
+
+* Check profile
+
+Check that the profile is correct. In any case, running the beta
+/shouldn't/ have permissions to alter the prod db.
+
+cat src/settings/settings_profile.mlh
+
+* Get env
+
+rm -fr _opam
+opam update
+
+# Possibly fix the ocaml version
+opam switch create . ocaml-base-compiler.4.12.0 --locked --deps-only
+eval $(opam env)
+
+rm -fr node_modules
+yarn
+
+* Compile backend
+
+Note: opt compiles, but running doesn't seem to work right now due to an async issue.
+
+make distclean
+make byte # Don't use -j as this will oom
+
+* Compile frontend
+
+yarn build
+
+* Deploy database
+
+** BETA
+
+sqlite3 pmp6_beta.db ".backup backup.db"
+sqitch deploy --verify db:sqlite:pmp6_beta.db
+
+** PROD
+
+sqlite3 /var/local/pmp6/pmp6.db ".backup backup.db"
+sudo sqitch deploy --verify db:sqlite:/var/pmp6/pmp6.db
+
+* install
+
+** BETA
+
+No need to install
+
+** PROD
+
+sudo make install.byte
+
+* Run
+
+** BETA
+
+./test
+
+** PROD
+
+./stop
+./run

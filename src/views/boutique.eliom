@@ -1,6 +1,6 @@
 module H = Html
 
-let intro =
+let intro () =
   H.[
     p [
       txt "Nous passons par HelloAsso pour permettre aux adhérents de \
@@ -16,7 +16,7 @@ let intro =
     ]
   ]
 
-let licence =
+let licence () =
   H.[
     header [
       h2 [txt "Licence FFESSM"];
@@ -33,7 +33,7 @@ let licence =
     Hello_asso.pay_widget "achat-de-licence-ffessm";
   ]
 
-let carte_niveau =
+let carte_niveau () =
   H.[
     header [
       h2 [txt "Carte de niveau"];
@@ -49,7 +49,7 @@ let carte_niveau =
     Hello_asso.pay_widget "achat-d-une-carte-de-brevet";
   ]
 
-let boutique =
+let boutique () =
   H.[
     header [
       h2 [txt "La boutique des plongeurs"];
@@ -62,12 +62,12 @@ let boutique =
     Hello_asso.event_widget "boutique-des-plongeurs";
   ]
 
-let boutique_page () =
-  Template.make_page ~title:"Boutique"
+let boutique_page () () =
+  Content.page ~title:"Boutique"
     H.[
       h1 [txt "Boutique"];
-      section intro;
-      section licence;
-      section carte_niveau;
-      section boutique;
+      section @@ intro ();
+      section @@ licence ();
+      section @@ carte_niveau ();
+      section @@ boutique ();
     ]
