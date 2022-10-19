@@ -17,8 +17,8 @@ let news_tab_title ~id i news =
     F.Toggler.toggler (`Animate (`Fade_in, `Fade_out))
   )
     [
-      anchor_a
-        ~anchor:slug
+      fragment_a
+        ~fragment:slug
         ~a:[a_user_data "tabs-target" slug]
         [txt @@ Model.short_title news]
     ]

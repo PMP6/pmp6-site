@@ -201,7 +201,7 @@ let footer () =
       ];
 
       div_classes ["cell"; "small-1"; "small-offset-2"; "large-offset-3"; "icons"] [
-        anchor_a ~anchor:"top" ~a:[a_user_data "smooth-scroll" ""] [
+        fragment_a ~fragment:"top" ~a:[a_user_data "smooth-scroll" ""] [
           Icon.solid "chevron-up" ()
         ]
       ]
