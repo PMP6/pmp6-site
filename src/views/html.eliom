@@ -13,12 +13,13 @@ let div_classes classes ?(a=[]) =
 let div_class class_ =
   div_classes [class_]
 
-let id_to_href id =
-  let href () = Printf.sprintf "#%s" id in
-  a_href (uri_of_string href)
-
-let anchor_a ?(a=[]) ~anchor =
-  Raw.a ~a:(id_to_href anchor :: a)
+let fragment_a ~fragment ?a:a_ args =
+  a
+    ~service:Eliom_service.reload_action
+    ~fragment
+    ~xhr:false
+    ?a:a_
+    args ()
 
 let raw_a ?(a=[]) ~href content =
   let href = uri_of_string (fun () -> href) in
@@ -57,10 +58,13 @@ let new_id =
     let id = Id.create () in
     "pmp6__auto__" ^ Id.to_string id
 
-let anchored ?(anchor=new_id ()) elt_fun ?(a=[]) elt_arg =
+let anchored ?(fragment=new_id ()) elt_fun ?(a=[]) elt_arg =
   (* Useful to make permanent links. Just add [anchored ~anchor:"foo"]
      in front of the element code. *)
-  anchor_a ~a:[a_class ["anchor"]] ~anchor [elt_fun ?a:(Some (a_id anchor :: a)) elt_arg]
+  fragment_a
+    ~fragment
+    ~a:[a_class ["anchor"]]
+    [elt_fun ?a:(Some (a_id fragment :: a)) elt_arg]
 
 module Confirmation_modal : sig
 
@@ -224,9 +228,9 @@ let seq_of_dispenser it =
   let rec c () =
     match it() with
     | None ->
-      Seq.Nil
+      Caml.Seq.Nil
     | Some x ->
-      Seq.Cons (x, c)
+      Caml.Seq.Cons (x, c)
   in
   c
 
