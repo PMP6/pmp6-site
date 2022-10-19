@@ -224,9 +224,9 @@ let seq_of_dispenser it =
   let rec c () =
     match it() with
     | None ->
-      Seq.Nil
+      Caml.Seq.Nil
     | Some x ->
-      Seq.Cons (x, c)
+      Caml.Seq.Cons (x, c)
   in
   c
 
