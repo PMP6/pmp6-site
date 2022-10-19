@@ -57,6 +57,11 @@ let new_id =
     let id = Id.create () in
     "pmp6__auto__" ^ Id.to_string id
 
+let anchored ?(anchor=new_id ()) elt_fun ?(a=[]) elt_arg =
+  (* Useful to make permanent links. Just add [anchored ~anchor:"foo"]
+     in front of the element code. *)
+  anchor_a ~a:[a_class ["anchor"]] ~anchor [elt_fun ?a:(Some (a_id anchor :: a)) elt_arg]
+
 module Confirmation_modal : sig
 
   (** Build elements that go through a confirmation modal to trigger

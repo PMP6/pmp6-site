@@ -59,7 +59,7 @@ let fosse_page () () =
 
       section [
         header [
-          h2 [txt "Fosse de plongée de Charenton"];
+          anchored ~anchor:"charenton" h2 [txt "Fosse de plongée de Charenton"];
         ];
         p [
           txt "4 bis avenue Anatole France";
@@ -78,7 +78,8 @@ let fosse_page () () =
 
       section [
         header [
-          h2 [txt "Aqua Hauts-de-Seine, Villeneuve"]
+          anchored ~anchor:"villeneuve"
+            h2 [txt "Aqua Hauts-de-Seine, Villeneuve"]
         ];
         p [
           txt "Centre UCPA Aqua Hauts-de-Seine";
@@ -106,7 +107,7 @@ let fosse_page () () =
 
       section [
         header [
-          h2 [txt "Espace Plongée d'Antony"]
+          anchored ~anchor:"antony" h2 [txt "Espace Plongée d'Antony"]
         ];
         p [
           txt "Centre Aquatique Pajeaud";
