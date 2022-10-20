@@ -29,6 +29,10 @@
     color: get-color(alert);
 }
 
+a.anchor:hover {
+    text-decoration: underline;
+}
+
 .link {
     @extend a;
 }

@@ -50,7 +50,7 @@ sqitch deploy --verify db:sqlite:pmp6_beta.db
 ** PROD
 
 sqlite3 /var/local/pmp6/pmp6.db ".backup backup.db"
-sudo sqitch deploy --verify db:sqlite:/var/pmp6/pmp6.db
+sudo sqitch deploy --verify db:sqlite:/var/local/pmp6/pmp6.db
 
 * install
 

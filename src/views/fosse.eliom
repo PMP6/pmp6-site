@@ -1,6 +1,6 @@
 module H = Html
 
-let gmaps_embed () =
+let antony_gmaps_embed () =
   Google.Maps.embed
     "!1m24!1m8!1m3!1d8849.634086269782!2d2.282821449764344!3d48.\
      74346840674256!3m2!1i1024!2i768!4f13.1!4m13!3e3!4m5!1s0x47e6777\
@@ -10,17 +10,29 @@ let gmaps_embed () =
      +104+Rue+Adolphe+Pajeaud%2C+92160+Antony!3m2!1d48.7431596!2d2.286931!\
      5e0!3m2!1sfr!2sfr!4v1557852774857!5m2!1sfr!2sfr\""
 
+let charenton_gmaps_embed () =
+  Google.Maps.embed
+    "!1m28!1m12!1m3!1d955.9487768243421!2d2.412119659111019!3d48.\
+     822760692822!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e3\
+     !4m5!1s0x47e672f973b70143%3A0x742d9f52f7ff23ed!2s\
+     Charenton-Écoles+Charenton-le-Pont+France\
+     !3m2!1d48.8215862!2d2.4140601999999998!4m5!1s0x47e672f9b9575371%\
+     3A0xc96f9be18e461e31!2s4+Av.+Anatole+France%2C+94220\
+     +Charenton-le-Pont%2C+France!3m2!1d48.8231241!2d2.4129158\
+     !5e0!3m2!1sfr!2suk!4v1666200351405!5m2!1sfr!2suk"
+
+let villeneuve_gmaps_embed () =
+  Google.Maps.embed
+    "!1m18!1m12!1m3!1d2620.5825615796984!2d2.3149239516407483!3d48.\
+     942392202640114!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2\
+     !1s0x47e668ce0172bedb%3A0x19a2a82e09902bfe!2sCentre%20de%20plong\
+     %C3%A9e%20Aqua%20Hauts-de-Seine%20-%20UCPA!5e0!3m2!1sfr!2suk\
+     !4v1666202603898!5m2!1sfr!2suk"
+
 let fosse_page () () =
   Content.page ~title:"Fosse"
     H.[
       h1 [txt "Fosse"];
-      p ~a:[a_class["callout"; "alert"]] [
-        txt "L'espace plongée d'Antony est en travaux jusqu'à une date \
-             indéterminée, ce qui nous empêche actuellement de \
-             proposer des séances de fosse. Nous travaillons à une \
-             solution alternative qui sera proposée aux adhérents dès \
-             que possible !";
-      ];
       p [
         txt "La fosse nous permet de pratiquer, jusqu'à 20m de \
              profondeur, les gestes techniques de la plongée. Les \
@@ -39,53 +51,109 @@ let fosse_page () () =
              procure une heure d'immersion en eau chaude.";
       ];
       p [
-        txt "Elles se déroulent à l'Espace Plongée d'Antony, à l'adresse \
-             suivante :";
+        txt "Selon la disponibilité des installations, les séances se \
+             déroulent dans plusieurs complexes sportifs proches de \
+             Paris. Les inscriptions se font habituellement sur un \
+             formulaire envoyé par mail avant chaque séance.";
       ];
-      p [
-        txt "Centre Aquatique Pajeaud";
-        br ();
-        txt "104 rue Adolphe Pajeaud";
-        br ();
-        txt "92160 ANTONY";
-        br ();
-        txt "RER B, direction St Rémy, station Les Baconnets puis 5-10 \
-             min à pieds";
-        br ();
-      ];
-      (* p [
-       *   txt "Pour l'année 2020-2021, les séances sont prévues aux \
-       *        dates suivantes :";
-       * ];
-       * ul [
-       *   li [txt "Jeudi 29 octobre à 19 h"];
-       *   li [txt "Lundi 9 novembre à 20 h"];
-       *   li [txt "Jeudi 26 novembre à 19 h"];
-       *   li [txt "Lundi 7 décembre à 20 h"];
-       *   li [txt "Jeudi 21 janvier à 20 h"];
-       *   li [txt "Jeudi 4 février à 19 h"];
-       *   li [txt "Jeudi 18 février à 20 h"];
-       *   li [txt "Lundi 1"; sup [txt "er"]; txt " mars à 20 h"];
-       *   li [txt "Lundi 15 mars à 19h"];
-       *   li [txt "Lundi 29 mars à 21 h "];
-       *   li [txt "Jeudi 6 mai à 19 h"];
-       * ]; *)
 
       p [
-        txt "Les inscriptions se font sur le formulaire envoyé par \
-             mail avant chaque séance. Le rendez-vous est fixé vingt \
-             minutes avant la séance, sur le côté droit du complexe \
-             sportif quand on arrive.";
+        txt "Pour l'année 2022-2023, l'espace plongée d'Antony étant \
+             en travaux, les séances prévues sont aux dates suivantes :";
       ];
-      div_classes ["grid-x"; "align-center"] [
-        div_classes ["cell"; "large-8"; "medium-10"; "small-12"] [
-          gmaps_embed ()
+
+      ul [
+        li [txt "Mercredi 16 novembre à 20 h à Villeneuve."];
+        li [txt "Mercredi 23 novembre à 20 h à Charenton (à confirmer)."];
+        li [txt "Mercredi 14 décembre à 19 h à Villeneuve."];
+        li [txt "Mercredi 25 janvier à 20 h à Charenton."];
+        li [txt "Mercredi 15 février à 20 h à Villeneuve."];
+        li [txt "Mercredi 22 février à 20 h à Charenton."];
+        li [txt "Mercredi 15 mars à 20 h à Villeneuve."];
+        li [txt "Mercredi 22 mars à 20 h à Charenton."];
+        li [txt "Mercredi 19 avril à 20 h à Villeneuve."];
+        li [txt "Mercredi 24 mai à 20 h à Charenton."];
+      ];
+
+      section [
+        header [
+          anchored ~fragment:"charenton" h2 [txt "Fosse de plongée de Charenton"];
+        ];
+        p [
+          txt "4 bis avenue Anatole France";
+          br ();
+          txt "94220 Charenton-le-Pont";
+          br ();
+          txt "Métro Charenton-Écoles, Ligne 8";
+          br ();
+        ];
+        div_classes ["grid-x"; "align-center"] [
+          div_classes ["cell"; "large-8"; "medium-10"; "small-12"] [
+            charenton_gmaps_embed ()
+          ];
         ];
       ];
+
+      section [
+        header [
+          anchored ~fragment:"villeneuve"
+            h2 [txt "Aqua Hauts-de-Seine, Villeneuve"]
+        ];
+        p [
+          txt "Centre UCPA Aqua Hauts-de-Seine";
+          br ();
+          txt "119 boulevard Charles de Gaulle";
+          br ();
+          txt "92390 Villeneuve-la-Garenne";
+          br ();
+        ];
+        p [
+          txt "Pour les plongeurs arrivant en voiture, des places de \
+               parking sont disponibles près de l'entrée (ne pas \
+               franchir la grille qui peut être verrouillée le \
+               soir). Il est possible de s'y rendre en transports en \
+               commun, et des covoiturages sont habituellement \
+               organisés par les participants de chaque séance (y \
+               compris sur place pour le retour).";
+        ];
+        div_classes ["grid-x"; "align-center"] [
+          div_classes ["cell"; "large-8"; "medium-10"; "small-12"] [
+            villeneuve_gmaps_embed ()
+          ];
+        ];
+      ];
+
+      section [
+        header [
+          anchored ~fragment:"antony" h2 [txt "Espace Plongée d'Antony"]
+        ];
+        p [
+          txt "Centre Aquatique Pajeaud";
+          br ();
+          txt "104 rue Adolphe Pajeaud";
+          br ();
+          txt "92160 ANTONY";
+          br ();
+          txt "RER B, direction St Rémy, station Les Baconnets puis 5-10 \
+               min à pieds";
+          br ();
+        ];
+        p [
+          txt "Le rendez-vous est fixé vingt minutes avant la séance, \
+               sur le côté droit du complexe sportif quand on arrive.";
+        ];
+        div_classes ["grid-x"; "align-center"] [
+          div_classes ["cell"; "large-8"; "medium-10"; "small-12"] [
+            antony_gmaps_embed ()
+          ];
+        ];
+      ];
+
       Widget.thumbnail_row ~subdir:["fosse"] [
         "Le tube de 20m vu de haut", "fosse_1.JPG";
         "Exercices à 6m", "fosse_2.JPG";
         "Ensemble sur le bord du tube", "fosse_3.JPG";
         "Descentes et remontées dans le tube", "fosse_4.JPG";
       ];
+
     ]

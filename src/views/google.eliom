@@ -47,6 +47,8 @@ module Maps = struct
           a_height 450;
           a_style "border:0";
           Unsafe.string_attrib "allow" "fullscreen";
+          Unsafe.string_attrib "loading" "lazy";
+          a_referrerpolicy `No_referrer_when_downgrade;
         ]
         []
     ]
