@@ -77,6 +77,8 @@ $(addprefix $(TEST_PREFIX), $(DIST_DIRS)):
 ## Installing & Running
 
 .PHONY: install install.byte install.byte install.opt install.static install.etc install.lib install.lib.byte install.lib.opt run.byte run.opt
+install-unit:
+	cp pmp6-site.service /etc/systemd/system
 install: install.byte install.opt
 install.byte: install.lib.byte install.etc install.static | $(addprefix $(PREFIX),$(DATADIR) $(LOGDIR) $(shell dirname $(CMDPIPE)))
 install.opt: install.lib.opt install.etc install.static | $(addprefix $(PREFIX),$(DATADIR) $(LOGDIR) $(shell dirname $(CMDPIPE)))
