@@ -1,0 +1,14 @@
+[Unit]
+Description=PMP6 site service
+After=network.target
+StartLimitIntervalSec=1
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+ExecStart=/home/thibault/pmp6-site/run
+ExecStop=killall ocsigenserver
+
+[Install]
+WantedBy=multi-user.target
