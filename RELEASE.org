@@ -72,5 +72,7 @@ sudo make install.byte
 
 ** PROD
 
-./stop
-./run
+sudo systemctl stop pmp6-site
+sudo systemctl enable pmp6-site
+systemctl status pmp6-site
+sudo systemctl start pmp6-site # If needed
