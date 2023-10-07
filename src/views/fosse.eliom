@@ -58,21 +58,22 @@ let fosse_page () () =
       ];
 
       p [
-        txt "Pour l'année 2022-2023, l'espace plongée d'Antony étant \
-             en travaux, les séances prévues sont aux dates suivantes :";
+        txt "Pour l'année 2023-2024, les espaces plongée d'Antony et de Charenton étant en \
+             travaux, les séances sont prévues à Villeneuve aux dates suivantes (attention \
+             aux horaires) :";
       ];
 
       ul [
-        li [txt "Mercredi 16 novembre à 20 h à Villeneuve."];
-        li [txt "Mercredi 23 novembre à 20 h à Charenton (à confirmer)."];
-        li [txt "Mercredi 14 décembre à 19 h à Villeneuve."];
-        li [txt "Mercredi 25 janvier à 20 h à Charenton."];
-        li [txt "Mercredi 15 février à 20 h à Villeneuve."];
-        li [txt "Mercredi 22 février à 20 h à Charenton."];
-        li [txt "Mercredi 15 mars à 20 h à Villeneuve."];
-        li [txt "Mercredi 22 mars à 20 h à Charenton."];
-        li [txt "Mercredi 19 avril à 20 h à Villeneuve."];
-        li [txt "Mercredi 24 mai à 20 h à Charenton."];
+        li [txt "mercredi 11 octobre à 20 h ;"];
+        li [txt "mercredi 08 novembre à 20 h ;"];
+        li [txt "mercredi 13 décembre à 20 h ;"];
+        li [txt "mercredi 10 janvier à 20 h ;"];
+        li [txt "jeudi 25 janvier à 22 h ;"];
+        li [txt "lundi 05 février à 20 h ;"];
+        li [txt "lundi 04 mars à 20 h ;"];
+        li [txt "mercredi 13 mars à 20 h ;"];
+        li [txt "jeudi 28 mars à 22 h ;"];
+        li [txt "lundi 29 avril à 20 h."]
       ];
 
       section [
