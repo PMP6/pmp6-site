@@ -17,6 +17,9 @@ module Type = struct
 
   let time_coding =
     (* Store times as a timestamp *)
+    (* TODO: it would be nicer to use Ptime instead (especially when
+       manipulating the database directly). This would require a db
+       migration though. *)
     let rep = Int in
     let encode time =
       Ok (
