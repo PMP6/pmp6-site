@@ -237,7 +237,7 @@ module User = struct
 
   let create_from_item_exn ({ Item.email; username; _ } as item) =
     Lwt_result.get_exn
-    @@ Lwt_result.map_err (fun _ -> Failure "Conflict")
+    @@ Lwt_result.map_error (fun _ -> Failure "Conflict")
     @@ Db.run
     @@ with_conflict_check ~username ~email
     @@ fun () -> Request.create_from_item item
