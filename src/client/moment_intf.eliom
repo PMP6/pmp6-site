@@ -10,8 +10,10 @@ class type moment = object
   method fromNow : Js.js_string Js.t Js.meth
   method calendar : Js.js_string Js.t Js.meth
   method calendar_withReferenceTime : moment Js.t -> Js.js_string Js.t Js.meth
+
   method calendar_withFormats :
     moment Js.t -> calendarFormat Js.t -> Js.js_string Js.t Js.meth
+
   method isSame : moment Js.t -> bool Js.t Js.meth
   method isSame_withUnit : moment Js.t -> Js.js_string Js.t -> bool Js.t Js.meth
 end

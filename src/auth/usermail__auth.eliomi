@@ -9,7 +9,6 @@ val send :
   unit ->
   unit Lwt.t
 
-(** Calls send in a background task and return immediately. *)
 val send_async :
   user:Model.User.t ->
   ?forced_address:string ->
@@ -18,3 +17,4 @@ val send_async :
   content:string ->
   unit ->
   unit
+(** Calls send in a background task and return immediately. *)

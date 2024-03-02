@@ -3,7 +3,6 @@ let ( & ) = Db.Type.( & )
 open Db.Let_syntax
 
 module User = struct
-
   module Item = struct
     type t = {
       username : string;
@@ -30,58 +29,29 @@ module User = struct
       { username; email; password; is_superuser; is_staff; joined_time }
 
     let db_type =
-      Db.Type.(hlist [string; string; Secret.Hash.db_type; bool; bool; time])
+      Db.Type.(hlist [ string; string; Secret.Hash.db_type; bool; bool; time ])
 
-    let db_unmap
-        Hlist.[username; email; password; is_superuser; is_staff; joined_time] =
-      {
-        username;
-        email;
-        password;
-        is_superuser;
-        is_staff;
-        joined_time;
-      }
+    let db_unmap Hlist.[ username; email; password; is_superuser; is_staff; joined_time ]
+        =
+      { username; email; password; is_superuser; is_staff; joined_time }
 
     let db_map { username; email; password; is_superuser; is_staff; joined_time } =
-      Hlist.[
-        username;
-        email;
-        password;
-        is_superuser;
-        is_staff;
-        joined_time;
-      ]
+      Hlist.[ username; email; password; is_superuser; is_staff; joined_time ]
 
-    let verify_password { password; _ } attempt =
-      Secret.Hash.verify password attempt
+    let verify_password { password; _ } attempt = Secret.Hash.verify password attempt
   end
 
   include Db_model.With_id (Item)
 
-  let username =
-    lift Item.username
-
-  let email =
-    lift Item.email
-
-  let password =
-    lift Item.password
-
-  let verify_password =
-    lift Item.verify_password
-
-  let is_superuser =
-    lift Item.is_superuser
-
-  let is_staff =
-    lift Item.is_staff
-
-  let joined_time =
-    lift Item.joined_time
+  let username = lift Item.username
+  let email = lift Item.email
+  let password = lift Item.password
+  let verify_password = lift Item.verify_password
+  let is_superuser = lift Item.is_superuser
+  let is_staff = lift Item.is_staff
+  let joined_time = lift Item.joined_time
 
   module Request = struct
-
     let all =
       Db.collect_all
         ~out:(db_type, db_unmap)
@@ -94,8 +64,8 @@ module User = struct
     let find id =
       Db.find_opt
         ~in_:(Id.db_type, id)
-       ~out:(db_type, db_unmap)
-       {|
+        ~out:(db_type, db_unmap)
+        {|
           SELECT id, username, email, password, is_superuser, is_staff, joined_time
           FROM auth_user
           WHERE id = ?
@@ -135,8 +105,8 @@ module User = struct
         |}
 
     let create ~username ~email ~password ~is_superuser ~is_staff =
-      create_from_item @@
-      Item.build_new ~username ~email ~password ~is_superuser ~is_staff
+      create_from_item
+      @@ Item.build_new ~username ~email ~password ~is_superuser ~is_staff
 
     let find_and_delete id =
       Db.find
@@ -163,11 +133,12 @@ module User = struct
         {| SELECT EXISTS (SELECT 1 FROM auth_user WHERE email = ?) |}
 
     let find_conflicts ?exclude ?username ?email () =
-      let Pack (types, values, names) = Db.Dyn_param.(
-        empty
-        |> add_opt Db.Type.string username "username"
-        |> add_opt Db.Type.string email "email"
-      ) in
+      let (Pack (types, values, names)) =
+        Db.Dyn_param.(
+          empty
+          |> add_opt Db.Type.string username "username"
+          |> add_opt Db.Type.string email "email")
+      in
       let columns = Db.Dyn_param.to_columns ~sep:`Or ~starting_index:2 names in
       Db.collect
         ~in_:(Db.Type.option Id.db_type & types, (exclude, values))
@@ -177,17 +148,22 @@ module User = struct
              SELECT id, username, email, password, is_superuser, is_staff, joined_time
              FROM auth_user
              WHERE (%s) AND id IS NOT $1
-           |} columns)
+           |}
+           columns)
 
     let update_exn id ?username ?email ?password ?is_superuser ?is_staff () =
-      let Pack (types, values, names) = Db.Dyn_param.(
-        empty
-        |> add_opt Db.Type.string username "username"
-        |> add_opt Db.Type.string email "email"
-        |> add_opt Secret.Hash.db_type (Option.map ~f:Secret.Hash.encode password) "password"
-        |> add_opt Db.Type.bool is_superuser "is_superuser"
-        |> add_opt Db.Type.bool is_staff "is_staff"
-      ) in
+      let (Pack (types, values, names)) =
+        Db.Dyn_param.(
+          empty
+          |> add_opt Db.Type.string username "username"
+          |> add_opt Db.Type.string email "email"
+          |> add_opt
+               Secret.Hash.db_type
+               (Option.map ~f:Secret.Hash.encode password)
+               "password"
+          |> add_opt Db.Type.bool is_superuser "is_superuser"
+          |> add_opt Db.Type.bool is_staff "is_staff")
+      in
       let columns = Db.Dyn_param.to_columns ~sep:`Comma ~starting_index:2 names in
       Db.find
         ~in_:(Db.Type.(Id.db_type & types), (id, values))
@@ -198,7 +174,8 @@ module User = struct
              SET %s
              WHERE id = $1
              RETURNING id, username, email, password, is_superuser, is_staff, joined_time
-           |} columns)
+           |}
+           columns)
 
     let update_email_exn id email =
       Db.exec
@@ -218,95 +195,71 @@ module User = struct
           SET password = $2
           WHERE id = $1
         |}
-
   end
 
-  let all () =
-    Db.run Request.all
-
-  let find id =
-    Db.run (Request.find id)
-
-  let find_exn id =
-    Lwt_option.get_exn @@ find id
-
-  let find_or_404 id =
-    Lwt_option.get_or_404 @@ find id
-
-  let find_by_username username =
-    Db.run (Request.find_by_username username)
-
-  let find_by_email email =
-    Db.run (Request.find_by_email email)
-
-  let find_and_delete id =
-    Db.run (Request.find_and_delete id)
-
-  let delete id =
-    Db.run (Request.delete id)
-
-  let email_exists email =
-    Db.run (Request.email_exists email)
+  let all () = Db.run Request.all
+  let find id = Db.run (Request.find id)
+  let find_exn id = Lwt_option.get_exn @@ find id
+  let find_or_404 id = Lwt_option.get_or_404 @@ find id
+  let find_by_username username = Db.run (Request.find_by_username username)
+  let find_by_email email = Db.run (Request.find_by_email email)
+  let find_and_delete id = Db.run (Request.find_and_delete id)
+  let delete id = Db.run (Request.delete id)
+  let email_exists email = Db.run (Request.email_exists email)
 
   let with_email_check email request =
-    Db.with_transaction (
-      if%bind Request.email_exists email
-      then return (Error `Email_already_exists)
-      else
-        let%map result = request () in
-        Ok result
-    )
+    Db.with_transaction
+      (if%bind Request.email_exists email then return (Error `Email_already_exists)
+       else
+         let%map result = request () in
+         Ok result)
 
   let classify_conflict ?username:username_ ?email:email_ existing_user =
     []
     |> Utils.cons_if
-      (Option.equal String.equal email_ (Some (email existing_user)))
-      `Email_already_exists
+         (Option.equal String.equal email_ (Some (email existing_user)))
+         `Email_already_exists
     |> Utils.cons_if
-      (Option.equal String.equal username_ (Some (username existing_user)))
-      `Username_already_exists
+         (Option.equal String.equal username_ (Some (username existing_user)))
+         `Username_already_exists
 
   let with_conflict_check ?exclude ?username ?email request =
-    Db.with_transaction (
-      match%bind Request.find_conflicts ?exclude ?username ?email () with
+    Db.with_transaction
+      (match%bind Request.find_conflicts ?exclude ?username ?email () with
       | [] ->
-        let%map result = request () in
-        Ok result
+          let%map result = request () in
+          Ok result
       | existing_users ->
-        let conflicts =
-          List.concat_map ~f:(classify_conflict ?username ?email) existing_users in
-        return (Error conflicts)
-    )
+          let conflicts =
+            List.concat_map ~f:(classify_conflict ?username ?email) existing_users
+          in
+          return (Error conflicts))
 
   let create_from_item_exn ({ Item.email; username; _ } as item) =
-    Lwt_result.get_exn @@
-    Lwt_result.map_err (fun _ -> Failure "Conflict") @@
-    Db.run @@
-    with_conflict_check ~username ~email @@ fun () ->
-    Request.create_from_item item
+    Lwt_result.get_exn
+    @@ Lwt_result.map_err (fun _ -> Failure "Conflict")
+    @@ Db.run
+    @@ with_conflict_check ~username ~email
+    @@ fun () -> Request.create_from_item item
 
   let create ~username ~email ~password ~is_superuser ~is_staff =
-    Db.run @@
-    with_conflict_check ~username ~email @@ fun () ->
-    Request.create ~username ~email ~password ~is_superuser ~is_staff
+    Db.run
+    @@ with_conflict_check ~username ~email
+    @@ fun () -> Request.create ~username ~email ~password ~is_superuser ~is_staff
 
   let update_email id email =
-    Db.run @@
-    with_email_check email @@
-    fun () -> Request.update_email_exn id email
+    Db.run @@ with_email_check email @@ fun () -> Request.update_email_exn id email
 
-  let update_password id password =
-    Db.run (Request.update_password id password)
+  let update_password id password = Db.run (Request.update_password id password)
 
   let update id ?username ?email ?password ?is_superuser ?is_staff () =
-    Db.run @@
-    with_conflict_check ~exclude:id ?username ?email @@ fun () ->
+    Db.run
+    @@ with_conflict_check ~exclude:id ?username ?email
+    @@ fun () ->
     Request.update_exn id ?username ?email ?password ?is_superuser ?is_staff ()
-
 end
 
 module Password_token = struct
-
   module Item = struct
     type t = {
       hash : Secret.Hash.t;
@@ -314,28 +267,20 @@ module Password_token = struct
       expiry_time : Time.t;
     }
 
-    type mapping =
-      (Secret.Hash.t -> User.Id.t -> Time.t -> unit) Hlist.t
+    type mapping = (Secret.Hash.t -> User.Id.t -> Time.t -> unit) Hlist.t
 
     let build_new ~hash ~user =
       let expiry_time = Time.add (Time.now ()) Time.Span.hour in
       { hash; user; expiry_time }
 
-    let db_type =
-      Db.Type.(hlist [ Secret.Hash.db_type; User.Id.db_type; time ])
-
-    let db_unmap Hlist.[ hash; user; expiry_time ] =
-      { hash; user; expiry_time}
-
-    let db_map { hash; user; expiry_time } =
-      Hlist.[ hash; user; expiry_time ]
-
+    let db_type = Db.Type.(hlist [ Secret.Hash.db_type; User.Id.db_type; time ])
+    let db_unmap Hlist.[ hash; user; expiry_time ] = { hash; user; expiry_time }
+    let db_map { hash; user; expiry_time } = Hlist.[ hash; user; expiry_time ]
   end
 
   include Db_model.With_id (Item)
 
   module Request = struct
-
     let create_from_item item =
       Db.exec
         ~in_:(Item.db_type, Item.db_map item)
@@ -344,9 +289,7 @@ module Password_token = struct
           VALUES (?, ?, ?)
         |}
 
-    let create_new user hash =
-      create_from_item @@
-      Item.build_new ~user ~hash
+    let create_new user hash = create_from_item @@ Item.build_new ~user ~hash
 
     let get_all_valid =
       Db.collect
@@ -373,7 +316,6 @@ module Password_token = struct
           DELETE FROM auth_password_token
           WHERE expiry_time <= ?
         |}
-
   end
 
   let create user =
@@ -384,24 +326,22 @@ module Password_token = struct
 
   let validate_password_reset token ~password =
     let open Db.Let_syntax in
-    Db.run @@
-    Db.with_transaction (
-      let%bind valid_tokens = Request.get_all_valid in
-      let valid_users =
-        List.filter_map
-          ~f:(fun (user, hash) ->
-            if Secret.Token.verify hash token
-            then Some user
-            else None)
-          valid_tokens in
-      match valid_users with
-      | [] -> return (Error `Token_absent_or_expired)
-      | _ :: _ :: _ -> return (Error `Unexpected) (* Hash collision ? *)
-      | [ user ] ->
-        let%bind () = User.Request.update_password user password in
-        let%bind () = Request.delete_for_user user in
-        return (Ok user)
-    )
+    Db.run
+    @@ Db.with_transaction
+         (let%bind valid_tokens = Request.get_all_valid in
+          let valid_users =
+            List.filter_map
+              ~f:(fun (user, hash) ->
+                if Secret.Token.verify hash token then Some user else None)
+              valid_tokens
+          in
+          match valid_users with
+          | [] -> return (Error `Token_absent_or_expired)
+          | _ :: _ :: _ -> return (Error `Unexpected) (* Hash collision ? *)
+          | [ user ] ->
+              let%bind () = User.Request.update_password user password in
+              let%bind () = Request.delete_for_user user in
+              return (Ok user))
 
   let prune_expired () =
     Log.log "Pruning expired password tokens...";
@@ -412,5 +352,4 @@ module Password_token = struct
   let _prune_daily : never_returns Lwt.t =
     Log.log "Scheduling a daily expired tokens pruning";
     Lwt_utils.every Time.Span.day prune_expired
-
 end

@@ -1,7 +1,7 @@
 module H = Html
 
-type transition_in = [
-  | `Slide_in_down
+type transition_in =
+  [ `Slide_in_down
   | `Slide_in_left
   | `Slide_in_up
   | `Slide_in_right
@@ -16,10 +16,10 @@ type transition_in = [
   | `Scale_in_down
   | `Spin_in
   | `Spin_in_ccw
-]
+  ]
 
-type transition_out = [
-  | `Slide_out_down
+type transition_out =
+  [ `Slide_out_down
   | `Slide_out_left
   | `Slide_out_up
   | `Slide_out_right
@@ -34,7 +34,7 @@ type transition_out = [
   | `Scale_out_down
   | `Spin_out
   | `Spin_out_ccw
-]
+  ]
 
 let to_string_in = function
   | `Slide_in_down -> "slide-in-down"
@@ -70,5 +70,4 @@ let to_string_out = function
   | `Scale_out_down -> "scale-out-down"
   | `Spin_out -> "spin-out"
 
-let animate in_ out =
-  H.a_user_data "animate" (to_string_in in_ ^ " " ^ to_string_out out)
+let animate in_ out = H.a_user_data "animate" (to_string_in in_ ^ " " ^ to_string_out out)
