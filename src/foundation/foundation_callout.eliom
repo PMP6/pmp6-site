@@ -2,19 +2,13 @@
 
 module H = Html
 
-let create
-    ?(a=[])
-    ?color
-    ?(closable=false)
-    contents
-  =
+let create ?(a = []) ?color ?(closable = false) contents =
   H.div
-    ~a:(
-      a
-      |> List.cons @@ H.a_class ["callout"]
+    ~a:
+      (a
+      |> List.cons @@ H.a_class [ "callout" ]
       |> Utils.cons_if closable @@ H.a_user_data "closable" ""
-      |> Utils.cons_opt_map color Foundation_color.to_class
-    )
+      |> Utils.cons_opt_map color Foundation_color.to_class)
     contents
 
 let primary = create ~color:Primary

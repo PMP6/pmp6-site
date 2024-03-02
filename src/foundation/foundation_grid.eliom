@@ -1,9 +1,8 @@
 module H = Html
 
-let x ?(a=[]) content =
-  H.div ~a:(H.class_ "grid-x" :: a) content
+let x ?(a = []) content = H.div ~a:(H.class_ "grid-x" :: a) content
 
-let cell ?small ?medium ?large ?(a=[]) content =
+let cell ?small ?medium ?large ?(a = []) content =
   let classes =
     [ "cell" ]
     |> Utils.cons_opt_map small @@ Fmt.str "small-%d"

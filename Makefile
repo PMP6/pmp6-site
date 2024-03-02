@@ -28,6 +28,7 @@ JS_OF_ELIOM       := js_of_eliom -ppx ${JSOPT_RUNTIMES} ${OPENFLAGS}
 ELIOMDEP          := eliomdep
 OCSIGENSERVER     := ocsigenserver
 OCSIGENSERVER.OPT := ocsigenserver.opt
+OCAMLFORMAT	  := ocamlformat
 
 ## Where to put intermediate object files.
 ## - ELIOM_{SERVER,CLIENT}_DIR must be distinct
@@ -338,3 +339,9 @@ clean:
 
 distclean: clean
 	-rm -rf $(TEST_PREFIX) $(DEPSDIR) .depend
+
+##----------------------------------------------------------------------
+## Format
+
+fmt:
+	$(OCAMLFORMAT) --inplace $(SERVER_FILES) $(CLIENT_FILES)
