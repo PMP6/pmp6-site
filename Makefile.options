@@ -57,7 +57,7 @@ SERVER_PACKAGES := \
 	async_smtp \
 	argon2 \
 	caqti-driver-sqlite3 \
-	caqti-lwt
+	caqti-lwt.unix
 
 # OCamlfind packages for the client
 CLIENT_PACKAGES := \

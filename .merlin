@@ -34,7 +34,7 @@ PKG core_kernel
 PKG js_of_ocaml
 PKG lwt
 
-PKG caqti-lwt
+PKG caqti-lwt.unix
 PKG caqti-driver-sqlite3
 
 FLG -open Base -open Core_kernel -strict-formats -short-paths -strict-sequence
