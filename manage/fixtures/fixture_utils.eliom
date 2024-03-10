@@ -1,6 +1,10 @@
 module type Standard_model = sig
   type t
-  module Id : sig type t end
+
+  module Id : sig
+    type t
+  end
+
   val all : unit -> t list Lwt.t
   val id : t -> Id.t
   val delete : Id.t -> unit Lwt.t

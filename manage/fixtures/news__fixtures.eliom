@@ -1,7 +1,7 @@
 module H = Html
 
 let content_expo_photos =
-{|L'exposition de photos sous-marines de PMP6 fait son grand retour !
+  {|L'exposition de photos sous-marines de PMP6 fait son grand retour !
 
 Au programme : (re)découvrir les magnifiques créatures capturées
 par l'objectif de nos plongeurs, tout en en apprenant plus sur
@@ -138,8 +138,7 @@ let fosses auth =
     ~author:(Auth.Model.User.id auth#staff)
     ~is_visible:true
 
-let flush () =
-  Fixture_utils.delete_all (module News.Model)
+let flush () = Fixture_utils.delete_all (module News.Model)
 
 let load auth =
   let%lwt rentree = News.Model.create_from_item @@ rentree auth in
@@ -147,9 +146,10 @@ let load auth =
   let%lwt fosses = News.Model.create_from_item @@ fosses auth in
   let%lwt expo_photo = News.Model.create_from_item @@ expo_photo auth in
 
-  Lwt.return @@ object
-    method expo_photo = expo_photo
-    method rentree = rentree
-    method piscine = piscine
-    method fosses = fosses
-  end
+  Lwt.return
+  @@ object
+       method expo_photo = expo_photo
+       method rentree = rentree
+       method piscine = piscine
+       method fosses = fosses
+     end
