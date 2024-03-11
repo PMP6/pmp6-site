@@ -4,8 +4,8 @@ BEGIN;
 
 CREATE TABLE auth_user (
     id INTEGER NOT NULL PRIMARY KEY,
-    username TEXT NOT NULL UNIQUE COLLATE NOCASE CHECK (username <> ""),
-    email TEXT NOT NULL UNIQUE COLLATE NOCASE CHECK (username <> ""),
+    username TEXT NOT NULL UNIQUE COLLATE NOCASE CHECK (username <> ''),
+    email TEXT NOT NULL UNIQUE COLLATE NOCASE CHECK (email <> ''),
     password TEXT NOT NULL,
     is_superuser INTEGER NOT NULL,
     is_staff INTEGER NOT NULL,
