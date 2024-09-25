@@ -7,7 +7,7 @@ module User : sig
     val password : t -> Secret.Hash.t
     val is_superuser : t -> bool
     val is_staff : t -> bool
-    val joined_time : t -> Time.t
+    val joined_time : t -> Time_ns.t
 
     val build_new :
       username:string ->
@@ -29,7 +29,7 @@ module User : sig
   val password : t -> Secret.Hash.t
   val is_superuser : t -> bool
   val is_staff : t -> bool
-  val joined_time : t -> Time.t
+  val joined_time : t -> Time_ns.t
   val verify_password : t -> string -> bool
   val all : unit -> t list Lwt.t
   val find : Id.t -> t option Lwt.t

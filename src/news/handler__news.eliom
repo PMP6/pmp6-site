@@ -35,7 +35,7 @@ module Admin = struct
     let author = Auth.Model.User.id user in
     fun () (id, (update_pubtime, (title, (short_title, (content, is_visible))))) ->
       let content = Doc.of_md content in
-      let pub_time = if update_pubtime then Some (Time.now ()) else None in
+      let pub_time = if update_pubtime then Some (Time_ns.now ()) else None in
       let%lwt model =
         Model.update id ~title ~short_title ?pub_time ~content ~author ~is_visible ()
       in

@@ -22,6 +22,7 @@ let check_list tests = Lwt_list.iter_p (fun test -> test ()) tests
 let tests =
   [
     check_bool "enabled foreign keys" Db.check_foreign_keys;
+    check_unit "db supports affected count" Db.check_affected_count_is_supported;
     check_unit "email" Email.check;
     check_ignore "smoke user model" Auth.Model.User.all;
     check_ignore "smoke news model" News.Model.all;

@@ -344,4 +344,4 @@ distclean: clean
 ## Format
 
 fmt:
-	$(OCAMLFORMAT) --inplace $(SERVER_FILES) $(CLIENT_FILES)
+	$(OCAMLFORMAT) --inplace $(SERVER_FILES) $(CLIENT_FILES) $(MANAGE_FILES)

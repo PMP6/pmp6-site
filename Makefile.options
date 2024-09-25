@@ -21,7 +21,7 @@ PROFILE_FILE := $(SRC_DIR)/settings/settings_profile.mlh
 SETTINGS_FILE := $(SRC_DIR)/settings/settings.eliom
 
 WARNINGS := +a-4-40-41-42-44-45-48-58-59-70
-OPENFLAGS := -open Base -open Core_kernel
+OPENFLAGS := -open Core
 CFLAGS := -strict-formats -short-paths
 
 # Source files for the server
@@ -33,9 +33,8 @@ CLIENT_FILES := $(shell grep --include=*.eliom --include=*.eliomi -E "client|sha
 
 # OCamlfind packages used for both server and client
 COMMON_PACKAGES := \
-	base \
 	base64 \
-	core_kernel \
+	core \
 	markup \
 	fmt \
 	uucp \
@@ -43,7 +42,6 @@ COMMON_PACKAGES := \
 	uuseg.string \
 	uunf \
 	uunf.string \
-	tyxml-ppx \
 	lwt_ppx \
 	omd \
 	ppx_let \
@@ -53,11 +51,12 @@ COMMON_PACKAGES := \
 # OCamlfind packages for the server
 SERVER_PACKAGES := \
 	$(COMMON_PACKAGES) \
-	async \
-	async_smtp \
 	argon2 \
 	caqti-driver-sqlite3 \
-	caqti-lwt
+	caqti-lwt.unix \
+	core_unix \
+	letters \
+	mrmime
 
 # OCamlfind packages for the client
 CLIENT_PACKAGES := \
@@ -65,7 +64,7 @@ CLIENT_PACKAGES := \
 	js_of_ocaml-ppx
 
 # A list of runtimes providing functions for js_of_ocaml
-JS_RUNTIMES := base/runtime.js core_kernel/runtime.js bin_prot/runtime.js time_now/runtime.js
+JS_RUNTIMES := base/runtime.js core/runtime.js bin_prot/runtime.js time_now/runtime.js
 
 # Directory with files to be statically served
 LOCAL_STATIC = dist
@@ -75,8 +74,8 @@ LOCAL_CONF = conf.d
 
 # The backend for persistent data. Can be dbm or sqlite.
 # Make sure you have the following packages installed
-# - *dbm* if you use dbm --> opam install dbm.
-# - *sqlite3* if you use sqlite --> opam install sqlite3.
+# - *dbm* if you use dbm --> opam install ocsipersist-dbm.
+# - *sqlite3* if you use sqlite --> opam install ocsipersist-sqlite.
 PERSISTENT_DATA_BACKEND = dbm
 
 # Debug application (yes/no): Debugging info in compilation,

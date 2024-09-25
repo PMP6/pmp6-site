@@ -1,7 +1,7 @@
 module H = Html
 
 let content_expo_photos =
-{|L'exposition de photos sous-marines de PMP6 fait son grand retour !
+  {|L'exposition de photos sous-marines de PMP6 fait son grand retour !
 
 Au programme : (re)découvrir les magnifiques créatures capturées
 par l'objectif de nos plongeurs, tout en en apprenant plus sur
@@ -100,13 +100,13 @@ Les inscriptions se feront comme d'habitude en remplissant le
 formulaire envoyé par mail avant chaque séance.
 |}
 
-let deploy_time = Time.now ()
+let deploy_time = Time_ns.now ()
 
 let expo_photo auth =
   News.Model.Item.Private.build
     ~title:"Expo photos"
     ~short_title:"Expo photos"
-    ~pub_time:(deploy_time |> Fn.flip Time.sub Time.Span.minute)
+    ~pub_time:(deploy_time |> Fn.flip Time_ns.sub Time_ns.Span.minute)
     ~content:(Doc.of_md content_expo_photos)
     ~author:(Auth.Model.User.id auth#poulpe)
     ~is_visible:true
@@ -115,7 +115,7 @@ let rentree auth =
   News.Model.Item.Private.build
     ~title:"Rentrée 2020"
     ~short_title:"Rentrée 2020"
-    ~pub_time:(deploy_time |> Fn.flip Time.sub Time.Span.minute)
+    ~pub_time:(deploy_time |> Fn.flip Time_ns.sub Time_ns.Span.minute)
     ~content:(Doc.of_md content_rentree)
     ~author:(Auth.Model.User.id auth#poulpe)
     ~is_visible:false
@@ -124,7 +124,7 @@ let piscine auth =
   News.Model.Item.Private.build
     ~title:"Horaires de piscine"
     ~short_title:"Piscine"
-    ~pub_time:(deploy_time |> Fn.flip Time.sub Time.Span.hour)
+    ~pub_time:(deploy_time |> Fn.flip Time_ns.sub Time_ns.Span.hour)
     ~content:(Doc.of_md content_piscine)
     ~author:(Auth.Model.User.id auth#staff)
     ~is_visible:true
@@ -133,13 +133,12 @@ let fosses auth =
   News.Model.Item.Private.build
     ~title:"Dates des fosses"
     ~short_title:"Fosses"
-    ~pub_time:(Time.now () |> Fn.flip Time.sub Time.Span.day)
+    ~pub_time:(Time_ns.now () |> Fn.flip Time_ns.sub Time_ns.Span.day)
     ~content:(Doc.of_md content_fosse)
     ~author:(Auth.Model.User.id auth#staff)
     ~is_visible:true
 
-let flush () =
-  Fixture_utils.delete_all (module News.Model)
+let flush () = Fixture_utils.delete_all (module News.Model)
 
 let load auth =
   let%lwt rentree = News.Model.create_from_item @@ rentree auth in
@@ -147,9 +146,10 @@ let load auth =
   let%lwt fosses = News.Model.create_from_item @@ fosses auth in
   let%lwt expo_photo = News.Model.create_from_item @@ expo_photo auth in
 
-  Lwt.return @@ object
-    method expo_photo = expo_photo
-    method rentree = rentree
-    method piscine = piscine
-    method fosses = fosses
-  end
+  Lwt.return
+  @@ object
+       method expo_photo = expo_photo
+       method rentree = rentree
+       method piscine = piscine
+       method fosses = fosses
+     end

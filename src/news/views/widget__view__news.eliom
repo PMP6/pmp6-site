@@ -212,18 +212,17 @@ let redaction_form ?news () =
     in
     let content, refresh_content = Eliom_shared.React.S.create None in
     let (_ : unit Lwt.t Eliom_client_value.t) =
-      Caml.(
-        [%client
-          Js_of_ocaml_lwt.Lwt_js_events.clicks
-            (Eliom_content.Html.To_dom.of_element ~%preview_button)
-            (fun _ _ ->
-              let content = Html.textarea_content ~%content_textarea in
-              let%lwt content_html = Doc.render_from_md content in
-              ~%refresh_content (Some content_html);
-              Lwt.return ())])
+      [%client
+        Js_of_ocaml_lwt.Lwt_js_events.clicks
+          (Eliom_content.Html.To_dom.of_element ~%preview_button)
+          (fun _ _ ->
+            let content = Html.textarea_content ~%content_textarea in
+            let%lwt content_html = Doc.render_from_md content in
+            ~%refresh_content (Some content_html);
+            Lwt.return ())]
     in
     let preview_callout =
-      Eliom_shared.React.S.map Caml.([%shared make_preview_callout]) content
+      Eliom_shared.React.S.map [%shared make_preview_callout] content
     in
     [
       F.Abide.abide_error [ H.txt "Le formulaire contient des erreurs." ];

@@ -156,11 +156,10 @@ end = struct
     make_elem ~opens_modal (modal_elt service gp pp pp_form_param text modal_id)
 end
 
-let%client format_datetime time =
-  let time_value = Time.(Span.to_ms @@ to_span_since_epoch time) in
+let%client format_timestamp_ms timestamp_ms =
   let _ = Moment.locale (Js.string "fr") in
   let open Moment in
-  let m = new%js moment_fromTimeValue time_value in
+  let m = new%js moment_fromTimeValue timestamp_ms in
   let today = new%js moment in
   let yesterday = new%js moment in
   yesterday##subtract 1. (Js.string "days");
@@ -172,18 +171,19 @@ let%client format_datetime time =
 
 let time_ ?(a = []) time_ =
   let datetime =
-    Time.to_string_abs_trimmed ~zone:(Time.Zone.of_utc_offset ~hours:2)
-    @@ Time.prev_multiple
+    Time_ns.to_string_abs_trimmed ~zone:(Time_float.Zone.of_utc_offset ~hours:2)
+    @@ Time_ns.prev_multiple
          ~before:time_
-         ~base:Time.epoch
-         ~interval:Time.Span.minute
+         ~base:Time_ns.epoch
+         ~interval:Time_ns.Span.minute
          ~can_equal_before:true (* For good measure, only useful is s=ms=ns=0 *)
          ()
   in
   let attr = a_datetime datetime :: a in
+  let timestamp_ms = Time_ns.(Span.to_ms @@ to_span_since_epoch time_) in
   Eliom_content.Html.C.node
     ~init:(time ~a:attr [ txt datetime ])
-    Caml.([%client time ~a:~%attr [ txt @@ format_datetime ~%time_ ]])
+    [%client time ~a:~%attr [ txt @@ format_timestamp_ms ~%timestamp_ms ]]
 
 (* Currently this does not allow post parameters. Use this with (possibly dynamically
    created) unit post services. This could be extended to support post parameters but that
@@ -205,17 +205,10 @@ let filter_content_signal signal =
       Some content_signal
   | _ -> None
 
-let seq_of_dispenser it =
-  (* Caml.Seq.of_dispenser on up-to-date versions *)
-  let rec c () =
-    match it () with None -> Caml.Seq.Nil | Some x -> Caml.Seq.Cons (x, c)
-  in
-  c
-
 let parse txt =
   let signals = Markup.string txt |> Markup.parse_html |> Markup.signals in
-  seq_of_dispenser (fun () -> Markup.next signals)
-  |> Caml.Seq.filter_map filter_content_signal
+  Stdlib.Seq.of_dispenser (fun () -> Markup.next signals)
+  |> Stdlib.Seq.filter_map filter_content_signal
   |> Eliom_content.Html.F.of_seq
 
 [%%server.start]

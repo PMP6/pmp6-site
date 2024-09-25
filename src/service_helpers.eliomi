@@ -44,5 +44,5 @@ module Timeout : sig
   val hours_f : float -> t
   val t : ?h:int -> ?m:int -> ?s:int -> unit -> t
   val t_f : ?h:float -> ?m:float -> ?s:float -> unit -> t
-  val span : Time.Span.t -> t
+  val span : Time_ns.Span.t -> t
 end

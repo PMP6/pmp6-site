@@ -217,7 +217,7 @@ let make_body user toasts content =
     [ header user; carousel (); main ~toasts ~content; footer () ]
 
 let return_page { Content.title; in_head; in_body } =
-  let (_ : unit Eliom_client_value.t) = Caml.([%client Foundation.init ()]) in
+  let (_ : unit Eliom_client_value.t) = [%client Foundation.init ()] in
   let%lwt toasts = Toast.fetch_and_render () in
   let%lwt user = Auth.Session.get_user () in
   Lwt.return
