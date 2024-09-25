@@ -1,7 +1,8 @@
 module type S = sig
   val smtp_host : string
   val smtp_port : int
-  val smtp_credentials : (string * string) option
+  val smtp_username : string
+  val smtp_password : string
   val default_from_display_name : string
   val default_from_email : string
   val default_email_subject_prefix : string

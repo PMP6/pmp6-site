@@ -16,4 +16,4 @@ let get_cmd name =
 
 let () =
   Fmt.set_style_renderer Fmt.stdout `Ansi_tty;
-  get_cmd (Sys.getenv_opt "MANAGE_COMMAND") ()
+  get_cmd (Sys.getenv "MANAGE_COMMAND") ()

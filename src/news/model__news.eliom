@@ -6,7 +6,7 @@ module Item = struct
   type t = {
     title : string;
     short_title : string;
-    pub_time : Time.t;
+    pub_time : Time_ns.t;
     content : Doc.t;
     author : User.Id.t;
     is_visible : bool;
@@ -26,7 +26,7 @@ module Item = struct
   end
 
   let build_new ~title ~short_title ~content ~author ~is_visible =
-    let pub_time = Time.now () in
+    let pub_time = Time_ns.now () in
     Private.build ~title ~short_title ~content ~pub_time ~author ~is_visible
 
   let slug news = Utils.slugify @@ title news

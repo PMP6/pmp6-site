@@ -31,5 +31,5 @@ module Timeout = struct
   let hours h = hours_f (float h)
   let t_f ?(h = 0.) ?(m = 0.) ?(s = 0.) () = hours_f h +. minutes_f m +. seconds_f s
   let t ?(h = 0) ?(m = 0) ?(s = 0) () = t_f ~h:(float h) ~m:(float m) ~s:(float s) ()
-  let span s = seconds_f (Time.Span.to_sec s)
+  let span s = seconds_f (Time_ns.Span.to_sec s)
 end

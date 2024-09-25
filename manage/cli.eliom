@@ -14,7 +14,7 @@ let pr_cmd_name name =
 
 let rec ask ?allow_empty msg =
   Fmt.pr "@[@[%a@]@ @]@?" Fmt.text msg;
-  let answer = Caml.read_line () in
+  let answer = Stdlib.read_line () in
   match (answer, allow_empty) with "", None -> ask ?allow_empty msg | _ -> answer
 
 let ask_password msg =
@@ -44,7 +44,7 @@ let rec ask_confirmation ?default msg =
         ask_confirmation ?default msg
   in
   Fmt.pr "@[@[%a@]@ @[[%s]@ @]@]@?" Fmt.text msg hint;
-  let answer = Caml.read_line () in
+  let answer = Stdlib.read_line () in
   match String.(lowercase @@ strip answer) with
   | "y" | "yes" -> true
   | "n" | "no" -> false

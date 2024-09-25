@@ -16,10 +16,10 @@ module Type = struct
     (* TODO: it would be nicer to use Ptime instead (especially when manipulating the
        database directly). This would require a db migration though. *)
     let encode time =
-      Ok (int_of_float @@ Time.Span.to_sec @@ Time.to_span_since_epoch time)
+      Ok (int_of_float @@ Time_ns.Span.to_sec @@ Time_ns.to_span_since_epoch time)
     in
     let decode timestamp =
-      Ok (Time.of_span_since_epoch @@ Time.Span.of_sec @@ float_of_int timestamp)
+      Ok (Time_ns.of_span_since_epoch @@ Time_ns.Span.of_sec @@ float_of_int timestamp)
     in
     custom ~encode ~decode int
 

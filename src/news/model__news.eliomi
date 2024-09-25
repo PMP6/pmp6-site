@@ -6,7 +6,7 @@ module Item : sig
 
   val title : t -> string
   val short_title : t -> string
-  val pub_time : t -> Time.t
+  val pub_time : t -> Time_ns.t
   val content : t -> Doc.t
   val author : t -> User.Id.t
   val is_visible : t -> bool
@@ -27,7 +27,7 @@ module Item : sig
       title:string ->
       short_title:string ->
       content:Doc.t ->
-      pub_time:Time.t ->
+      pub_time:Time_ns.t ->
       author:User.Id.t ->
       is_visible:bool ->
       t
@@ -42,7 +42,7 @@ include Db_model.Data_with_id with type item := Item.t
 
 val title : t -> string
 val short_title : t -> string
-val pub_time : t -> Time.t
+val pub_time : t -> Time_ns.t
 val content : t -> Doc.t
 val author : t -> User.Id.t
 val is_visible : t -> bool
@@ -78,7 +78,7 @@ val update :
   Id.t ->
   ?title:string ->
   ?short_title:string ->
-  ?pub_time:Time.t ->
+  ?pub_time:Time_ns.t ->
   ?content:Doc.t ->
   ?author:User.Id.t ->
   ?is_visible:bool ->

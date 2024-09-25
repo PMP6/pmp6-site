@@ -1,15 +1,15 @@
 #use "topfind";;
 #thread;;
 #require "argon2";;
-#require "core_kernel";;
+#require "core";;
 #require "caqti-lwt";;
 #require "caqti-driver-sqlite3";;
 
-open Core_kernel;;
+open Core;;
 open Lwt.Infix;;
 
-#require "async_smtp";;
-open Async_smtp;;
+#require "letters";;
+#require "mrmime";;
 
 #require "ocsipersist.dbm";;
 #require "eliom.server";;

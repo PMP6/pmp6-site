@@ -10,7 +10,7 @@ module User = struct
       password : Secret.Hash.t;
       is_superuser : bool;
       is_staff : bool;
-      joined_time : Time.t;
+      joined_time : Time_ns.t;
     }
 
     let username { username; _ } = username
@@ -21,7 +21,7 @@ module User = struct
     let joined_time { joined_time; _ } = joined_time
 
     let build_new ~username ~email ~password ~is_superuser ~is_staff =
-      let joined_time = Time.now () in
+      let joined_time = Time_ns.now () in
       let password = Secret.Hash.encode password in
       { username; email; password; is_superuser; is_staff; joined_time }
 
@@ -255,11 +255,11 @@ module Password_token = struct
     type t = {
       hash : Secret.Hash.t;
       user : User.Id.t;
-      expiry_time : Time.t;
+      expiry_time : Time_ns.t;
     }
 
     let build_new ~hash ~user =
-      let expiry_time = Time.add (Time.now ()) Time.Span.hour in
+      let expiry_time = Time_ns.add (Time_ns.now ()) Time_ns.Span.hour in
       { hash; user; expiry_time }
 
     let db_mapping = Db.Type.(hlist [ Secret.Hash.db_type; User.Id.db_type; time ])
@@ -290,7 +290,7 @@ module Password_token = struct
           FROM auth_password_token
           WHERE expiry_time > ?
         |}
-        (Time.now ())
+        (Time_ns.now ())
 
     let delete_for_user user =
       (User.Id.db_type ->. Db.Type.unit)
@@ -306,7 +306,7 @@ module Password_token = struct
           DELETE FROM auth_password_token
           WHERE expiry_time <= ?
         |}
-        (Time.now ())
+        (Time_ns.now ())
   end
 
   let create user =
@@ -342,5 +342,5 @@ module Password_token = struct
 
   let _prune_daily : never_returns Lwt.t =
     Log.log "Scheduling a daily expired tokens pruning";
-    Lwt_utils.every Time.Span.day prune_expired
+    Lwt_utils.every Time_ns.Span.day prune_expired
 end
