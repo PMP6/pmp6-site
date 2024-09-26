@@ -26,18 +26,6 @@
     %%% This will include the packages defined as SERVER_PACKAGES in your Makefile:
     %%PACKAGES%%
 
-    <host defaulthostname="www.%%HOSTNAME%%" hostfilter="www.%%HOSTNAME%%">
-      <if>
-        <ssl />
-        <then>
-          <redirect suburl="(.*)" dest="https://%%HOSTNAME%%:%%PORTTLS%%\1"/>
-        </then>
-        <else>
-          <redirect suburl="(.*)" dest="http://%%HOSTNAME%%:%%PORT%%\1"/>
-        </else>
-      </if>
-    </host>
-
     <host defaulthostname="%%HOSTNAME%%" hostfilter="*">
       <static dir="%%STATICDIR%%" />
       <static dir="%%ELIOMSTATICDIR%%" />
