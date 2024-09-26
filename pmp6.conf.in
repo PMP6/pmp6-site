@@ -6,14 +6,6 @@
 <ocsigen>
   <server>
     <port>%%PORT%%</port>
-    <port protocol="HTTPS">%%PORTTLS%%</port>
-    <ssl>
-      <ciphers>
-        EECDH+ECDSA+AESGCM:EECDH+aRSA+AESGCM:EECDH+ECDSA+SHA384:EECDH+ECDSA+SHA256:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH+aRSA+RC4:EECDH:EDH+aRSA:RC4:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!SRP:!DSS
-      </ciphers>
-      %%SSLCERTIFICATE%%
-      %%SSLPRIVATEKEY%%
-    </ssl>
     %%% Only set for running, not for testing
     %%USERGROUP%%
     <logdir>%%LOGDIR%%</logdir>
@@ -57,23 +49,6 @@
         <extension>.js</extension>
         <extension>.css</extension>
       </deflate>
-
-      <if>
-        %%REQUIRESSL%%
-        <then>
-          <redirect fullurl="http://(.*)" dest="https://\1"/>
-          <if>
-            <ssl />
-            <then>
-              <outputfilter
-                  header="Strict-Transport-Security"
-                  dest="max-age=31536000;includeSubDomains;preload"
-                  replace="true" />
-            </then>
-          </if>
-        </then>
-      </if>
-
     </host>
   </server>
 </ocsigen>
