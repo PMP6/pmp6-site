@@ -154,20 +154,6 @@ SED_ARGS += -e "s|%%MANAGE_PROJECT_NAME%%|$(MANAGE_PROJECT_NAME)|g"
 OCSIGEN_CONF_TRUE := <or><ssl/><not><ssl/></not></or>
 OCSIGEN_CONF_FALSE := <and><ssl/><not><ssl/></not></and>
 
-ifneq ($(strip $(SSLCERTIFICATE)),)
-  SED_ARGS += -e "s|%%SSLCERTIFICATE%%|<certificate>$(SSLCERTIFICATE)</certificate>|g"
-  SED_ARGS += -e "s|%%REQUIRESSL%%|$(OCSIGEN_CONF_TRUE)|g"
-else
-  SED_ARGS += -e "s|%%SSLCERTIFICATE%%||g"
-  SED_ARGS += -e "s|%%REQUIRESSL%%|$(OCSIGEN_CONF_FALSE)|g"
-endif
-
-ifneq ($(strip $(SSLPRIVATEKEY)),)
-  SED_ARGS += -e "s|%%SSLPRIVATEKEY%%|<privatekey>$(SSLPRIVATEKEY)</privatekey>|g"
-else
-  SED_ARGS += -e "s|%%SSLPRIVATEKEY%%||g"
-endif
-
 ifeq ($(DEBUG),yes)
   SED_ARGS += -e "s|%%DEBUGMODE%%|\<debugmode /\>|g"
 else
@@ -175,11 +161,9 @@ else
 endif
 
 LOCAL_SED_ARGS := -e "s|%%PORT%%|$(TEST_PORT)|g"
-LOCAL_SED_ARGS += -e "s|%%PORTTLS%%|$(TEST_PORTTLS)|g"
 LOCAL_SED_ARGS += -e "s|%%STATICDIR%%|$(LOCAL_STATIC)|g"
 LOCAL_SED_ARGS += -e "s|%%USERGROUP%%||g"
 GLOBAL_SED_ARGS := -e "s|%%PORT%%|$(PORT)|g"
-GLOBAL_SED_ARGS += -e "s|%%PORTTLS%%|$(PORTTLS)|g"
 GLOBAL_SED_ARGS += -e "s|%%STATICDIR%%|%%PREFIX%%$(STATICDIR)|g"
 ifeq ($(WWWUSER)$(WWWGROUP),)
   GLOBAL_SED_ARGS += -e "s|%%USERGROUP%%||g"
