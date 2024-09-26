@@ -33,7 +33,6 @@ PKG uunf.string
 PKG core
 PKG js_of_ocaml
 PKG lwt
-PKG core_unix
 
 PKG caqti-lwt.unix
 PKG caqti-driver-sqlite3

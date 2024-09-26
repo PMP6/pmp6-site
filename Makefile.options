@@ -54,7 +54,6 @@ SERVER_PACKAGES := \
 	argon2 \
 	caqti-driver-sqlite3 \
 	caqti-lwt.unix \
-	core_unix \
 	letters \
 	mrmime
 
