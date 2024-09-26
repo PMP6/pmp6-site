@@ -48,6 +48,8 @@ depends: [
   "conf-sqlite3" {= "1"}
   "conf-zlib" {= "1"}
   "core" {= "v0.16.2"}
+  "core_kernel" {= "v0.16.0"}
+  "core_unix" {= "v0.16.0"}
   "cppo" {= "1.7.0"}
   "cryptokit" {= "1.20"}
   "csexp" {= "1.5.2"}
@@ -66,6 +68,7 @@ depends: [
   "eliom" {= "11.0.1"}
   "emile" {= "1.1"}
   "eqaf" {= "0.9"}
+  "expect_test_helpers_core" {= "v0.16.0"}
   "fieldslib" {= "v0.16.0"}
   "fmt" {= "0.9.0"}
   "fpath" {= "0.7.3"}
@@ -118,6 +121,7 @@ depends: [
   "ocaml-config" {= "2"}
   "ocaml-options-vanilla" {= "1"}
   "ocaml-syntax-shims" {= "1.0.0"}
+  "ocaml_intrinsics" {= "v0.16.1"}
   "ocamlbuild" {= "0.15.0"}
   "ocamlfind" {= "1.9.6"}
   "ocplib-endian" {= "1.2"}
@@ -178,8 +182,10 @@ depends: [
   "sedlex" {= "3.2"}
   "sendmail" {= "0.8.1"}
   "seq" {= "base"}
+  "sexp_pretty" {= "v0.16.0"}
   "sexplib" {= "v0.16.0"}
   "sexplib0" {= "v0.16.0"}
+  "spawn" {= "v0.15.1"}
   "splittable_random" {= "v0.16.0"}
   "sqlite3" {= "5.2.0"}
   "ssl" {= "0.7.0"}
@@ -188,6 +194,7 @@ depends: [
   "stdune" {= "3.16.0"}
   "stringext" {= "1.6.0"}
   "time_now" {= "v0.16.0"}
+  "timezone" {= "v0.16.0"}
   "tls" {= "0.17.5"}
   "tls-lwt" {= "0.17.5"}
   "topkg" {= "1.0.7"}
