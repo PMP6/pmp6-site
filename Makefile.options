@@ -114,6 +114,6 @@ LOGDIR := var/log/${PROJECT_NAME}
 # Ocsigenserver's persistent data files
 DATADIR := var/data/${PROJECT_NAME}
 # Copy of $(LOCAL_STATIC)
-STATICDIR := var/www/${PROJECT_NAME}/static
+STATICDIR := var/www/${PROJECT_NAME}/staticfiles
 # Project's JavaScript file
 ELIOMSTATICDIR := var/www/${PROJECT_NAME}/eliom
