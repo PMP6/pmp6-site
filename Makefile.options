@@ -64,7 +64,7 @@ CLIENT_PACKAGES := \
 	js_of_ocaml-ppx
 
 # A list of runtimes providing functions for js_of_ocaml
-JS_RUNTIMES := base/runtime.js core/runtime.js bin_prot/runtime.js time_now/runtime.js
+JS_RUNTIMES := base/runtime.js core/runtime.js bin_prot/runtime.js time_now/runtime.js bigstringaf/runtime.js
 
 # Directory with files to be statically served
 LOCAL_STATIC = dist
