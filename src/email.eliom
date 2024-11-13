@@ -60,6 +60,50 @@ let send
   in
   Letters.send ~config ~sender:from ~recipients ~message
 
+let send
+    ?auto_generated
+    ?display_name
+    ?from
+    ~to_
+    ~subject
+    ?subject_prefix
+    ~content
+    ?signature
+    ?cc
+    ?bcc
+    () =
+  (* Hack for send failures that just retries 10 times. *)
+  let rec aux nb_future_tries =
+    match%lwt
+      send
+        ?auto_generated
+        ?display_name
+        ?from
+        ~to_
+        ~subject
+        ?subject_prefix
+        ~content
+        ?signature
+        ?cc
+        ?bcc
+        ()
+    with
+    | result -> Lwt.return result
+    | exception exn ->
+        if nb_future_tries >= 1 then
+          let () =
+            Log.logf
+              "Email sending failed (%a), %d tries remaining.@."
+              Exn.pp
+              exn
+              nb_future_tries
+          in
+          let%lwt () = Lwt_unix.sleep 1.0 in
+          aux (nb_future_tries - 1)
+        else Lwt.reraise exn
+  in
+  aux 10
+
 let check () =
   (* Sending a dummy empty mail and hope no exception is raised. *)
   send
