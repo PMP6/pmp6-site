@@ -3,7 +3,7 @@ let config =
     ~username:Settings.smtp_username
     ~password:Settings.smtp_password
     ~hostname:Settings.smtp_host
-    ~with_starttls:true
+    ~with_starttls:Settings.smtp_starttls
     ()
   |> Letters.Config.set_port (Some Settings.smtp_port)
 

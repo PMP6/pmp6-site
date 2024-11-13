@@ -8,4 +8,5 @@ module Env : sig
   val get_value : default:string -> string -> string
   val get_or_empty_string : string -> string
   val require : string -> string
+  val require_bool : string -> bool
 end
