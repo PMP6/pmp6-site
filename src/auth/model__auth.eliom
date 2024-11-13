@@ -274,7 +274,7 @@ module Password_token = struct
     open Db.Infix_request
 
     let create_from_item item =
-      (Item.db_type ->! Db.Type.unit)
+      (Item.db_type ->. Db.Type.unit)
         {|
           INSERT INTO auth_password_token (hash, user, expiry_time)
           VALUES (?, ?, ?)
