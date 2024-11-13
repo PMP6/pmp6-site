@@ -25,6 +25,7 @@ depends: [
   "bin_prot" {= "v0.16.0"}
   "bos" {= "0.2.1"}
   "ca-certs" {= "0.2.3"}
+  "camlp-streams" {= "5.0.1"}
   "camlzip" {= "1.12"}
   "caqti" {= "2.1.2"}
   "caqti-driver-sqlite3" {= "2.1.1"}
@@ -47,6 +48,7 @@ depends: [
   "conf-pkg-config" {= "3"}
   "conf-sqlite3" {= "1"}
   "conf-zlib" {= "1"}
+  "containers" {= "3.14"}
   "core" {= "v0.16.2"}
   "core_kernel" {= "v0.16.0"}
   "core_unix" {= "v0.16.0"}
@@ -65,11 +67,13 @@ depends: [
   "dune-site" {= "3.16.0"}
   "duration" {= "0.2.1"}
   "dyn" {= "3.16.0"}
+  "either" {= "1.0.0"}
   "eliom" {= "11.0.1"}
   "emile" {= "1.1"}
   "eqaf" {= "0.9"}
   "expect_test_helpers_core" {= "v0.16.0"}
   "fieldslib" {= "v0.16.0"}
+  "fix" {= "20230505"}
   "fmt" {= "0.9.0"}
   "fpath" {= "0.7.3"}
   "gen" {= "1.1"}
@@ -121,9 +125,13 @@ depends: [
   "ocaml-config" {= "2"}
   "ocaml-options-vanilla" {= "1"}
   "ocaml-syntax-shims" {= "1.0.0"}
+  "ocaml-version" {= "3.6.8"}
   "ocaml_intrinsics" {= "v0.16.1"}
   "ocamlbuild" {= "0.15.0"}
   "ocamlfind" {= "1.9.6"}
+  "ocamlformat" {= "0.26.2"}
+  "ocamlformat-lib" {= "0.26.2"}
+  "ocp-indent" {= "1.8.1"}
   "ocplib-endian" {= "1.2"}
   "ocsigenserver" {= "6.0.0"}
   "ocsipersist" {= "2.0.0"}
@@ -219,3 +227,9 @@ depends: [
 build: make
 install: [make "install"]
 dev-repo: "git+https://github.com/PMP6/pmp6-site.git"
+available: opam-version >= "2.1"
+pin-depends: [
+  "letters.0.3.3"
+  "git+https://github.com/oxidizing/letters.git#c38446b15c9e68cab0f77814f6509cae9861efeb"
+]
+x-locked: "locked"
