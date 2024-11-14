@@ -1,5 +1,4 @@
 #!/usr/bin/sh
 cd /home/thibault/pmp6-site
-eval $(opam env --root=/home/thibault/.opam)
-rm -f /usr/local/var/data/pmp6/ocsipersist/socket # Otherwise sometimes ocsidbm won't work
+eval $(opam env)
 make run.byte
