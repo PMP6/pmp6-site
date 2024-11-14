@@ -7,4 +7,7 @@ module Env = struct
 
   let require var =
     match get var with None -> raise (Undefined var) | Some value -> value
+
+  let require_bool var =
+    bool_of_string (require var)
 end

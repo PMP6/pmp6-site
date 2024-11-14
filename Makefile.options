@@ -64,7 +64,7 @@ CLIENT_PACKAGES := \
 	js_of_ocaml-ppx
 
 # A list of runtimes providing functions for js_of_ocaml
-JS_RUNTIMES := base/runtime.js core/runtime.js bin_prot/runtime.js time_now/runtime.js
+JS_RUNTIMES := base/runtime.js core/runtime.js bin_prot/runtime.js time_now/runtime.js bigstringaf/runtime.js
 
 # Directory with files to be statically served
 LOCAL_STATIC = dist
@@ -83,11 +83,11 @@ PERSISTENT_DATA_BACKEND = dbm
 DEBUG := no
 
 # User to run server with (make run.*)
-# WWWUSER := www-data
-# WWWGROUP := www-data
+WWWUSER := thibault
+WWWGROUP := thibault
 
 # Port for running the server (make run.*)
-PORT := 8080
+PORT := 8888
 
 # Port for testing (make test.*)
 TEST_PORT := 8080
@@ -114,6 +114,6 @@ LOGDIR := var/log/${PROJECT_NAME}
 # Ocsigenserver's persistent data files
 DATADIR := var/data/${PROJECT_NAME}
 # Copy of $(LOCAL_STATIC)
-STATICDIR := var/www/${PROJECT_NAME}/static
+STATICDIR := var/www/${PROJECT_NAME}/staticfiles
 # Project's JavaScript file
 ELIOMSTATICDIR := var/www/${PROJECT_NAME}/eliom

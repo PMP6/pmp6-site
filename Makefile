@@ -90,8 +90,8 @@ install.lib.opt: $(TEST_PREFIX)$(LIBDIR)/$(PROJECT_NAME).cmxs | $(PREFIX)$(LIBDI
 	install $< $(PREFIX)$(LIBDIR)
 install.static: $(TEST_PREFIX)$(ELIOMSTATICDIR)/$(PROJECT_NAME).js | $(PREFIX)$(STATICDIR) $(PREFIX)$(ELIOMSTATICDIR)
 	cp -r $(LOCAL_STATIC)/* $(PREFIX)$(STATICDIR)
-	[ -z $(WWWUSER) ] || chown -R $(WWWUSER) $(PREFIX)$(STATICDIR)
-	install $(addprefix -o ,$(WWWUSER)) $< $(PREFIX)$(ELIOMSTATICDIR)
+	[ -z $(WWWUSER) ] || chown -R $(WWWUSER):$(WWWGROUP) $(PREFIX)$(STATICDIR)
+	install $(addprefix -o ,$(WWWUSER)) $(addprefix -g ,$(WWWGROUP)) $< $(PREFIX)$(ELIOMSTATICDIR)
 install.etc: $(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME).conf | $(PREFIX)$(ETCDIR)
 	install $< $(PREFIX)$(ETCDIR)/$(PROJECT_NAME).conf
 
@@ -105,7 +105,7 @@ print-install-files:
 $(addprefix $(PREFIX),$(ETCDIR) $(LIBDIR)):
 	install -d $@
 $(addprefix $(PREFIX),$(DATADIR) $(LOGDIR) $(STATICDIR) $(ELIOMSTATICDIR) $(shell dirname $(CMDPIPE))):
-	install $(addprefix -o ,$(WWWUSER)) -d $@
+	install $(addprefix -o ,$(WWWUSER)) $(addprefix -g ,$(WWWGROUP)) -d $@
 
 run.byte:
 	$(call WITH_SECRETS, $(OCSIGENSERVER) $(RUN_DEBUG) -c ${PREFIX}${ETCDIR}/${PROJECT_NAME}.conf)
@@ -162,14 +162,8 @@ endif
 
 LOCAL_SED_ARGS := -e "s|%%PORT%%|$(TEST_PORT)|g"
 LOCAL_SED_ARGS += -e "s|%%STATICDIR%%|$(LOCAL_STATIC)|g"
-LOCAL_SED_ARGS += -e "s|%%USERGROUP%%||g"
 GLOBAL_SED_ARGS := -e "s|%%PORT%%|$(PORT)|g"
 GLOBAL_SED_ARGS += -e "s|%%STATICDIR%%|%%PREFIX%%$(STATICDIR)|g"
-ifeq ($(WWWUSER)$(WWWGROUP),)
-  GLOBAL_SED_ARGS += -e "s|%%USERGROUP%%||g"
-else
-  GLOBAL_SED_ARGS += -e "s|%%USERGROUP%%|<user>$(WWWUSER)</user><group>$(WWWGROUP)</group>|g"
-endif
 
 $(TEST_PREFIX)${ETCDIR}/${PROJECT_NAME}.conf: ${PROJECT_NAME}.conf.in Makefile.options | $(TEST_PREFIX)$(ETCDIR)
 	sed $(SED_ARGS) $(GLOBAL_SED_ARGS) $< | sed -e "s|%%PREFIX%%|$(PREFIX)|g" > $@
