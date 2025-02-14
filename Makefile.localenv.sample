@@ -3,3 +3,11 @@
 # it.
 
 HOSTNAME = localhost # or myhostname.com
+
+# Default port/protocol used to generate absolute links
+# These should match the configuration as seen by end-user browsers
+# The example provided here should work for local development
+# On production server, one should usually set 80/443/https
+DEFAULT_HTTP_PORT=8080
+DEFAULT_HTTPS_PORT=8443
+DEFAULT_PROTOCOL=http
