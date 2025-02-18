@@ -14,4 +14,4 @@ let to_class_name = function
   | Warning -> "warning"
   | Alert -> "alert"
 
-let to_class self = Html.a_class [to_class_name self]
+let to_class self = Html.a_class [ to_class_name self ]

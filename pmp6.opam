@@ -9,30 +9,26 @@ dev-repo: "git+https://github.com/PMP6/pmp6-site.git"
 bug-reports: "https://github.com/PMP6/pmp6-site/issues"
 depends: [
   "argon2"
-  "async"
-  "async_smtp"
   "camlzip"
   "caqti"
   "caqti-driver-sqlite3"
   "caqti-lwt"
-  "core_kernel"
-  "dbm"
+  "core"
+  "core_unix" # Needed for the manage dummy site
   "eliom"
   "fmt"
   "js_of_ocaml"
+  "letters"
   "lwt"
   "lwt_ppx"
   "markup"
+  "mrmime"
+  "ocsipersist-dbm"
   "omd"
   "ppx_jane"
   "tyxml"
-  "tyxml-ppx"
-  "uucp"
   "uunf"
   "uuseg"
 ]
 build: make
 install: [make "install"]
-url {
-  src: "git+file:///home/thibault/pmp6#master"
-}

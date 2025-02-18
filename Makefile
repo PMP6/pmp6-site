@@ -28,6 +28,7 @@ JS_OF_ELIOM       := js_of_eliom -ppx ${JSOPT_RUNTIMES} ${OPENFLAGS}
 ELIOMDEP          := eliomdep
 OCSIGENSERVER     := ocsigenserver
 OCSIGENSERVER.OPT := ocsigenserver.opt
+OCAMLFORMAT	  := ocamlformat
 
 ## Where to put intermediate object files.
 ## - ELIOM_{SERVER,CLIENT}_DIR must be distinct
@@ -89,8 +90,8 @@ install.lib.opt: $(TEST_PREFIX)$(LIBDIR)/$(PROJECT_NAME).cmxs | $(PREFIX)$(LIBDI
 	install $< $(PREFIX)$(LIBDIR)
 install.static: $(TEST_PREFIX)$(ELIOMSTATICDIR)/$(PROJECT_NAME).js | $(PREFIX)$(STATICDIR) $(PREFIX)$(ELIOMSTATICDIR)
 	cp -r $(LOCAL_STATIC)/* $(PREFIX)$(STATICDIR)
-	[ -z $(WWWUSER) ] || chown -R $(WWWUSER) $(PREFIX)$(STATICDIR)
-	install $(addprefix -o ,$(WWWUSER)) $< $(PREFIX)$(ELIOMSTATICDIR)
+	[ -z $(WWWUSER) ] || chown -R $(WWWUSER):$(WWWGROUP) $(PREFIX)$(STATICDIR)
+	install $(addprefix -o ,$(WWWUSER)) $(addprefix -g ,$(WWWGROUP)) $< $(PREFIX)$(ELIOMSTATICDIR)
 install.etc: $(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME).conf | $(PREFIX)$(ETCDIR)
 	install $< $(PREFIX)$(ETCDIR)/$(PROJECT_NAME).conf
 
@@ -104,7 +105,7 @@ print-install-files:
 $(addprefix $(PREFIX),$(ETCDIR) $(LIBDIR)):
 	install -d $@
 $(addprefix $(PREFIX),$(DATADIR) $(LOGDIR) $(STATICDIR) $(ELIOMSTATICDIR) $(shell dirname $(CMDPIPE))):
-	install $(addprefix -o ,$(WWWUSER)) -d $@
+	install $(addprefix -o ,$(WWWUSER)) $(addprefix -g ,$(WWWGROUP)) -d $@
 
 run.byte:
 	$(call WITH_SECRETS, $(OCSIGENSERVER) $(RUN_DEBUG) -c ${PREFIX}${ETCDIR}/${PROJECT_NAME}.conf)
@@ -148,24 +149,13 @@ SED_ARGS += -e "s|%%ELIOMSTATICDIR%%|%%PREFIX%%$(ELIOMSTATICDIR)|g"
 SED_ARGS += -e "s|%%STATICURL%%|$(STATIC_URL)|g"
 SED_ARGS += -e "s|%%HOSTNAME%%|$(HOSTNAME)|g"
 SED_ARGS += -e "s|%%MANAGE_PROJECT_NAME%%|$(MANAGE_PROJECT_NAME)|g"
+SED_ARGS += -e "s|%%DEFAULT_HTTP_PORT%%|$(DEFAULT_HTTP_PORT)|g"
+SED_ARGS += -e "s|%%DEFAULT_HTTPS_PORT%%|$(DEFAULT_HTTPS_PORT)|g"
+SED_ARGS += -e "s|%%DEFAULT_PROTOCOL%%|$(DEFAULT_PROTOCOL)|g"
 
 # Workaroung accesscontrol having no true/false constants
 OCSIGEN_CONF_TRUE := <or><ssl/><not><ssl/></not></or>
 OCSIGEN_CONF_FALSE := <and><ssl/><not><ssl/></not></and>
-
-ifneq ($(strip $(SSLCERTIFICATE)),)
-  SED_ARGS += -e "s|%%SSLCERTIFICATE%%|<certificate>$(SSLCERTIFICATE)</certificate>|g"
-  SED_ARGS += -e "s|%%REQUIRESSL%%|$(OCSIGEN_CONF_TRUE)|g"
-else
-  SED_ARGS += -e "s|%%SSLCERTIFICATE%%||g"
-  SED_ARGS += -e "s|%%REQUIRESSL%%|$(OCSIGEN_CONF_FALSE)|g"
-endif
-
-ifneq ($(strip $(SSLPRIVATEKEY)),)
-  SED_ARGS += -e "s|%%SSLPRIVATEKEY%%|<privatekey>$(SSLPRIVATEKEY)</privatekey>|g"
-else
-  SED_ARGS += -e "s|%%SSLPRIVATEKEY%%||g"
-endif
 
 ifeq ($(DEBUG),yes)
   SED_ARGS += -e "s|%%DEBUGMODE%%|\<debugmode /\>|g"
@@ -174,17 +164,9 @@ else
 endif
 
 LOCAL_SED_ARGS := -e "s|%%PORT%%|$(TEST_PORT)|g"
-LOCAL_SED_ARGS += -e "s|%%PORTTLS%%|$(TEST_PORTTLS)|g"
 LOCAL_SED_ARGS += -e "s|%%STATICDIR%%|$(LOCAL_STATIC)|g"
-LOCAL_SED_ARGS += -e "s|%%USERGROUP%%||g"
 GLOBAL_SED_ARGS := -e "s|%%PORT%%|$(PORT)|g"
-GLOBAL_SED_ARGS += -e "s|%%PORTTLS%%|$(PORTTLS)|g"
 GLOBAL_SED_ARGS += -e "s|%%STATICDIR%%|%%PREFIX%%$(STATICDIR)|g"
-ifeq ($(WWWUSER)$(WWWGROUP),)
-  GLOBAL_SED_ARGS += -e "s|%%USERGROUP%%||g"
-else
-  GLOBAL_SED_ARGS += -e "s|%%USERGROUP%%|<user>$(WWWUSER)</user><group>$(WWWGROUP)</group>|g"
-endif
 
 $(TEST_PREFIX)${ETCDIR}/${PROJECT_NAME}.conf: ${PROJECT_NAME}.conf.in Makefile.options | $(TEST_PREFIX)$(ETCDIR)
 	sed $(SED_ARGS) $(GLOBAL_SED_ARGS) $< | sed -e "s|%%PREFIX%%|$(PREFIX)|g" > $@
@@ -338,3 +320,9 @@ clean:
 
 distclean: clean
 	-rm -rf $(TEST_PREFIX) $(DEPSDIR) .depend
+
+##----------------------------------------------------------------------
+## Format
+
+fmt:
+	$(OCAMLFORMAT) --inplace $(SERVER_FILES) $(CLIENT_FILES) $(MANAGE_FILES)

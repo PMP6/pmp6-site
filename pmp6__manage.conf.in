@@ -7,7 +7,6 @@
   <server>
     <port>%%PORT%%</port>
     %%% Only set for running, not for testing
-    %%USERGROUP%%
     <logdir>%%LOGDIR%%</logdir>
     <datadir>%%DATADIR%%</datadir>
     <charset>utf-8</charset>
@@ -15,12 +14,12 @@
     %%DEBUGMODE%%
     <commandpipe>%%MANAGECMDPIPE%%</commandpipe>
     <extension findlib-package="ocsigenserver.ext.staticmod"/>
-    <extension findlib-package="ocsigenserver.ext.ocsipersist-%%PERSISTENT_DATA_BACKEND%%"/>
+    <extension findlib-package="ocsipersist-%%PERSISTENT_DATA_BACKEND%%"/>
     <extension findlib-package="eliom.server"/>
     %%% This will include the packages defined as SERVER_PACKAGES in your Makefile:
     %%PACKAGES%%
 
-    <host defaulthostname="%%HOSTNAME%%" hostfilter="*">
+    <host defaulthostname="localhost" hostfilter="localhost 127.0.0.1">
       <static dir="%%STATICDIR%%" />
       <static dir="%%ELIOMSTATICDIR%%" />
       <eliommodule module="%%LIBDIR%%/%%MANAGE_PROJECT_NAME%%.cma" />
