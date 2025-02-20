@@ -30,5 +30,5 @@ depends: [
   "uunf"
   "uuseg"
 ]
-build: make
-install: [make "install"]
+build: []
+install: []
