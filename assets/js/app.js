@@ -11,6 +11,8 @@ window.jQuery = $;
 require('foundation-sites');
 window.moment = require('moment/moment');
 
+$(document).foundation();
+
 // If you want to pick and choose which modules to include, comment out the above and uncomment
 // the line below
 //import './lib/foundation-explicit-pieces';
