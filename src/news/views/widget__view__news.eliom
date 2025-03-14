@@ -1,6 +1,5 @@
 module Model = Model__news
 module Service = Service__news
-
 module%shared F = Foundation
 module%shared H = Html
 
