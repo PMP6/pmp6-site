@@ -9,4 +9,5 @@ module Env : sig
   val get_or_empty_string : string -> string
   val require : string -> string
   val require_bool : string -> bool
+  val require_int : string -> int
 end
