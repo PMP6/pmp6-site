@@ -1,10 +1,18 @@
-val smtp_host : string
-val smtp_port : int
-val smtp_username : string
-val smtp_password : string
-val smtp_starttls : bool
-val default_from_display_name : string
-val default_from_email : string
-val default_email_subject_prefix : string
-val default_email_signature : string option
-val db_uri : string
+module Smtp : sig
+  val host : string
+  val port : int
+  val username : string
+  val password : string
+  val use_starttls : bool
+end
+
+module Database : sig
+  val uri : string
+end
+
+module Email : sig
+  val default_from_display_name : string
+  val default_from_email : string
+  val default_subject_prefix : string
+  val default_signature : string option
+end

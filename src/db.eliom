@@ -5,7 +5,7 @@ module Lwr = Lwt_result
 module type C = Caqti_lwt.CONNECTION
 
 let caqti_exn caqti_error = Caqti_error.Exn caqti_error
-let connection_uri = Settings.db_uri
+let connection_uri = Settings.Database.uri
 
 module Type = struct
   (* Utilities over Caqti_type *)
