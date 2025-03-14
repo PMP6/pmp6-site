@@ -109,9 +109,9 @@ let check () =
   send
     ~to_:[ "pmp6@mailinator.com" ]
     ~from:"pmp6@dummy.dummy"
-    ~display_name:"Le site PMP6"
+    ~display_name:"Le site PMP6 éèà"
     ~subject_prefix:"[PMP6] "
-    ~subject:"Test"
-    ~content:"Dummy check"
-    ~signature:(Some "Le site PMP6")
+    ~subject:"Test éèa"
+    ~content:"Dummy check éèà"
+    ?signature:None (* Test that default signature works with its accents *)
     ()
