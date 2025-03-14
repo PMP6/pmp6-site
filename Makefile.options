@@ -5,7 +5,7 @@
 PROJECT_NAME := pmp6
 
 # If you modify this, make sure you don't use a git-tracked file.
-SECRETS_ENV_FILE := secrets.env
+CONFIG_ENV_FILE := config.env
 
 # Name of the mock eliom module for manage installation
 MANAGE_PROJECT_NAME := $(PROJECT_NAME)__manage

@@ -17,5 +17,5 @@ local
 
 # Machine-specific configuration
 Makefile.localenv
-secrets.env
+config.env
 src/settings/settings_profile.mlh

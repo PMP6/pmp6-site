@@ -14,9 +14,9 @@ include Makefile.localenv
 ## Generate js_of_eliom runtime options
 JSOPT_RUNTIMES := $(addprefix -jsopt +,${JS_RUNTIMES})
 
-define WITH_SECRETS
-	@test -f $(SECRETS_ENV_FILE) || { echo ${SECRETS_ENV_FILE} absent, exiting; false; }
-	(set -a; . $(realpath $(SECRETS_ENV_FILE)); set +a; $1)
+define WITH_CONFIG
+	@test -f $(CONFIG_ENV_FILE) || { echo ${CONFIG_ENV_FILE} absent, exiting; false; }
+	(set -a; . $(realpath $(CONFIG_ENV_FILE)); set +a; $1)
 endef
 
 ## Required binaries
@@ -67,9 +67,9 @@ DIST_FILES = $(ELIOMSTATICDIR)/$(PROJECT_NAME).js $(LIBDIR)/$(PROJECT_NAME).cma
 
 .PHONY: test.byte test.opt
 test.byte: $(addprefix $(TEST_PREFIX),$(ETCDIR)/$(PROJECT_NAME)-test.conf $(DIST_DIRS) $(DIST_FILES))
-	$(call WITH_SECRETS, $(OCSIGENSERVER) $(RUN_DEBUG) -c $<)
+	$(call WITH_CONFIG, $(OCSIGENSERVER) $(RUN_DEBUG) -c $<)
 test.opt: $(addprefix $(TEST_PREFIX),$(ETCDIR)/$(PROJECT_NAME)-test.conf $(DIST_DIRS) $(patsubst %.cma,%.cmxs, $(DIST_FILES)))
-	$(call WITH_SECRETS, $(OCSIGENSERVER.OPT) $(RUN_DEBUG) -c $<)
+	$(call WITH_CONFIG, $(OCSIGENSERVER.OPT) $(RUN_DEBUG) -c $<)
 
 $(addprefix $(TEST_PREFIX), $(DIST_DIRS)):
 	mkdir -p $@
@@ -108,9 +108,9 @@ $(addprefix $(PREFIX),$(DATADIR) $(LOGDIR) $(STATICDIR) $(ELIOMSTATICDIR) $(shel
 	install $(addprefix -o ,$(WWWUSER)) $(addprefix -g ,$(WWWGROUP)) -d $@
 
 run.byte:
-	$(call WITH_SECRETS, $(OCSIGENSERVER) $(RUN_DEBUG) -c ${PREFIX}${ETCDIR}/${PROJECT_NAME}.conf)
+	$(call WITH_CONFIG, $(OCSIGENSERVER) $(RUN_DEBUG) -c ${PREFIX}${ETCDIR}/${PROJECT_NAME}.conf)
 run.opt:
-	$(call WITH_SECRETS, $(OCSIGENSERVER.OPT) $(RUN_DEBUG) -c ${PREFIX}${ETCDIR}/${PROJECT_NAME}.conf)
+	$(call WITH_CONFIG, $(OCSIGENSERVER.OPT) $(RUN_DEBUG) -c ${PREFIX}${ETCDIR}/${PROJECT_NAME}.conf)
 
 ##----------------------------------------------------------------------
 ## Aux
@@ -244,7 +244,7 @@ fixtures-media: $(FIXTURES_DIR)/media
 	cp -r $(FIXTURES_DIR)/media/* $(LOCAL_STATIC)/media
 
 manage.byte: $(addprefix $(TEST_PREFIX),$(ETCDIR)/$(MANAGE_PROJECT_NAME).conf $(DIST_DIRS) $(LIBDIR)/$(MANAGE_PROJECT_NAME).cma)
-	$(call WITH_SECRETS, $(OCSIGENSERVER) $(RUN_DEBUG) -c $<)
+	$(call WITH_CONFIG, $(OCSIGENSERVER) $(RUN_DEBUG) -c $<)
 
 ${ELIOM_SERVER_DIR}/${MANAGE_DIR}/%.cmi: ${MANAGE_DIR}/%.eliomi
 	${ELIOMC} -c ${SERVER_INC} ${SERVER_INC_DIRS} ${MANAGE_INC_DIRS} $(GENERATE_DEBUG) $<
