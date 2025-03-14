@@ -8,4 +8,4 @@ let smtp_password = Config.Env.require "SMTP_PASSWORD"
 let smtp_starttls = Config.Env.require_bool "SMTP_STARTTLS"
 
 (* Database *)
-let db_uri = "sqlite3:/var/local/pmp6/pmp6.db"
+let db_uri = Config.Env.require "DB_URI"
