@@ -42,7 +42,6 @@ COMMON_PACKAGES := \
 	lwt_ppx \
 	omd \
 	ppx_let \
-	ppx_optcomp \
 	js_of_ocaml-ppx_deriving_json
 
 # OCamlfind packages for the server
