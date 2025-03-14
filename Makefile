@@ -200,9 +200,6 @@ $(TEST_PREFIX)$(LIBDIR)/$(PROJECT_NAME).cmxa: $(call objs,$(ELIOM_SERVER_DIR),cm
 %.cmxs: %.cmxa
 	$(ELIOMOPT) -shared -linkall -o $@ $(GENERATE_DEBUG) $<
 
-# Explicit rule to recompile when the settings profile .mlh file changes
-${ELIOM_SERVER_DIR}/$(SETTINGS_FILE:eliom=cmi): ${PROFILE_FILE}
-
 ${ELIOM_SERVER_DIR}/${SRC_DIR}/%.cmi: ${SRC_DIR}/%.eliomi
 	${ELIOMC} -c ${SERVER_INC} ${SERVER_INC_DIRS} $(GENERATE_DEBUG) $<
 

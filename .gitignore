@@ -18,4 +18,3 @@ local
 # Machine-specific configuration
 Makefile.localenv
 config.env
-src/settings/settings_profile.mlh

@@ -17,9 +17,6 @@ FIXTURES_DIR := ${MANAGE_DIR}/fixtures
 
 MANAGE_FILES := $(shell find $(MANAGE_DIR) -name *.eliom -o -name *.eliomi)
 
-PROFILE_FILE := $(SRC_DIR)/settings/settings_profile.mlh
-SETTINGS_FILE := $(SRC_DIR)/settings/settings.eliom
-
 WARNINGS := +a-4-40-41-42-44-45-48-58-59-70
 OPENFLAGS := -open Core
 CFLAGS := -strict-formats -short-paths

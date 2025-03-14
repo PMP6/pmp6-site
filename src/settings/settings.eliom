@@ -1,16 +1,11 @@
-[%%import "settings_profile.mlh"]
-[%%if profile = "dev"]
+include Settings_base
 
-include Settings_dev
+(* SMTP *)
+let smtp_host = Config.Env.require "SMTP_HOST"
+let smtp_port = Config.Env.require_int "SMTP_PORT"
+let smtp_username = Config.Env.require "SMTP_USERNAME"
+let smtp_password = Config.Env.require "SMTP_PASSWORD"
+let smtp_starttls = Config.Env.require_bool "SMTP_STARTTLS"
 
-[%%elif profile = "beta"]
-
-include Settings_beta
-
-[%%elif profile = "prod"]
-
-include Settings_prod
-
-[%%else]
-[%%error "Invalid settings profile. Valid values are dev, beta or prod."]
-[%%endif]
+(* Database *)
+let db_uri = Config.Env.require "DB_URI"
