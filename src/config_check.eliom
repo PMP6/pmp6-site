@@ -28,10 +28,17 @@ let tests =
     check_ignore "smoke news model" News.Model.all;
   ]
 
+let log_root_uri () =
+  Log.logf
+    "Site will now be available on %s"
+    (Eliom_uri.make_string_uri ~absolute:true ~service:Skeleton.home_service ())
+
 let () =
   Log.logf "Running configuration checks...";
   match Lwt_main.run @@ check_list tests with
-  | () -> Log.logf "All configuration checks passed."
+  | () ->
+      Log.logf "All configuration checks passed.";
+      log_root_uri ()
   | exception _ ->
       Log.logf "At least one configuration check failed. Now stopping the server.";
       exit 0
