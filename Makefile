@@ -153,10 +153,6 @@ SED_ARGS += -e "s|%%DEFAULT_HTTP_PORT%%|$(DEFAULT_HTTP_PORT)|g"
 SED_ARGS += -e "s|%%DEFAULT_HTTPS_PORT%%|$(DEFAULT_HTTPS_PORT)|g"
 SED_ARGS += -e "s|%%DEFAULT_PROTOCOL%%|$(DEFAULT_PROTOCOL)|g"
 
-# Workaroung accesscontrol having no true/false constants
-OCSIGEN_CONF_TRUE := <or><ssl/><not><ssl/></not></or>
-OCSIGEN_CONF_FALSE := <and><ssl/><not><ssl/></not></and>
-
 ifeq ($(DEBUG),yes)
   SED_ARGS += -e "s|%%DEBUGMODE%%|\<debugmode /\>|g"
 else
