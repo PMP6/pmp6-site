@@ -17,5 +17,4 @@ local
 
 # Machine-specific configuration
 Makefile.localenv
-secrets.env
-src/settings/settings_profile.mlh
+pmp6.sexp

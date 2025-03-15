@@ -14,11 +14,6 @@ include Makefile.localenv
 ## Generate js_of_eliom runtime options
 JSOPT_RUNTIMES := $(addprefix -jsopt +,${JS_RUNTIMES})
 
-define WITH_SECRETS
-	@test -f $(SECRETS_ENV_FILE) || { echo ${SECRETS_ENV_FILE} absent, exiting; false; }
-	(set -a; . $(realpath $(SECRETS_ENV_FILE)); set +a; $1)
-endef
-
 ## Required binaries
 OCAMLC		  := ocamlc -w ${WARNINGS} ${CFLAGS} ${OPENFLAGS}
 OCAMLOPT	  := ocamlopt -w ${WARNINGS} ${CFLAGS} ${OPENFLAGS}
@@ -66,10 +61,10 @@ DIST_DIRS = $(ETCDIR) $(DATADIR) $(LIBDIR) $(LOGDIR) $(STATICDIR) $(ELIOMSTATICD
 DIST_FILES = $(ELIOMSTATICDIR)/$(PROJECT_NAME).js $(LIBDIR)/$(PROJECT_NAME).cma
 
 .PHONY: test.byte test.opt
-test.byte: $(addprefix $(TEST_PREFIX),$(ETCDIR)/$(PROJECT_NAME)-test.conf $(DIST_DIRS) $(DIST_FILES))
-	$(call WITH_SECRETS, $(OCSIGENSERVER) $(RUN_DEBUG) -c $<)
-test.opt: $(addprefix $(TEST_PREFIX),$(ETCDIR)/$(PROJECT_NAME)-test.conf $(DIST_DIRS) $(patsubst %.cma,%.cmxs, $(DIST_FILES)))
-	$(call WITH_SECRETS, $(OCSIGENSERVER.OPT) $(RUN_DEBUG) -c $<)
+test.byte: $(addprefix $(TEST_PREFIX),$(ETCDIR)/$(PROJECT_NAME)-test.conf $(ETCDIR)/$(PROJECT_NAME).sexp $(DIST_DIRS) $(DIST_FILES))
+	$(OCSIGENSERVER) $(RUN_DEBUG) -c $<
+test.opt: $(addprefix $(TEST_PREFIX),$(ETCDIR)/$(PROJECT_NAME)-test.conf $(ETCDIR)/$(PROJECT_NAME).sexp $(DIST_DIRS) $(patsubst %.cma,%.cmxs, $(DIST_FILES)))
+	$(OCSIGENSERVER.OPT) $(RUN_DEBUG) -c $<
 
 $(addprefix $(TEST_PREFIX), $(DIST_DIRS)):
 	mkdir -p $@
@@ -92,8 +87,8 @@ install.static: $(TEST_PREFIX)$(ELIOMSTATICDIR)/$(PROJECT_NAME).js | $(PREFIX)$(
 	cp -r $(LOCAL_STATIC)/* $(PREFIX)$(STATICDIR)
 	[ -z $(WWWUSER) ] || chown -R $(WWWUSER):$(WWWGROUP) $(PREFIX)$(STATICDIR)
 	install $(addprefix -o ,$(WWWUSER)) $(addprefix -g ,$(WWWGROUP)) $< $(PREFIX)$(ELIOMSTATICDIR)
-install.etc: $(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME).conf | $(PREFIX)$(ETCDIR)
-	install $< $(PREFIX)$(ETCDIR)/$(PROJECT_NAME).conf
+install.etc: $(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME).conf $(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME).sexp | $(PREFIX)$(ETCDIR)
+	install -t $(PREFIX)$(ETCDIR) $^
 
 .PHONY:
 print-install-files:
@@ -108,9 +103,9 @@ $(addprefix $(PREFIX),$(DATADIR) $(LOGDIR) $(STATICDIR) $(ELIOMSTATICDIR) $(shel
 	install $(addprefix -o ,$(WWWUSER)) $(addprefix -g ,$(WWWGROUP)) -d $@
 
 run.byte:
-	$(call WITH_SECRETS, $(OCSIGENSERVER) $(RUN_DEBUG) -c ${PREFIX}${ETCDIR}/${PROJECT_NAME}.conf)
+	$(OCSIGENSERVER) $(RUN_DEBUG) -c ${PREFIX}${ETCDIR}/${PROJECT_NAME}.conf
 run.opt:
-	$(call WITH_SECRETS, $(OCSIGENSERVER.OPT) $(RUN_DEBUG) -c ${PREFIX}${ETCDIR}/${PROJECT_NAME}.conf)
+	$(OCSIGENSERVER.OPT) $(RUN_DEBUG) -c ${PREFIX}${ETCDIR}/${PROJECT_NAME}.conf
 
 ##----------------------------------------------------------------------
 ## Aux
@@ -153,10 +148,6 @@ SED_ARGS += -e "s|%%DEFAULT_HTTP_PORT%%|$(DEFAULT_HTTP_PORT)|g"
 SED_ARGS += -e "s|%%DEFAULT_HTTPS_PORT%%|$(DEFAULT_HTTPS_PORT)|g"
 SED_ARGS += -e "s|%%DEFAULT_PROTOCOL%%|$(DEFAULT_PROTOCOL)|g"
 
-# Workaroung accesscontrol having no true/false constants
-OCSIGEN_CONF_TRUE := <or><ssl/><not><ssl/></not></or>
-OCSIGEN_CONF_FALSE := <and><ssl/><not><ssl/></not></and>
-
 ifeq ($(DEBUG),yes)
   SED_ARGS += -e "s|%%DEBUGMODE%%|\<debugmode /\>|g"
 else
@@ -175,6 +166,9 @@ $(TEST_PREFIX)${ETCDIR}/${PROJECT_NAME}-test.conf: ${PROJECT_NAME}.conf.in Makef
 
 $(TEST_PREFIX)${ETCDIR}/${MANAGE_PROJECT_NAME}.conf: ${MANAGE_PROJECT_NAME}.conf.in Makefile.options | $(TEST_PREFIX)$(ETCDIR)
 	sed $(SED_ARGS) $(LOCAL_SED_ARGS) $< | sed -e "s|%%PREFIX%%|$(TEST_PREFIX)|g" > $@
+
+$(TEST_PREFIX)${ETCDIR}/${PROJECT_NAME}.sexp: ${PROJECT_NAME}.sexp | $(TEST_PREFIX)$(ETCDIR)
+	install $< $@
 
 ##----------------------------------------------------------------------
 ## Server side compilation
@@ -199,9 +193,6 @@ $(TEST_PREFIX)$(LIBDIR)/$(PROJECT_NAME).cmxa: $(call objs,$(ELIOM_SERVER_DIR),cm
 
 %.cmxs: %.cmxa
 	$(ELIOMOPT) -shared -linkall -o $@ $(GENERATE_DEBUG) $<
-
-# Explicit rule to recompile when the settings profile .mlh file changes
-${ELIOM_SERVER_DIR}/$(SETTINGS_FILE:eliom=cmi): ${PROFILE_FILE}
 
 ${ELIOM_SERVER_DIR}/${SRC_DIR}/%.cmi: ${SRC_DIR}/%.eliomi
 	${ELIOMC} -c ${SERVER_INC} ${SERVER_INC_DIRS} $(GENERATE_DEBUG) $<
@@ -243,8 +234,8 @@ fixtures-media: $(FIXTURES_DIR)/media
 	mkdir -p $(LOCAL_STATIC)/media
 	cp -r $(FIXTURES_DIR)/media/* $(LOCAL_STATIC)/media
 
-manage.byte: $(addprefix $(TEST_PREFIX),$(ETCDIR)/$(MANAGE_PROJECT_NAME).conf $(DIST_DIRS) $(LIBDIR)/$(MANAGE_PROJECT_NAME).cma)
-	$(call WITH_SECRETS, $(OCSIGENSERVER) $(RUN_DEBUG) -c $<)
+manage.byte: $(addprefix $(TEST_PREFIX),$(ETCDIR)/$(MANAGE_PROJECT_NAME).conf $(ETCDIR)/$(PROJECT_NAME).sexp $(DIST_DIRS) $(LIBDIR)/$(MANAGE_PROJECT_NAME).cma)
+	$(OCSIGENSERVER) $(RUN_DEBUG) -c $<
 
 ${ELIOM_SERVER_DIR}/${MANAGE_DIR}/%.cmi: ${MANAGE_DIR}/%.eliomi
 	${ELIOMC} -c ${SERVER_INC} ${SERVER_INC_DIRS} ${MANAGE_INC_DIRS} $(GENERATE_DEBUG) $<

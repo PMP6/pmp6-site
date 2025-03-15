@@ -26,6 +26,7 @@ depends: [
   "ocsipersist-dbm"
   "omd"
   "ppx_jane"
+  "ppx_sexp_conv"
   "tyxml"
   "uunf"
   "uuseg"

@@ -1,9 +1,7 @@
 module Accordion = Foundation_accordion
 module Abide = Foundation_abide
-
 module%shared Callout = Foundation_callout
 module%shared Color = Foundation_color
-
 module Form = Foundation_form
 module Grid = Foundation_grid
 module Motion_ui = Foundation_motion_ui

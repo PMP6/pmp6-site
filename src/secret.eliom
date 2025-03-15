@@ -11,8 +11,14 @@ module Hash = struct
   let encode password =
     (* Parameters tuned to take ~0.5s on entry-level OVH VPS, using less than half of
        available RAM as of running the test *)
-    let salt_len = 16 (* bytes *) in
-    let hash_len = 16 (* bytes *) in
+    let salt_len =
+      16
+      (* bytes *)
+    in
+    let hash_len =
+      16
+      (* bytes *)
+    in
     let t_cost = 1 in
     let m_cost = 250_000 in
     let parallelism = 1 in

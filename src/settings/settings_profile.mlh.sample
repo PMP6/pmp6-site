@@ -1,2 +1,0 @@
-(* Valid values are "dev", "beta" or "prod" *)
-[%%define profile "dev"]

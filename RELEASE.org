@@ -10,12 +10,12 @@ git pull
 git checkout master
 git pull
 
-* Check profile
+* Check config
 
-Check that the profile is correct. In any case, running the beta
-/shouldn't/ have permissions to alter the prod db.
+Check that the config (especially db uri) is correct. In any case,
+running the beta /shouldn't/ have permissions to alter the prod db.
 
-cat src/settings/settings_profile.mlh
+cat pmp6.sexp
 
 * Get env
 
