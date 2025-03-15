@@ -4,9 +4,6 @@
 
 PROJECT_NAME := pmp6
 
-# If you modify this, make sure you don't use a git-tracked file.
-CONFIG_ENV_FILE := config.env
-
 # Name of the mock eliom module for manage installation
 MANAGE_PROJECT_NAME := $(PROJECT_NAME)__manage
 
@@ -52,7 +49,8 @@ SERVER_PACKAGES := \
 	caqti-lwt.unix \
 	core_unix \
 	letters \
-	mrmime
+	mrmime \
+	ppx_sexp_conv
 
 # OCamlfind packages for the client
 CLIENT_PACKAGES := \

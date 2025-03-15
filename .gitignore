@@ -17,4 +17,4 @@ local
 
 # Machine-specific configuration
 Makefile.localenv
-config.env
+pmp6.sexp

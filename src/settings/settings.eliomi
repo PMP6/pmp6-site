@@ -1,18 +1,26 @@
 module Smtp : sig
-  val host : string
-  val port : int
-  val username : string
-  val password : string
-  val use_starttls : bool
+  type t = {
+    host : string;
+    port : int;
+    username : string;
+    password : string;
+    use_starttls : bool;
+  }
 end
 
 module Database : sig
-  val uri : string
+  type t = { uri : string }
 end
 
 module Email : sig
-  val default_from_display_name : string
-  val default_from_email : string
-  val default_subject_prefix : string
-  val default_signature : string option
+  type t = {
+    default_from_display_name : string;
+    default_from_email : string;
+    default_subject_prefix : string;
+    default_signature : string option;
+  }
 end
+
+val smtp : Smtp.t
+val database : Database.t
+val email : Email.t

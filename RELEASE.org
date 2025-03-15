@@ -15,7 +15,7 @@ git pull
 Check that the config (especially db uri) is correct. In any case,
 running the beta /shouldn't/ have permissions to alter the prod db.
 
-cat config.env
+cat pmp6.sexp
 
 * Get env
 

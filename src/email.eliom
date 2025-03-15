@@ -1,11 +1,11 @@
 let config =
   Letters.Config.create
-    ~username:Settings.Smtp.username
-    ~password:Settings.Smtp.password
-    ~hostname:Settings.Smtp.host
-    ~with_starttls:Settings.Smtp.use_starttls
+    ~username:Settings.smtp.username
+    ~password:Settings.smtp.password
+    ~hostname:Settings.smtp.host
+    ~with_starttls:Settings.smtp.use_starttls
     ()
-  |> Letters.Config.set_port (Some Settings.Smtp.port)
+  |> Letters.Config.set_port (Some Settings.smtp.port)
 
 let mailbox_as_string_exn ~display_name ~email =
   let email_mailbox =
@@ -18,13 +18,13 @@ let mailbox_as_string_exn ~display_name ~email =
 
 let send
     ?auto_generated
-    ?(display_name = Settings.Email.default_from_display_name)
-    ?(from = Settings.Email.default_from_email)
+    ?(display_name = Settings.email.default_from_display_name)
+    ?(from = Settings.email.default_from_email)
     ~to_
     ~subject
-    ?(subject_prefix = Settings.Email.default_subject_prefix)
+    ?(subject_prefix = Settings.email.default_subject_prefix)
     ~content
-    ?(signature = Settings.Email.default_signature)
+    ?(signature = Settings.email.default_signature)
     ?(cc = [])
     ?(bcc = [])
     () =

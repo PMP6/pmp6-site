@@ -1,0 +1,25 @@
+;; -*- lisp -*-
+
+;; DO NOT PUT ANY ACTUAL SECRET HERE
+;;
+;; This file is tracked by git and serves as an example schema of an
+;; actual config file. It should be copied to PROJECT_NAME.sexp, which
+;; will not be tracked, and then this .sexp file should be edited to
+;; contain the actual config that will be read by the website code
+;; (including secrets).
+;;
+;; MAKE THE ACTUAL SECRET FILE NON READABLE BY OTHERS
+;;
+;; See also Makefile.localenv.example for the web server configuration
+
+((smtp
+  ((host ssl0.ovh.net)
+   (port 465)
+   (username noreply@pmp6.fr)
+   (password "***********")
+   (use_starttls false)))
+ (database
+  ((uri "sqlite3:/var/local/pmp6/pmp6.db")
+   ;; (uri sqlite3:pmp6_beta.db)
+   ;; (uri sqlite3:pmp6_test.db)
+   )))
