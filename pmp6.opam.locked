@@ -129,6 +129,7 @@ depends: [
   "ocamlbuild" {= "0.15.0"}
   "ocamlfind" {= "1.9.8"}
   "ocplib-endian" {= "1.2"}
+  "ocsigen-ppx-rpc" {= "1.0"}
   "ocsigenserver" {= "6.0.0"}
   "ocsipersist" {= "2.0.0"}
   "ocsipersist-dbm" {= "2.0.0"}

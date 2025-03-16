@@ -24,6 +24,7 @@ depends: [
   "markup"
   "mrmime"
   "ocsipersist-dbm"
+  "ocsigen-ppx-rpc"
   "omd"
   "ppx_jane"
   "ppx_sexp_conv"
