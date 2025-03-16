@@ -41,7 +41,6 @@ depends: [
   "conduit" {= "7.0.0"}
   "conduit-lwt" {= "7.0.0"}
   "conduit-lwt-unix" {= "7.0.0"}
-  "conf-dbm" {= "1.0.0"}
   "conf-gmp" {= "4"}
   "conf-gmp-powm-sec" {= "3"}
   "conf-libffi" {= "2.0.0"}
@@ -59,7 +58,6 @@ depends: [
   "cstruct" {= "6.2.0"}
   "ctypes" {= "0.23.0"}
   "ctypes-foreign" {= "0.23.0"}
-  "dbm" {= "1.4"}
   "digestif" {= "1.2.0"}
   "domain-name" {= "0.4.1"}
   "dune" {= "3.17.2"}
@@ -132,8 +130,8 @@ depends: [
   "ocsigen-ppx-rpc" {= "1.0"}
   "ocsigenserver" {= "6.0.0"}
   "ocsipersist" {= "2.0.0"}
-  "ocsipersist-dbm" {= "2.0.0"}
   "ocsipersist-lib" {= "2.0.0"}
+  "ocsipersist-sqlite" {= "2.0.0"}
   "ohex" {= "0.2.0"}
   "omd" {= "2.0.0~alpha4"}
   "ordering" {= "3.17.2"}
