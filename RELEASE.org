@@ -22,8 +22,9 @@ cat pmp6.sexp
 rm -fr _opam
 opam update
 
-# Possibly fix the ocaml version
-opam switch create . ocaml-base-compiler.4.14.2 --locked --deps-only
+# These instructions may not be up-to-date: OCaml version needs to
+# match the lockfile
+opam switch create . ocaml-base-compiler.5.2.1 --locked --deps-only
 eval $(opam env)
 
 rm -fr node_modules
