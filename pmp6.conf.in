@@ -15,9 +15,7 @@
     <commandpipe>%%CMDPIPE%%</commandpipe>
     <extension findlib-package="ocsigenserver.ext.staticmod"/>
     <extension findlib-package="ocsipersist-%%PERSISTENT_DATA_BACKEND%%"/>
-    <extension findlib-package="eliom.server">
-      <ignoredgetparams regexp="utm_[a-z]*|[a-z]*clid|li_fat_id"/>
-    </extension>
+    <extension findlib-package="eliom.server" />
     <extension findlib-package="ocsigenserver.ext.deflatemod" />
     %%% This will include the packages defined as SERVER_PACKAGES in your Makefile:
     %%PACKAGES%%
@@ -28,6 +26,7 @@
       <eliommodule module="%%LIBDIR%%/%%PROJECT_NAME%%.cma" />
       <eliom>
         <applicationscript async="true"/>
+        <ignoredgetparams regexp="utm_[a-z]*|[a-z]*clid|li_fat_id" />
       </eliom>
       <deflate compress="only">
         <extension>.js</extension>
