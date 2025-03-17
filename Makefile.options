@@ -31,10 +31,7 @@ COMMON_PACKAGES := \
 	core \
 	markup \
 	fmt \
-	uucp \
-	uuseg \
 	uuseg.string \
-	uunf \
 	uunf.string \
 	lwt_ppx \
 	omd \
