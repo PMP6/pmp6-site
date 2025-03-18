@@ -55,7 +55,16 @@ CLIENT_PACKAGES := \
 	js_of_ocaml-ppx
 
 # A list of runtimes providing functions for js_of_ocaml
-JS_RUNTIMES := base/runtime.js core/runtime.js bin_prot/runtime.js time_now/runtime.js bigstringaf/runtime.js
+JS_RUNTIMES := \
+	base/base_internalhash_types/runtime.js	\
+	base/runtime.js \
+	base_bigstring/runtime.js \
+	bigstringaf/runtime.js \
+	bin_prot/runtime.js \
+	core/runtime.js \
+	ocaml_intrinsics_kernel/runtime.js \
+	ppx_expect/runtime/runtime.js \
+	time_now/runtime.js
 
 # Directory with files to be statically served
 LOCAL_STATIC = dist
