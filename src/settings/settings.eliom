@@ -52,4 +52,4 @@ let get_settings_file () =
   Filename.concat dirname basename
 
 let load_settings () = t_of_sexp @@ Sexp.load_sexp @@ get_settings_file ()
-let ({ smtp; database; email } as foo) = load_settings ()
+let { smtp; database; email } = load_settings ()

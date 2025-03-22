@@ -11,5 +11,5 @@ open Lwt.Infix;;
 #require "letters";;
 #require "mrmime";;
 
-#require "ocsipersist.dbm";;
+#require "ocsipersist.sqlite";;
 #require "eliom.server";;

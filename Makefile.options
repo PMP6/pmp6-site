@@ -25,40 +25,43 @@ SERVER_FILES := $(shell find $(SRC_DIR) -name *.eliom -o -name *.eliomi)
 # Only files that contains "client" or "shared" (should be safe)
 CLIENT_FILES := $(shell grep --include=*.eliom --include=*.eliomi -E "client|shared" --recursive -l $(SRC_DIR))
 
-# OCamlfind packages used for both server and client
-COMMON_PACKAGES := \
-	base64 \
-	core \
-	markup \
-	fmt \
-	uucp \
-	uuseg \
-	uuseg.string \
-	uunf \
-	uunf.string \
-	lwt_ppx \
-	omd \
-	ppx_let \
-	js_of_ocaml-ppx_deriving_json
-
 # OCamlfind packages for the server
 SERVER_PACKAGES := \
-	$(COMMON_PACKAGES) \
 	argon2 \
+	base64 \
 	caqti-driver-sqlite3 \
 	caqti-lwt.unix \
+	core \
 	core_unix \
+	fmt \
+	js_of_ocaml-ppx_deriving_json \
 	letters \
+	lwt_ppx \
+	markup \
 	mrmime \
-	ppx_sexp_conv
+	omd \
+	ppx_let \
+	ppx_sexp_conv \
+	uunf.string \
+	uuseg.string
 
 # OCamlfind packages for the client
 CLIENT_PACKAGES := \
-	$(COMMON_PACKAGES) \
-	js_of_ocaml-ppx
+	core \
+	js_of_ocaml-ppx \
+	lwt_ppx
 
 # A list of runtimes providing functions for js_of_ocaml
-JS_RUNTIMES := base/runtime.js core/runtime.js bin_prot/runtime.js time_now/runtime.js bigstringaf/runtime.js
+JS_RUNTIMES := \
+	base/base_internalhash_types/runtime.js	\
+	base/runtime.js \
+	base_bigstring/runtime.js \
+	bigstringaf/runtime.js \
+	bin_prot/runtime.js \
+	core/runtime.js \
+	ocaml_intrinsics_kernel/runtime.js \
+	ppx_expect/runtime/runtime.js \
+	time_now/runtime.js
 
 # Directory with files to be statically served
 LOCAL_STATIC = dist
@@ -67,7 +70,7 @@ LOCAL_STATIC = dist
 # Make sure you have the following packages installed
 # - *dbm* if you use dbm --> opam install ocsipersist-dbm.
 # - *sqlite3* if you use sqlite --> opam install ocsipersist-sqlite.
-PERSISTENT_DATA_BACKEND = dbm
+PERSISTENT_DATA_BACKEND = sqlite
 
 # Debug application (yes/no): Debugging info in compilation,
 # JavaScript, ocsigenserver

@@ -1,6 +1,6 @@
 module H = Html
 
-let app_js_script () = Skeleton.Static.js_script ~a:[ H.a_defer () ] [ "app.js" ] ()
+let app_js_script () = Skeleton.Static.js_script ~a:[] [ "app.js" ] ()
 
 let gfont_uri () =
   let fonts = [ "Muli"; "Coiny"; "Open+Sans"; "Oswald"; "Inconsolata" ] in
@@ -30,7 +30,6 @@ let head ?(other_head = []) ~title () =
          meta ~a:[ a_name "theme-color"; a_content "#ffffff" ] ();
          css_link ~uri:(Skeleton.Static.css_uri [ "app.css" ]) ();
          css_link ~uri:(gfont_uri ()) ();
-         app_js_script ();
          favicon_link ~size:16;
          favicon_link ~size:32;
          Google.Analytics.gtag_manager ();
@@ -214,9 +213,11 @@ let make_body user toasts content =
   (* empty anchor does not work for smooth scroll *)
   H.body
     ~a:[ H.a_id "top" ]
-    [ header user; carousel (); main ~toasts ~content; footer () ]
+    [ header user; carousel (); main ~toasts ~content; footer (); app_js_script () ]
 
 let return_page { Content.title; in_head; in_body } =
+  (* We need to explicitly init foundation here so that it is done on every page change *)
+  let (_ : unit Eliom_client_value.t) = [%client Foundation.init ()] in
   let%lwt toasts = Toast.fetch_and_render () in
   let%lwt user = Auth.Session.get_user () in
   Lwt.return
