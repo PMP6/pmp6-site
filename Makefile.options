@@ -98,16 +98,22 @@ TEST_PREFIX := local/
 # installing/running or $(TEST_PREFIX) when testing).
 # Configuration file $(PROJECT_NAME).conf
 ETCDIR := etc/${PROJECT_NAME}
+
 # Project's library $(PROJECT_NAME).cma (cmxs)
 LIBDIR := lib/${PROJECT_NAME}
+
 # Command pipe, eg. $ echo reload > $(INSTALL_PREFIX)$(CMDPIPE)
 CMDPIPE := var/run/${PROJECT_NAME}-cmd
 MANAGECMDPIPE := var/run/${MANAGE_PROJECT_NAME}-cmd
+
 # Ocsigenserver's logging files
 LOGDIR := var/log/${PROJECT_NAME}
+
 # Ocsigenserver's persistent data files
 DATADIR := var/data/${PROJECT_NAME}
+
 # Copy of $(LOCAL_STATIC)
 STATICDIR := var/www/${PROJECT_NAME}/staticfiles
+
 # Project's JavaScript file
 ELIOMSTATICDIR := var/www/${PROJECT_NAME}/eliom
