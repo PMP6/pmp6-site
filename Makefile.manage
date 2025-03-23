@@ -1,0 +1,45 @@
+##----------------------------------------------------------------------
+## Management mock project specific compilation
+
+$(TEST_PREFIX)${ETCDIR}/${MANAGE_PROJECT_NAME}.conf: ${MANAGE_PROJECT_NAME}.conf.in Makefile.options | $(TEST_PREFIX)$(ETCDIR)
+	sed $(SED_ARGS) $(LOCAL_SED_ARGS) $< | sed -e "s|%%PREFIX%%|$(TEST_PREFIX)|g" > $@
+
+# Use sort to get subdir uniqueness
+MANAGE_DIRS := $(sort $(dir $(MANAGE_FILES)))
+MANAGE_DEP_DIRS := ${addprefix -eliom-inc ,${MANAGE_DIRS}}
+MANAGE_INC_DIRS := ${addprefix -I $(ELIOM_SERVER_DIR)/, ${MANAGE_DIRS}}
+
+SERVER_INC  := ${addprefix -package ,${SERVER_PACKAGES}}
+
+${ELIOM_TYPE_DIR}/${MANAGE_DIR}/%.type_mli: ${MANAGE_DIR}/%.eliom
+	${ELIOMC} -infer ${SERVER_INC} ${SERVER_INC_DIRS} ${MANAGE_INC_DIRS} $<
+
+$(TEST_PREFIX)$(LIBDIR)/$(MANAGE_PROJECT_NAME).cma: $(call objs,$(ELIOM_SERVER_DIR),cmo,$(MANAGE_FILES)) $(call objs,$(ELIOM_SERVER_DIR),cmo,$(SERVER_FILES)) $(TEST_PREFIX)$(LIBDIR)/$(PROJECT_NAME).cma | $(TEST_PREFIX)$(LIBDIR)
+	${ELIOMC} -a -o $@ $(GENERATE_DEBUG) \
+	  $(call depsort,$(ELIOM_SERVER_DIR),cmo,-server,$(SERVER_INC),$(MANAGE_FILES) $(SERVER_FILES))
+
+.PHONY: manage manage.byte fixtures-media
+
+manage: fixtures-media manage.byte
+
+superuser :
+	$(MAKE) MANAGE_COMMAND=superuser manage
+
+fixtures:
+	$(MAKE) MANAGE_COMMAND=fixtures manage
+
+fixtures-media: $(FIXTURES_DIR)/media
+	mkdir -p $(LOCAL_STATIC)/media
+	cp -r $(FIXTURES_DIR)/media/* $(LOCAL_STATIC)/media
+
+manage.byte: $(addprefix $(TEST_PREFIX),$(ETCDIR)/$(MANAGE_PROJECT_NAME).conf $(ETCDIR)/$(PROJECT_NAME).sexp $(DIST_DIRS) $(LIBDIR)/$(MANAGE_PROJECT_NAME).cma)
+	$(OCSIGENSERVER) $(RUN_DEBUG) -c $<
+
+${ELIOM_SERVER_DIR}/${MANAGE_DIR}/%.cmi: ${MANAGE_DIR}/%.eliomi
+	${ELIOMC} -c ${SERVER_INC} ${SERVER_INC_DIRS} ${MANAGE_INC_DIRS} $(GENERATE_DEBUG) $<
+
+${ELIOM_SERVER_DIR}/${MANAGE_DIR}/%.cmo: ${MANAGE_DIR}/%.eliom
+	${ELIOMC} -c ${SERVER_INC} ${SERVER_INC_DIRS} ${MANAGE_INC_DIRS} $(GENERATE_DEBUG) $<
+
+${ELIOM_SERVER_DIR}/${MANAGE_DIR}/%.cmx: ${MANAGE_DIR}/%.eliom
+	${ELIOMOPT} -c ${SERVER_INC} ${SERVER_INC_DIRS} ${MANAGE_INC_DIRS} $(GENERATE_DEBUG) $<
