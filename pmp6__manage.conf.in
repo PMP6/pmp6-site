@@ -20,7 +20,7 @@
     %%PACKAGES%%
 
     <host defaulthostname="localhost" hostfilter="localhost 127.0.0.1">
-      <static dir="%%STATICDIR%%" />
+      <static dir="%%STATICFILESDIR%%" />
       <static dir="%%ELIOMSTATICDIR%%" />
       <eliommodule module="%%LIBDIR%%/%%MANAGE_PROJECT_NAME%%.cma" />
       <eliom>

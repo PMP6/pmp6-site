@@ -22,7 +22,7 @@
     %%PACKAGES%%
 
     <host defaulthostname="%%DEFAULT_HOSTNAME%%" hostfilter="*" defaulthttpport="%%DEFAULT_HTTP_PORT%%" defaulthttpsport="%%DEFAULT_HTTPS_PORT%%" defaultprotocol="%%DEFAULT_PROTOCOL%%">
-      <static dir="%%STATICDIR%%" />
+      <static dir="%%STATICFILESDIR%%" />
       <static dir="%%ELIOMSTATICDIR%%" />
       <eliommodule module="%%LIBDIR%%/%%PROJECT_NAME%%.cma" />
       <eliom>

@@ -53,7 +53,7 @@ byte opt:: $(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME)-test.conf
 byte:: $(TEST_PREFIX)$(LIBDIR)/${PROJECT_NAME}.cma
 opt:: $(TEST_PREFIX)$(LIBDIR)/${PROJECT_NAME}.cmxs
 
-DIST_DIRS = $(ETCDIR) $(DATADIR) $(LIBDIR) $(LOGDIR) $(STATICDIR) $(ELIOMSTATICDIR) $(shell dirname $(CMDPIPE))
+DIST_DIRS = $(ETCDIR) $(DATADIR) $(LIBDIR) $(LOGDIR) $(STATICFILESDIR) $(ELIOMSTATICDIR) $(shell dirname $(CMDPIPE))
 
 ##----------------------------------------------------------------------
 ## Testing
@@ -83,9 +83,9 @@ install.lib.byte: $(TEST_PREFIX)$(LIBDIR)/$(PROJECT_NAME).cma | $(PREFIX)$(LIBDI
 	install $< $(PREFIX)$(LIBDIR)
 install.lib.opt: $(TEST_PREFIX)$(LIBDIR)/$(PROJECT_NAME).cmxs | $(PREFIX)$(LIBDIR)
 	install $< $(PREFIX)$(LIBDIR)
-install.static: $(TEST_PREFIX)$(ELIOMSTATICDIR)/$(PROJECT_NAME).js | $(PREFIX)$(STATICDIR) $(PREFIX)$(ELIOMSTATICDIR)
-	cp -r $(LOCAL_STATIC)/* $(PREFIX)$(STATICDIR)
-	[ -z $(WWWUSER) ] || chown -R $(WWWUSER):$(WWWGROUP) $(PREFIX)$(STATICDIR)
+install.static: $(TEST_PREFIX)$(ELIOMSTATICDIR)/$(PROJECT_NAME).js | $(PREFIX)$(STATICFILESDIR) $(PREFIX)$(ELIOMSTATICDIR)
+	cp -r $(LOCAL_STATIC)/* $(PREFIX)$(STATICFILESDIR)
+	[ -z $(WWWUSER) ] || chown -R $(WWWUSER):$(WWWGROUP) $(PREFIX)$(STATICFILESDIR)
 	install $(addprefix -o ,$(WWWUSER)) $(addprefix -g ,$(WWWGROUP)) $< $(PREFIX)$(ELIOMSTATICDIR)
 install.etc: $(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME).conf $(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME).sexp | $(PREFIX)$(ETCDIR)
 	install -t $(PREFIX)$(ETCDIR) $^
@@ -93,13 +93,13 @@ install.etc: $(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME).conf $(TEST_PREFIX)$(ETCDIR
 .PHONY:
 print-install-files:
 	@echo $(PREFIX)$(LIBDIR)
-	@echo $(PREFIX)$(STATICDIR)
+	@echo $(PREFIX)$(STATICFILESDIR)
 	@echo $(PREFIX)$(ELIOMSTATICDIR)
 	@echo $(PREFIX)$(ETCDIR)
 
 $(addprefix $(PREFIX),$(ETCDIR) $(LIBDIR)):
 	install -d $@
-$(addprefix $(PREFIX),$(DATADIR) $(LOGDIR) $(STATICDIR) $(ELIOMSTATICDIR) $(shell dirname $(CMDPIPE))):
+$(addprefix $(PREFIX),$(DATADIR) $(LOGDIR) $(STATICFILESDIR) $(ELIOMSTATICDIR) $(shell dirname $(CMDPIPE))):
 	install $(addprefix -o ,$(WWWUSER)) $(addprefix -g ,$(WWWGROUP)) -d $@
 
 run.byte:
@@ -151,9 +151,9 @@ else
 endif
 
 LOCAL_SED_ARGS := -e "s|%%PORT%%|$(TEST_PORT)|g"
-LOCAL_SED_ARGS += -e "s|%%STATICDIR%%|$(LOCAL_STATIC)|g"
+LOCAL_SED_ARGS += -e "s|%%STATICFILESDIR%%|$(LOCAL_STATIC)|g"
 GLOBAL_SED_ARGS := -e "s|%%PORT%%|$(PORT)|g"
-GLOBAL_SED_ARGS += -e "s|%%STATICDIR%%|%%PREFIX%%$(STATICDIR)|g"
+GLOBAL_SED_ARGS += -e "s|%%STATICFILESDIR%%|%%PREFIX%%$(STATICFILESDIR)|g"
 
 $(TEST_PREFIX)${ETCDIR}/${PROJECT_NAME}.conf: ${PROJECT_NAME}.conf.in Makefile.options | $(TEST_PREFIX)$(ETCDIR)
 	sed $(SED_ARGS) $(GLOBAL_SED_ARGS) $< | sed -e "s|%%PREFIX%%|$(PREFIX)|g" > $@
