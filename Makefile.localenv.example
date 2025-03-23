@@ -2,7 +2,7 @@
 # Makefile.localenv to have it included in Makefile. Git will ignore
 # it.
 
-HOSTNAME = localhost # or myhostname.com
+DEFAULT_HOSTNAME = localhost # or myhostname.com
 
 # Default port/protocol used to generate absolute links
 # These should match the configuration as seen by end-user browsers

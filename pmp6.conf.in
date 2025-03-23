@@ -10,6 +10,7 @@
     <logdir>%%LOGDIR%%</logdir>
     <datadir>%%DATADIR%%</datadir>
     <charset>utf-8</charset>
+    <usedefaulthostname/>
     %%% Only set when debugging
     %%DEBUGMODE%%
     <commandpipe>%%CMDPIPE%%</commandpipe>
@@ -20,7 +21,7 @@
     %%% This will include the packages defined as SERVER_PACKAGES in your Makefile:
     %%PACKAGES%%
 
-    <host defaulthostname="%%HOSTNAME%%" hostfilter="*" defaulthttpport="%%DEFAULT_HTTP_PORT%%" defaulthttpsport="%%DEFAULT_HTTPS_PORT%%" defaultprotocol="%%DEFAULT_PROTOCOL%%">
+    <host defaulthostname="%%DEFAULT_HOSTNAME%%" hostfilter="*" defaulthttpport="%%DEFAULT_HTTP_PORT%%" defaulthttpsport="%%DEFAULT_HTTPS_PORT%%" defaultprotocol="%%DEFAULT_PROTOCOL%%">
       <static dir="%%STATICDIR%%" />
       <static dir="%%ELIOMSTATICDIR%%" />
       <eliommodule module="%%LIBDIR%%/%%PROJECT_NAME%%.cma" />
