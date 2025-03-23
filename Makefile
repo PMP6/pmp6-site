@@ -9,7 +9,7 @@ include Makefile.options
 include Makefile.localenv
 
 ##----------------------------------------------------------------------
-##			      Internals
+##                Internals
 
 ## Generate js_of_eliom runtime options
 JSOPT_RUNTIMES := $(addprefix -jsopt +,${JS_RUNTIMES})
@@ -43,6 +43,8 @@ ifeq ($(DEBUG),yes)
 endif
 
 ##----------------------------------------------------------------------
+
+##----------------------------------------------------------------------
 ## General
 
 .PHONY: all byte opt
@@ -56,11 +58,14 @@ opt:: $(TEST_PREFIX)$(LIBDIR)/${PROJECT_NAME}.cmxs
 DIST_DIRS = $(ETCDIR) $(DATADIR) $(LIBDIR) $(LOGDIR) $(STATICFILESDIR) $(ELIOMSTATICDIR) $(shell dirname $(CMDPIPE))
 
 ##----------------------------------------------------------------------
+
+##----------------------------------------------------------------------
 ## Testing
 
 DIST_FILES = $(ELIOMSTATICDIR)/$(PROJECT_NAME).js $(LIBDIR)/$(PROJECT_NAME).cma
 
 .PHONY: test.byte test.opt
+
 test.byte: $(addprefix $(TEST_PREFIX),$(ETCDIR)/$(PROJECT_NAME)-test.conf $(ETCDIR)/$(PROJECT_NAME).sexp $(DIST_DIRS) $(DIST_FILES))
 	$(OCSIGENSERVER) $(RUN_DEBUG) -c $<
 test.opt: $(addprefix $(TEST_PREFIX),$(ETCDIR)/$(PROJECT_NAME)-test.conf $(ETCDIR)/$(PROJECT_NAME).sexp $(DIST_DIRS) $(patsubst %.cma,%.cmxs, $(DIST_FILES)))
