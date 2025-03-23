@@ -15,9 +15,9 @@
     %%DEBUGMODE%%
     <commandpipe>%%CMDPIPE%%</commandpipe>
     <extension findlib-package="ocsigenserver.ext.staticmod"/>
+    <extension findlib-package="ocsigenserver.ext.deflatemod" />
     <extension findlib-package="ocsipersist-sqlite"/>
     <extension findlib-package="eliom.server" />
-    <extension findlib-package="ocsigenserver.ext.deflatemod" />
     %%% This will include the packages defined as SERVER_PACKAGES in your Makefile:
     %%PACKAGES%%
 
