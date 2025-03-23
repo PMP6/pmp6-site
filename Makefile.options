@@ -63,13 +63,6 @@ JS_RUNTIMES := \
 	ppx_expect/runtime/runtime.js \
 	time_now/runtime.js
 
-# Directory with files to be statically served
-LOCAL_STATIC = dist
-
-# Debug application (yes/no): Debugging info in compilation,
-# JavaScript, ocsigenserver
-DEBUG := no
-
 # User to run server with (make run.*)
 WWWUSER := thibault
 WWWGROUP := thibault
@@ -110,3 +103,10 @@ STATICFILESDIR := var/www/${PROJECT_NAME}/staticfiles
 
 # Project's JavaScript file directory
 ELIOMSTATICDIR := var/www/${PROJECT_NAME}/eliom
+
+# Directory with files to be statically served
+LOCAL_STATIC := dist
+
+# Debug application (yes/no): Debugging info in compilation,
+# JavaScript, ocsigenserver
+DEBUG := no
