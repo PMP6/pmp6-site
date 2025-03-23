@@ -128,9 +128,10 @@ depsort=$(call objs,$(1),$(2),$(call eliomdep,$(3),$(4),$(5)))
 
 FINDLIB_PACKAGES=$(patsubst %,\<extension\ findlib-package=\"%\"\ /\>,$(SERVER_PACKAGES))
 EDIT_WARNING=DON\'T EDIT THIS FILE! It is generated from $(PROJECT_NAME).conf.in, edit that one, or the variables in Makefile.options
-SED_ARGS := -e "/^ *%%%/d"
+SED_ARGS = -e "/^ *%%%/d"
 SED_ARGS += -e "s|%%PROJECT_NAME%%|$(PROJECT_NAME)|g"
 SED_ARGS += -e "s|%%CMDPIPE%%|%%PREFIX%%$(CMDPIPE)|g"
+SED_ARGS += -e "s|%%MANAGE_PROJECT_NAME%%|$(MANAGE_PROJECT_NAME)|g"
 SED_ARGS += -e "s|%%MANAGECMDPIPE%%|%%PREFIX%%$(MANAGECMDPIPE)|g"
 SED_ARGS += -e "s|%%LOGDIR%%|%%PREFIX%%$(LOGDIR)|g"
 SED_ARGS += -e "s|%%DATADIR%%|%%PREFIX%%$(DATADIR)|g"
@@ -138,9 +139,7 @@ SED_ARGS += -e "s|%%LIBDIR%%|%%PREFIX%%$(LIBDIR)|g"
 SED_ARGS += -e "s|%%WARNING%%|$(EDIT_WARNING)|g"
 SED_ARGS += -e "s|%%PACKAGES%%|$(FINDLIB_PACKAGES)|g"
 SED_ARGS += -e "s|%%ELIOMSTATICDIR%%|%%PREFIX%%$(ELIOMSTATICDIR)|g"
-SED_ARGS += -e "s|%%STATICURL%%|$(STATIC_URL)|g"
 SED_ARGS += -e "s|%%DEFAULT_HOSTNAME%%|$(HOSTNAME)|g"
-SED_ARGS += -e "s|%%MANAGE_PROJECT_NAME%%|$(MANAGE_PROJECT_NAME)|g"
 SED_ARGS += -e "s|%%DEFAULT_HTTP_PORT%%|$(DEFAULT_HTTP_PORT)|g"
 SED_ARGS += -e "s|%%DEFAULT_HTTPS_PORT%%|$(DEFAULT_HTTPS_PORT)|g"
 SED_ARGS += -e "s|%%DEFAULT_PROTOCOL%%|$(DEFAULT_PROTOCOL)|g"
