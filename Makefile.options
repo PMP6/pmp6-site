@@ -12,11 +12,15 @@ SRC_DIR := src
 MANAGE_DIR := manage
 FIXTURES_DIR := ${MANAGE_DIR}/fixtures
 
-MANAGE_FILES := $(shell find $(MANAGE_DIR) -name *.eliom -o -name *.eliomi)
+##----------------------------------------------------------------------
+## Compilation settings
 
 WARNINGS := +a-4-40-41-42-44-45-48-58-59-70
 OPENFLAGS := -open Core
 CFLAGS := -strict-formats -short-paths
+
+# Source files for the manage mock project
+MANAGE_FILES := $(shell find $(MANAGE_DIR) -name *.eliom -o -name *.eliomi)
 
 # Source files for the server
 SERVER_FILES := $(shell find $(SRC_DIR) -name *.eliom -o -name *.eliomi)
@@ -63,6 +67,9 @@ JS_RUNTIMES := \
 	ppx_expect/runtime/runtime.js \
 	time_now/runtime.js
 
+##----------------------------------------------------------------------
+## Ocsigenserver configuration
+
 # User to run server with (make run.*)
 WWWUSER := thibault
 WWWGROUP := thibault
@@ -73,14 +80,18 @@ PORT := 8888
 # Port for testing (make test.*)
 TEST_PORT := 8080
 
+##----------------------------------------------------------------------
+## The installation tree
+##
+## Relative to:
+## - $(PREFIX) when installing/running
+## - $(TEST_PREFIX) when testing
+
 # Root of installation (must end with /)
 PREFIX := /usr/local/
 
 # Local folder for make test.* (must end with /)
 TEST_PREFIX := local/
-
-## The installation tree (relative to $(PREFIX) when installing/running or
-## $(TEST_PREFIX) when testing).
 
 # Configuration file $(PROJECT_NAME).conf
 ETCDIR := etc/${PROJECT_NAME}
@@ -106,6 +117,9 @@ ELIOMSTATICDIR := var/www/${PROJECT_NAME}/eliom
 
 # Directory with files to be statically served
 LOCAL_STATIC := dist
+
+##----------------------------------------------------------------------
+## Debugging settings
 
 # Debug application (yes/no): Debugging info in compilation,
 # JavaScript, ocsigenserver
