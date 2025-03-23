@@ -130,8 +130,6 @@ FINDLIB_PACKAGES=$(patsubst %,\<extension\ findlib-package=\"%\"\ /\>,$(SERVER_P
 EDIT_WARNING=DON\'T EDIT THIS FILE! It is generated from $(PROJECT_NAME).conf.in, edit that one, or the variables in Makefile.options
 SED_ARGS := -e "/^ *%%%/d"
 SED_ARGS += -e "s|%%PROJECT_NAME%%|$(PROJECT_NAME)|g"
-SED_ARGS += -e "s|%%DATABASE_NAME%%|$(DATABASE_NAME)|g"
-SED_ARGS += -e "s|%%DATABASE_USER%%|$(DATABASE_USER)|g"
 SED_ARGS += -e "s|%%CMDPIPE%%|%%PREFIX%%$(CMDPIPE)|g"
 SED_ARGS += -e "s|%%MANAGECMDPIPE%%|%%PREFIX%%$(MANAGECMDPIPE)|g"
 SED_ARGS += -e "s|%%LOGDIR%%|%%PREFIX%%$(LOGDIR)|g"
