@@ -84,19 +84,18 @@ TEST_PORT := 8080
 PREFIX := /usr/local/
 
 # Local folder for make test.* (must end with /)
-# Do not add files manually in this directory.
-# It is just here to test your installation before installing in /
 TEST_PREFIX := local/
 
-# The installation tree (relative to $(PREFIX) when
-# installing/running or $(TEST_PREFIX) when testing).
+## The installation tree (relative to $(PREFIX) when installing/running or
+## $(TEST_PREFIX) when testing).
+
 # Configuration file $(PROJECT_NAME).conf
 ETCDIR := etc/${PROJECT_NAME}
 
 # Project's library $(PROJECT_NAME).cma (cmxs)
 LIBDIR := lib/${PROJECT_NAME}
 
-# Command pipe, eg. $ echo reload > $(INSTALL_PREFIX)$(CMDPIPE)
+# Command pipe, eg. $ echo restart > $(INSTALL_PREFIX)$(CMDPIPE)
 CMDPIPE := var/run/${PROJECT_NAME}-cmd
 MANAGECMDPIPE := var/run/${MANAGE_PROJECT_NAME}-cmd
 
@@ -106,8 +105,8 @@ LOGDIR := var/log/${PROJECT_NAME}
 # Ocsigenserver's persistent data files
 DATADIR := var/data/${PROJECT_NAME}
 
-# Copy of $(LOCAL_STATIC)
+# Project's served static files
 STATICFILESDIR := var/www/${PROJECT_NAME}/staticfiles
 
-# Project's JavaScript file
+# Project's JavaScript file directory
 ELIOMSTATICDIR := var/www/${PROJECT_NAME}/eliom
