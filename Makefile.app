@@ -12,12 +12,6 @@
 JSOPT_RUNTIMES := $(addprefix -jsopt +,${JS_RUNTIMES})
 
 ## Required binaries
-OCAMLC            := ocamlc -w ${WARNINGS} ${CFLAGS} ${OPENFLAGS}
-OCAMLOPT          := ocamlopt -w ${WARNINGS} ${CFLAGS} ${OPENFLAGS}
-ELIOMC            := eliomc -ppx -w ${WARNINGS} ${CFLAGS} ${OPENFLAGS}
-ELIOMOPT          := eliomopt -ppx -w ${WARNINGS} ${CFLAGS} ${OPENFLAGS}
-JS_OF_ELIOM       := js_of_eliom -ppx ${JSOPT_RUNTIMES} ${OPENFLAGS}
-ELIOMDEP          := eliomdep
 OCSIGENSERVER     := ocsigenserver
 OCSIGENSERVER.OPT := ocsigenserver.opt
 OCAMLFORMAT       := ocamlformat
@@ -123,14 +117,6 @@ run.opt:
 	$(OCSIGENSERVER.OPT) $(RUN_DEBUG) -c ${PREFIX}${ETCDIR}/${PROJECT_NAME}.conf
 
 ##----------------------------------------------------------------------
-## Aux
-
-eliomdep=$(shell $(ELIOMDEP) $(1) -ppx -sort $(2) $(filter %.eliom %.ml,$(3))))
-
-objs=$(patsubst %.ml,$(1)/%.$(2),$(patsubst %.eliom,$(1)/%.$(2),$(filter %.eliom %.ml,$(3))))
-depsort=$(call objs,$(1),$(2),$(call eliomdep,$(3),$(4),$(5)))
-
-##----------------------------------------------------------------------
 ## Config files
 
 FINDLIB_PACKAGES=$(patsubst %,\<extension\ findlib-package=\"%\"\ /\>,$(SERVER_PACKAGES))
@@ -172,6 +158,24 @@ $(SEXP_FILE): $(SEXP_IN) | $(TEST_PREFIX)$(ETCDIR)
 	install $< $@
 
 ##----------------------------------------------------------------------
+## Required compilers
+
+OCAMLC            := ocamlc -w ${WARNINGS} ${CFLAGS} ${OPENFLAGS}
+OCAMLOPT          := ocamlopt -w ${WARNINGS} ${CFLAGS} ${OPENFLAGS}
+ELIOMC            := eliomc -ppx -w ${WARNINGS} ${CFLAGS} ${OPENFLAGS}
+ELIOMOPT          := eliomopt -ppx -w ${WARNINGS} ${CFLAGS} ${OPENFLAGS}
+JS_OF_ELIOM       := js_of_eliom -ppx ${JSOPT_RUNTIMES} ${OPENFLAGS}
+ELIOMDEP          := eliomdep
+
+##----------------------------------------------------------------------
+## Aux
+
+eliomdep=$(shell $(ELIOMDEP) $(1) -ppx -sort $(2) $(filter %.eliom %.ml,$(3))))
+
+objs=$(patsubst %.ml,$(1)/%.$(2),$(patsubst %.eliom,$(1)/%.$(2),$(filter %.eliom %.ml,$(3))))
+depsort=$(call objs,$(1),$(2),$(call eliomdep,$(3),$(4),$(5)))
+
+##----------------------------------------------------------------------
 ## Server side compilation
 
 # Use sort to get subdir uniqueness
@@ -203,11 +207,6 @@ ${ELIOM_SERVER_DIR}/${SRC_DIR}/%.cmo: ${SRC_DIR}/%.eliom
 
 ${ELIOM_SERVER_DIR}/${SRC_DIR}/%.cmx: ${SRC_DIR}/%.eliom
 	${ELIOMOPT} -c ${SERVER_INC} ${SERVER_INC_DIRS} $(GENERATE_DEBUG) $<
-
-##----------------------------------------------------------------------
-## Management mock project specific compilation
-
-include Makefile.manage
 
 ##----------------------------------------------------------------------
 ## Client side compilation
@@ -261,6 +260,11 @@ $(DEPSDIR):
 	mkdir -p $(addprefix $@/, $(SERVER_DIRS))
 	mkdir -p $(addprefix $@/, $(CLIENT_DIRS))
 	mkdir -p $(addprefix $@/, $(MANAGE_DIRS))
+
+##----------------------------------------------------------------------
+## Management mock project specific compilation
+
+include Makefile.manage
 
 ##----------------------------------------------------------------------
 ## Clean up
