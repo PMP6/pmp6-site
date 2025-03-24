@@ -55,9 +55,13 @@ DIST_DIRS          := $(ETCDIR) $(DATADIR) $(LIBDIR) $(LOGDIR) \
 		      $(STATICFILESDIR) $(ELIOMSTATICDIR) \
 		      $(shell dirname $(CMDPIPE))
 
+CONF_IN           := $(PROJECT_NAME).conf.in
+CONFIG_FILE       := $(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME).conf
+TEST_CONFIG_FILE  := $(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME)-test.conf
+
 byte opt:: $(TEST_PREFIX)$(ELIOMSTATICDIR)/${PROJECT_NAME}.js
-byte opt:: $(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME).conf
-byte opt:: $(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME)-test.conf
+byte opt:: $(CONFIG_FILE)
+byte opt:: $(TEST_CONFIG_FILE)
 byte:: $(TEST_PREFIX)$(LIBDIR)/${PROJECT_NAME}.cma
 opt:: $(TEST_PREFIX)$(LIBDIR)/${PROJECT_NAME}.cmxs
 
@@ -70,9 +74,10 @@ DIST_FILES = $(ELIOMSTATICDIR)/$(PROJECT_NAME).js $(LIBDIR)/$(PROJECT_NAME).cma
 
 .PHONY: test.byte test.opt
 
-test.byte: $(addprefix $(TEST_PREFIX),$(ETCDIR)/$(PROJECT_NAME)-test.conf $(ETCDIR)/$(PROJECT_NAME).sexp $(DIST_DIRS) $(DIST_FILES))
+test.byte: $(TEST_CONFIG_FILE) $(addprefix $(TEST_PREFIX),$(ETCDIR)/$(PROJECT_NAME).sexp $(DIST_DIRS) $(DIST_FILES))
 	$(OCSIGENSERVER) $(RUN_DEBUG) -c $<
-test.opt: $(addprefix $(TEST_PREFIX),$(ETCDIR)/$(PROJECT_NAME)-test.conf $(ETCDIR)/$(PROJECT_NAME).sexp $(DIST_DIRS) $(patsubst %.cma,%.cmxs, $(DIST_FILES)))
+
+test.opt: $(TEST_CONFIG_FILE) $(addprefix $(TEST_PREFIX),$(ETCDIR)/$(PROJECT_NAME).sexp $(DIST_DIRS) $(patsubst %.cma,%.cmxs, $(DIST_FILES)))
 	$(OCSIGENSERVER.OPT) $(RUN_DEBUG) -c $<
 
 $(addprefix $(TEST_PREFIX), $(DIST_DIRS)):
@@ -96,7 +101,7 @@ install.static: $(TEST_PREFIX)$(ELIOMSTATICDIR)/$(PROJECT_NAME).js | $(PREFIX)$(
 	cp -r $(LOCAL_STATIC)/* $(PREFIX)$(STATICFILESDIR)
 	[ -z $(WWWUSER) ] || chown -R $(WWWUSER):$(WWWGROUP) $(PREFIX)$(STATICFILESDIR)
 	install $(addprefix -o ,$(WWWUSER)) $(addprefix -g ,$(WWWGROUP)) $< $(PREFIX)$(ELIOMSTATICDIR)
-install.etc: $(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME).conf $(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME).sexp | $(PREFIX)$(ETCDIR)
+install.etc: $(CONFIG_FILE) $(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME).sexp | $(PREFIX)$(ETCDIR)
 	install -t $(PREFIX)$(ETCDIR) $^
 
 .PHONY:
@@ -128,7 +133,7 @@ depsort=$(call objs,$(1),$(2),$(call eliomdep,$(3),$(4),$(5)))
 ## Config files
 
 FINDLIB_PACKAGES=$(patsubst %,\<extension\ findlib-package=\"%\"\ /\>,$(SERVER_PACKAGES))
-EDIT_WARNING=DON\'T EDIT THIS FILE! It is generated from $(PROJECT_NAME).conf.in, edit that one, or the variables in Makefile.options
+EDIT_WARNING=DON\'T EDIT THIS FILE! It is generated from $(CONF_IN), edit that one, or the variables in Makefile.options
 SED_ARGS = -e "/^ *%%%/d"
 SED_ARGS += -e "s|%%PROJECT_NAME%%|$(PROJECT_NAME)|g"
 SED_ARGS += -e "s|%%CMDPIPE%%|%%PREFIX%%$(CMDPIPE)|g"
@@ -156,10 +161,10 @@ LOCAL_SED_ARGS += -e "s|%%STATICFILESDIR%%|$(LOCAL_STATIC)|g"
 GLOBAL_SED_ARGS := -e "s|%%PORT%%|$(PORT)|g"
 GLOBAL_SED_ARGS += -e "s|%%STATICFILESDIR%%|%%PREFIX%%$(STATICFILESDIR)|g"
 
-$(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME).conf: $(PROJECT_NAME).conf.in Makefile.options | $(TEST_PREFIX)$(ETCDIR)
+$(CONFIG_FILE): $(CONF_IN) Makefile.options | $(TEST_PREFIX)$(ETCDIR)
 	sed $(SED_ARGS) $(GLOBAL_SED_ARGS) $< | sed -e "s|%%PREFIX%%|$(PREFIX)|g" > $@
 
-$(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME)-test.conf: $(PROJECT_NAME).conf.in Makefile.options | $(TEST_PREFIX)$(ETCDIR)
+$(TEST_CONFIG_FILE): $(CONF_IN) Makefile.options | $(TEST_PREFIX)$(ETCDIR)
 	sed $(SED_ARGS) $(LOCAL_SED_ARGS) $< | sed -e "s|%%PREFIX%%|$(TEST_PREFIX)|g" > $@
 
 $(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME).sexp: $(PROJECT_NAME).sexp | $(TEST_PREFIX)$(ETCDIR)
