@@ -12,11 +12,15 @@ SRC_DIR := src
 MANAGE_DIR := manage
 FIXTURES_DIR := ${MANAGE_DIR}/fixtures
 
-MANAGE_FILES := $(shell find $(MANAGE_DIR) -name *.eliom -o -name *.eliomi)
+##----------------------------------------------------------------------
+## Compilation settings
 
 WARNINGS := +a-4-40-41-42-44-45-48-58-59-70
 OPENFLAGS := -open Core
 CFLAGS := -strict-formats -short-paths
+
+# Source files for the manage mock project
+MANAGE_FILES := $(shell find $(MANAGE_DIR) -name *.eliom -o -name *.eliomi)
 
 # Source files for the server
 SERVER_FILES := $(shell find $(SRC_DIR) -name *.eliom -o -name *.eliomi)
@@ -63,18 +67,8 @@ JS_RUNTIMES := \
 	ppx_expect/runtime/runtime.js \
 	time_now/runtime.js
 
-# Directory with files to be statically served
-LOCAL_STATIC = dist
-
-# The backend for persistent data. Can be dbm or sqlite.
-# Make sure you have the following packages installed
-# - *dbm* if you use dbm --> opam install ocsipersist-dbm.
-# - *sqlite3* if you use sqlite --> opam install ocsipersist-sqlite.
-PERSISTENT_DATA_BACKEND = sqlite
-
-# Debug application (yes/no): Debugging info in compilation,
-# JavaScript, ocsigenserver
-DEBUG := no
+##----------------------------------------------------------------------
+## Ocsigenserver configuration
 
 # User to run server with (make run.*)
 WWWUSER := thibault
@@ -86,28 +80,47 @@ PORT := 8888
 # Port for testing (make test.*)
 TEST_PORT := 8080
 
+##----------------------------------------------------------------------
+## The installation tree
+##
+## Relative to:
+## - $(PREFIX) when installing/running
+## - $(TEST_PREFIX) when testing
+
 # Root of installation (must end with /)
 PREFIX := /usr/local/
 
 # Local folder for make test.* (must end with /)
-# Do not add files manually in this directory.
-# It is just here to test your installation before installing in /
 TEST_PREFIX := local/
 
-# The installation tree (relative to $(PREFIX) when
-# installing/running or $(TEST_PREFIX) when testing).
 # Configuration file $(PROJECT_NAME).conf
 ETCDIR := etc/${PROJECT_NAME}
+
 # Project's library $(PROJECT_NAME).cma (cmxs)
 LIBDIR := lib/${PROJECT_NAME}
-# Command pipe, eg. $ echo reload > $(INSTALL_PREFIX)$(CMDPIPE)
+
+# Command pipe, eg. $ echo restart > $(INSTALL_PREFIX)$(CMDPIPE)
 CMDPIPE := var/run/${PROJECT_NAME}-cmd
 MANAGECMDPIPE := var/run/${MANAGE_PROJECT_NAME}-cmd
+
 # Ocsigenserver's logging files
 LOGDIR := var/log/${PROJECT_NAME}
+
 # Ocsigenserver's persistent data files
 DATADIR := var/data/${PROJECT_NAME}
-# Copy of $(LOCAL_STATIC)
-STATICDIR := var/www/${PROJECT_NAME}/staticfiles
-# Project's JavaScript file
+
+# Project's served static files
+STATICFILESDIR := var/www/${PROJECT_NAME}/staticfiles
+
+# Project's JavaScript file directory
 ELIOMSTATICDIR := var/www/${PROJECT_NAME}/eliom
+
+# Directory with files to be statically served
+LOCAL_STATIC := dist
+
+##----------------------------------------------------------------------
+## Debugging settings
+
+# Debug application (yes/no): Debugging info in compilation,
+# JavaScript, ocsigenserver
+DEBUG := no

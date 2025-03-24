@@ -10,7 +10,7 @@
 ;;
 ;; MAKE THE ACTUAL SECRET FILE NON READABLE BY OTHERS
 ;;
-;; See also Makefile.localenv.example for the web server configuration
+;; See also Makefile.local.example for the web server configuration
 
 ((smtp
   ((host ssl0.ovh.net)

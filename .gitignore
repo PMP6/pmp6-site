@@ -16,7 +16,7 @@ local
 .depend
 
 # Machine-specific configuration
-Makefile.localenv
+Makefile.local
 pmp6.sexp
 
 # ocsipersist sqlite database
