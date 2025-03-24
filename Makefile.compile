@@ -12,6 +12,13 @@ export ELIOM_TYPE_DIR   := _server
 
 DEPSDIR := _deps
 
+# Source files for the server
+SERVER_FILES := $(shell find $(SRC_DIR) -name *.eliom -o -name *.eliomi)
+
+# Source files for the client
+# Only files that contains "client" or "shared" (should be safe)
+CLIENT_FILES := $(shell grep --include=*.eliom --include=*.eliomi -E "client|shared" --recursive -l $(SRC_DIR))
+
 ##----------------------------------------------------------------------
 ## Required compilers
 
