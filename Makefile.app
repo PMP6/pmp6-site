@@ -36,11 +36,6 @@ TEST_CONFIG_FILE  := $(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME)-test.conf
 SEXP_IN           := $(PROJECT_NAME).sexp
 SEXP_FILE         := $(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME).sexp
 
-byte opt:: $(TEST_PREFIX)$(ELIOMSTATICDIR)/${PROJECT_NAME}.js
-byte opt:: $(CONFIG_FILE)
-byte opt:: $(TEST_CONFIG_FILE)
-byte opt:: $(SEXP_FILE)
-
 ##----------------------------------------------------------------------
 ## Testing
 
@@ -150,6 +145,16 @@ $(SEXP_FILE): $(SEXP_IN) | $(TEST_PREFIX)$(ETCDIR)
 
 ##----------------------------------------------------------------------
 ## Compilation
+
+.PHONY: config-files
+
+config-files: $(CONFIG_FILE) $(TEST_CONFIG_FILE) $(SEXP_FILE) $(TEST_PREFIX)$(ELIOMSTATICDIR)/${PROJECT_NAME}.js
+
+byte::
+	$(MAKE) config-files
+
+opt::
+	$(MAKE) config-files
 
 include Makefile.compile
 
