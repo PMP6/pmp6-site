@@ -51,15 +51,15 @@ endif
 
 all:: byte opt
 
+DIST_DIRS          := $(ETCDIR) $(DATADIR) $(LIBDIR) $(LOGDIR) \
+		      $(STATICFILESDIR) $(ELIOMSTATICDIR) \
+		      $(shell dirname $(CMDPIPE))
+
 byte opt:: $(TEST_PREFIX)$(ELIOMSTATICDIR)/${PROJECT_NAME}.js
 byte opt:: $(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME).conf
 byte opt:: $(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME)-test.conf
 byte:: $(TEST_PREFIX)$(LIBDIR)/${PROJECT_NAME}.cma
 opt:: $(TEST_PREFIX)$(LIBDIR)/${PROJECT_NAME}.cmxs
-
-DIST_DIRS          := $(ETCDIR) $(DATADIR) $(LIBDIR) $(LOGDIR) \
-		      $(STATICFILESDIR) $(ELIOMSTATICDIR) \
-		      $(shell dirname $(CMDPIPE))
 
 ##----------------------------------------------------------------------
 
