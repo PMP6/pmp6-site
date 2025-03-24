@@ -11,7 +11,6 @@
 ## Required binaries
 OCSIGENSERVER     := ocsigenserver
 OCSIGENSERVER.OPT := ocsigenserver.opt
-OCAMLFORMAT       := ocamlformat
 
 ifeq ($(DEBUG),yes)
   GENERATE_DEBUG ?= -g
@@ -165,4 +164,4 @@ distclean: clean
 ## Format
 
 fmt:
-	$(OCAMLFORMAT) --inplace $(SERVER_FILES) $(CLIENT_FILES) $(MANAGE_FILES)
+	ocamlformat --inplace $(SERVER_FILES) $(CLIENT_FILES) $(MANAGE_FILES)
