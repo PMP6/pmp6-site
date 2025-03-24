@@ -81,8 +81,8 @@ $(addprefix $(TEST_PREFIX), $(DIST_DIRS)):
 install-unit:
 	cp pmp6-site.service /etc/systemd/system
 install: install.byte install.opt
-install.byte: install.lib.byte install.etc install.static | $(addprefix $(PREFIX),$(DATADIR) $(LOGDIR) $(shell dirname $(CMDPIPE)))
-install.opt: install.lib.opt install.etc install.static | $(addprefix $(PREFIX),$(DATADIR) $(LOGDIR) $(shell dirname $(CMDPIPE)))
+install.byte: byte install.lib.byte install.etc install.static | $(addprefix $(PREFIX),$(DATADIR) $(LOGDIR) $(shell dirname $(CMDPIPE)))
+install.opt: opt install.lib.opt install.etc install.static | $(addprefix $(PREFIX),$(DATADIR) $(LOGDIR) $(shell dirname $(CMDPIPE)))
 install.lib: install.lib.byte install.lib.opt
 install.lib.byte: $(TEST_PREFIX)$(LIBDIR)/$(PROJECT_NAME).cma | $(PREFIX)$(LIBDIR)
 	install $< $(PREFIX)$(LIBDIR)
