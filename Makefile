@@ -156,12 +156,13 @@ LOCAL_SED_ARGS += -e "s|%%STATICFILESDIR%%|$(LOCAL_STATIC)|g"
 GLOBAL_SED_ARGS := -e "s|%%PORT%%|$(PORT)|g"
 GLOBAL_SED_ARGS += -e "s|%%STATICFILESDIR%%|%%PREFIX%%$(STATICFILESDIR)|g"
 
-$(TEST_PREFIX)${ETCDIR}/${PROJECT_NAME}.conf: ${PROJECT_NAME}.conf.in Makefile.options | $(TEST_PREFIX)$(ETCDIR)
+$(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME).conf: $(PROJECT_NAME).conf.in Makefile.options | $(TEST_PREFIX)$(ETCDIR)
 	sed $(SED_ARGS) $(GLOBAL_SED_ARGS) $< | sed -e "s|%%PREFIX%%|$(PREFIX)|g" > $@
-$(TEST_PREFIX)${ETCDIR}/${PROJECT_NAME}-test.conf: ${PROJECT_NAME}.conf.in Makefile.options | $(TEST_PREFIX)$(ETCDIR)
+
+$(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME)-test.conf: $(PROJECT_NAME).conf.in Makefile.options | $(TEST_PREFIX)$(ETCDIR)
 	sed $(SED_ARGS) $(LOCAL_SED_ARGS) $< | sed -e "s|%%PREFIX%%|$(TEST_PREFIX)|g" > $@
 
-$(TEST_PREFIX)${ETCDIR}/${PROJECT_NAME}.sexp: ${PROJECT_NAME}.sexp | $(TEST_PREFIX)$(ETCDIR)
+$(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME).sexp: $(PROJECT_NAME).sexp | $(TEST_PREFIX)$(ETCDIR)
 	install $< $@
 
 ##----------------------------------------------------------------------
