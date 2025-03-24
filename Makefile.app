@@ -61,20 +61,29 @@ $(addprefix $(TEST_PREFIX), $(DIST_DIRS)):
 ## Installing & Running
 
 .PHONY: install install.byte install.byte install.opt install.static install.etc install.lib install.lib.byte install.lib.opt run.byte run.opt
+
 install-unit:
 	cp pmp6-site.service /etc/systemd/system
+
 install: install.byte install.opt
+
 install.byte: byte install.lib.byte install.etc install.static | $(addprefix $(PREFIX),$(DATADIR) $(LOGDIR) $(shell dirname $(CMDPIPE)))
+
 install.opt: opt install.lib.opt install.etc install.static | $(addprefix $(PREFIX),$(DATADIR) $(LOGDIR) $(shell dirname $(CMDPIPE)))
+
 install.lib: install.lib.byte install.lib.opt
+
 install.lib.byte: $(TEST_PREFIX)$(LIBDIR)/$(PROJECT_NAME).cma | $(PREFIX)$(LIBDIR)
 	install $< $(PREFIX)$(LIBDIR)
+
 install.lib.opt: $(TEST_PREFIX)$(LIBDIR)/$(PROJECT_NAME).cmxs | $(PREFIX)$(LIBDIR)
 	install $< $(PREFIX)$(LIBDIR)
+
 install.static: $(TEST_PREFIX)$(ELIOMSTATICDIR)/$(PROJECT_NAME).js | $(PREFIX)$(STATICFILESDIR) $(PREFIX)$(ELIOMSTATICDIR)
 	cp -r $(LOCAL_STATIC)/* $(PREFIX)$(STATICFILESDIR)
 	[ -z $(WWWUSER) ] || chown -R $(WWWUSER):$(WWWGROUP) $(PREFIX)$(STATICFILESDIR)
 	install $(addprefix -o ,$(WWWUSER)) $(addprefix -g ,$(WWWGROUP)) $< $(PREFIX)$(ELIOMSTATICDIR)
+
 install.etc: $(CONFIG_FILE) $(SEXP_FILE) | $(PREFIX)$(ETCDIR)
 	install -t $(PREFIX)$(ETCDIR) $^
 
@@ -87,11 +96,13 @@ print-install-files:
 
 $(addprefix $(PREFIX),$(ETCDIR) $(LIBDIR)):
 	install -d $@
+
 $(addprefix $(PREFIX),$(DATADIR) $(LOGDIR) $(STATICFILESDIR) $(ELIOMSTATICDIR) $(shell dirname $(CMDPIPE))):
 	install $(addprefix -o ,$(WWWUSER)) $(addprefix -g ,$(WWWGROUP)) -d $@
 
 run.byte:
 	$(OCSIGENSERVER) $(RUN_DEBUG) -c ${PREFIX}${ETCDIR}/${PROJECT_NAME}.conf
+
 run.opt:
 	$(OCSIGENSERVER.OPT) $(RUN_DEBUG) -c ${PREFIX}${ETCDIR}/${PROJECT_NAME}.conf
 
@@ -124,6 +135,7 @@ endif
 
 LOCAL_SED_ARGS := -e "s|%%PORT%%|$(TEST_PORT)|g"
 LOCAL_SED_ARGS += -e "s|%%STATICFILESDIR%%|$(LOCAL_STATIC)|g"
+
 GLOBAL_SED_ARGS := -e "s|%%PORT%%|$(PORT)|g"
 GLOBAL_SED_ARGS += -e "s|%%STATICFILESDIR%%|%%PREFIX%%$(STATICFILESDIR)|g"
 
