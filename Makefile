@@ -78,10 +78,10 @@ DIST_FILES = $(ELIOMSTATICDIR)/$(PROJECT_NAME).js $(LIBDIR)/$(PROJECT_NAME).cma
 
 .PHONY: test.byte test.opt
 
-test.byte: byte $(addprefix $(TEST_PREFIX),$(DIST_DIRS))
+test.byte:: byte | $(addprefix $(TEST_PREFIX),$(DIST_DIRS))
 	$(OCSIGENSERVER) $(RUN_DEBUG) -c $(TEST_CONFIG_FILE)
 
-test.opt: opt $(addprefix $(TEST_PREFIX),$(DIST_DIRS))
+test.opt:: opt | $(addprefix $(TEST_PREFIX),$(DIST_DIRS))
 	$(OCSIGENSERVER.OPT) $(RUN_DEBUG) -c $(TEST_CONFIG_FILE)
 
 $(addprefix $(TEST_PREFIX), $(DIST_DIRS)):
