@@ -1,6 +1,5 @@
 # Contains machine specific configuration. Rename this to
-# Makefile.localenv to have it included in Makefile. Git will ignore
-# it.
+# Makefile.local to have it included in Makefile. Git will ignore it.
 
 DEFAULT_HOSTNAME = localhost # or myhostname.com
 

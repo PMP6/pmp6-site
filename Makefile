@@ -6,7 +6,7 @@
 ##----------------------------------------------------------------------
 
 include Makefile.options
-include Makefile.localenv
+include Makefile.local
 
 ##----------------------------------------------------------------------
 ##                Internals
