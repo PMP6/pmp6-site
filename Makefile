@@ -59,6 +59,9 @@ CONF_IN           := $(PROJECT_NAME).conf.in
 CONFIG_FILE       := $(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME).conf
 TEST_CONFIG_FILE  := $(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME)-test.conf
 
+SEXP_IN           := $(PROJECT_NAME).sexp
+SEXP_FILE         := $(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME).sexp
+
 byte opt:: $(TEST_PREFIX)$(ELIOMSTATICDIR)/${PROJECT_NAME}.js
 byte opt:: $(CONFIG_FILE)
 byte opt:: $(TEST_CONFIG_FILE)
@@ -74,10 +77,10 @@ DIST_FILES = $(ELIOMSTATICDIR)/$(PROJECT_NAME).js $(LIBDIR)/$(PROJECT_NAME).cma
 
 .PHONY: test.byte test.opt
 
-test.byte: $(TEST_CONFIG_FILE) $(addprefix $(TEST_PREFIX),$(ETCDIR)/$(PROJECT_NAME).sexp $(DIST_DIRS) $(DIST_FILES))
+test.byte: $(TEST_CONFIG_FILE) $(SEXP_FILE) $(addprefix $(TEST_PREFIX),$(DIST_DIRS) $(DIST_FILES))
 	$(OCSIGENSERVER) $(RUN_DEBUG) -c $<
 
-test.opt: $(TEST_CONFIG_FILE) $(addprefix $(TEST_PREFIX),$(ETCDIR)/$(PROJECT_NAME).sexp $(DIST_DIRS) $(patsubst %.cma,%.cmxs, $(DIST_FILES)))
+test.opt: $(TEST_CONFIG_FILE) $(SEXP_FILE) $(addprefix $(TEST_PREFIX),$(DIST_DIRS) $(patsubst %.cma,%.cmxs, $(DIST_FILES)))
 	$(OCSIGENSERVER.OPT) $(RUN_DEBUG) -c $<
 
 $(addprefix $(TEST_PREFIX), $(DIST_DIRS)):
@@ -101,7 +104,7 @@ install.static: $(TEST_PREFIX)$(ELIOMSTATICDIR)/$(PROJECT_NAME).js | $(PREFIX)$(
 	cp -r $(LOCAL_STATIC)/* $(PREFIX)$(STATICFILESDIR)
 	[ -z $(WWWUSER) ] || chown -R $(WWWUSER):$(WWWGROUP) $(PREFIX)$(STATICFILESDIR)
 	install $(addprefix -o ,$(WWWUSER)) $(addprefix -g ,$(WWWGROUP)) $< $(PREFIX)$(ELIOMSTATICDIR)
-install.etc: $(CONFIG_FILE) $(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME).sexp | $(PREFIX)$(ETCDIR)
+install.etc: $(CONFIG_FILE) $(SEXP_FILE) | $(PREFIX)$(ETCDIR)
 	install -t $(PREFIX)$(ETCDIR) $^
 
 .PHONY:
@@ -167,7 +170,7 @@ $(CONFIG_FILE): $(CONF_IN) Makefile.options | $(TEST_PREFIX)$(ETCDIR)
 $(TEST_CONFIG_FILE): $(CONF_IN) Makefile.options | $(TEST_PREFIX)$(ETCDIR)
 	sed $(SED_ARGS) $(LOCAL_SED_ARGS) $< | sed -e "s|%%PREFIX%%|$(TEST_PREFIX)|g" > $@
 
-$(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME).sexp: $(PROJECT_NAME).sexp | $(TEST_PREFIX)$(ETCDIR)
+$(SEXP_FILE): $(SEXP_IN) | $(TEST_PREFIX)$(ETCDIR)
 	install $< $@
 
 ##----------------------------------------------------------------------
