@@ -10,7 +10,6 @@ MANAGE_PROJECT_NAME := $(PROJECT_NAME)__manage
 # Root dir for source files.
 SRC_DIR := src
 MANAGE_DIR := manage
-FIXTURES_DIR := ${MANAGE_DIR}/fixtures
 
 ##----------------------------------------------------------------------
 ## Compilation settings
@@ -18,16 +17,6 @@ FIXTURES_DIR := ${MANAGE_DIR}/fixtures
 WARNINGS := +a-4-40-41-42-44-45-48-58-59-70
 OPENFLAGS := -open Core
 CFLAGS := -strict-formats -short-paths
-
-# Source files for the manage mock project
-MANAGE_FILES := $(shell find $(MANAGE_DIR) -name *.eliom -o -name *.eliomi)
-
-# Source files for the server
-SERVER_FILES := $(shell find $(SRC_DIR) -name *.eliom -o -name *.eliomi)
-
-# Source files for the client
-# Only files that contains "client" or "shared" (should be safe)
-CLIENT_FILES := $(shell grep --include=*.eliom --include=*.eliomi -E "client|shared" --recursive -l $(SRC_DIR))
 
 # OCamlfind packages for the server
 SERVER_PACKAGES := \

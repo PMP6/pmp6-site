@@ -182,3 +182,8 @@ distclean: clean
 
 fmt:
 	ocamlformat --inplace $(SERVER_FILES) $(CLIENT_FILES) $(MANAGE_FILES)
+
+##----------------------------------------------------------------------
+## Dependencies
+
+include Makefile.depend

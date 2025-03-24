@@ -12,6 +12,13 @@ export ELIOM_TYPE_DIR   := _server
 
 DEPSDIR := _deps
 
+# Source files for the server
+SERVER_FILES := $(shell find $(SRC_DIR) -name *.eliom -o -name *.eliomi)
+
+# Source files for the client
+# Only files that contains "client" or "shared" (should be safe)
+CLIENT_FILES := $(shell grep --include=*.eliom --include=*.eliomi -E "client|shared" --recursive -l $(SRC_DIR))
+
 ##----------------------------------------------------------------------
 ## Required compilers
 
@@ -98,26 +105,3 @@ ${ELIOM_CLIENT_DIR}/%.cmo: %.ml
 
 ${ELIOM_CLIENT_DIR}/%.cmi: %.eliomi
 	${JS_OF_ELIOM} -c ${CLIENT_INC} ${CLIENT_INC_DIRS} $(GENERATE_DEBUG) $<
-
-##----------------------------------------------------------------------
-## Dependencies
-
-include .depend
-
-.depend: $(patsubst %,$(DEPSDIR)/%.server,$(SERVER_FILES)) $(patsubst %,$(DEPSDIR)/%.client,$(CLIENT_FILES)) $(patsubst %,$(DEPSDIR)/%.manage,$(MANAGE_FILES))
-	cat $^ > $@
-
-$(DEPSDIR)/%.server: % | $(DEPSDIR)
-	$(ELIOMDEP) -server -ppx $(SERVER_INC) $(SERVER_DEP_DIRS) $< > $@
-
-$(DEPSDIR)/%.client: % | $(DEPSDIR)
-	$(ELIOMDEP) -client -ppx $(CLIENT_INC) $(CLIENT_DEP_DIRS) $< > $@
-
-$(DEPSDIR)/%.manage: % | $(DEPSDIR)
-	$(ELIOMDEP) -server -ppx $(SERVER_INC) $(SERVER_DEP_DIRS) $(MANAGE_DEP_DIRS) $< > $@
-
-$(DEPSDIR):
-	mkdir -p $@
-	mkdir -p $(addprefix $@/, $(SERVER_DIRS))
-	mkdir -p $(addprefix $@/, $(CLIENT_DIRS))
-	mkdir -p $(addprefix $@/, $(MANAGE_DIRS))
