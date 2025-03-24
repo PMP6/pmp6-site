@@ -262,6 +262,8 @@ $(DEPSDIR):
 ##----------------------------------------------------------------------
 ## Clean up
 
+.PHONY: clean
+
 clean:
 	-rm -f *.cm[ioax] *.cmxa *.cmxs *.o *.a *.annot
 	-rm -f *.type_mli
