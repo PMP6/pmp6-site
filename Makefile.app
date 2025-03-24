@@ -5,9 +5,6 @@
 ## configured through the variables in the file Makefile.options.
 ##----------------------------------------------------------------------
 
-include Makefile.options
-include Makefile.local
-
 ##----------------------------------------------------------------------
 ##                Internals
 
