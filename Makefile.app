@@ -14,7 +14,7 @@ OCSIGENSERVER.OPT := ocsigenserver.opt
 
 ifeq ($(DEBUG),yes)
   GENERATE_DEBUG ?= -g
-  RUN_DEBUG ?= "-vvv"
+  RUN_DEBUG ?= --veryverbose
   DEBUG_JS ?= -jsopt --pretty -jsopt --noinline -jsopt --debuginfo
 endif
 
