@@ -10,7 +10,6 @@ MANAGE_PROJECT_NAME := $(PROJECT_NAME)__manage
 # Root dir for source files.
 SRC_DIR := src
 MANAGE_DIR := manage
-FIXTURES_DIR := ${MANAGE_DIR}/fixtures
 
 ##----------------------------------------------------------------------
 ## Compilation settings
