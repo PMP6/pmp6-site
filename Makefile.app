@@ -8,24 +8,10 @@
 ##----------------------------------------------------------------------
 ##                Internals
 
-## Generate js_of_eliom runtime options
-JSOPT_RUNTIMES := $(addprefix -jsopt +,${JS_RUNTIMES})
-
 ## Required binaries
 OCSIGENSERVER     := ocsigenserver
 OCSIGENSERVER.OPT := ocsigenserver.opt
 OCAMLFORMAT       := ocamlformat
-
-## Where to put intermediate object files.
-## - ELIOM_{SERVER,CLIENT}_DIR must be distinct
-## - ELIOM_CLIENT_DIR must not be the local dir.
-## - ELIOM_SERVER_DIR could be ".", but you need to
-##   remove it from the "clean" rules...
-export ELIOM_SERVER_DIR := _server
-export ELIOM_CLIENT_DIR := _client
-export ELIOM_TYPE_DIR   := _server
-
-DEPSDIR := _deps
 
 ifeq ($(DEBUG),yes)
   GENERATE_DEBUG ?= -g
@@ -55,8 +41,6 @@ byte opt:: $(TEST_PREFIX)$(ELIOMSTATICDIR)/${PROJECT_NAME}.js
 byte opt:: $(CONFIG_FILE)
 byte opt:: $(TEST_CONFIG_FILE)
 byte opt:: $(SEXP_FILE)
-byte:: $(TEST_PREFIX)$(LIBDIR)/${PROJECT_NAME}.cma
-opt:: $(TEST_PREFIX)$(LIBDIR)/${PROJECT_NAME}.cmxs
 
 ##----------------------------------------------------------------------
 ## Testing

@@ -1,8 +1,22 @@
 ## Legacy-style rules for eliom compilation
 ## This will be replaced by dune in the near future
 
+## Where to put intermediate object files.
+## - ELIOM_{SERVER,CLIENT}_DIR must be distinct
+## - ELIOM_CLIENT_DIR must not be the local dir.
+## - ELIOM_SERVER_DIR could be ".", but you need to
+##   remove it from the "clean" rules...
+export ELIOM_SERVER_DIR := _server
+export ELIOM_CLIENT_DIR := _client
+export ELIOM_TYPE_DIR   := _server
+
+DEPSDIR := _deps
+
 ##----------------------------------------------------------------------
 ## Required compilers
+
+## Generate js_of_eliom runtime options
+JSOPT_RUNTIMES := $(addprefix -jsopt +,${JS_RUNTIMES})
 
 OCAMLC            := ocamlc -w ${WARNINGS} ${CFLAGS} ${OPENFLAGS}
 OCAMLOPT          := ocamlopt -w ${WARNINGS} ${CFLAGS} ${OPENFLAGS}
@@ -21,6 +35,9 @@ depsort=$(call objs,$(1),$(2),$(call eliomdep,$(3),$(4),$(5)))
 
 ##----------------------------------------------------------------------
 ## Server side compilation
+
+byte:: $(TEST_PREFIX)$(LIBDIR)/${PROJECT_NAME}.cma
+opt:: $(TEST_PREFIX)$(LIBDIR)/${PROJECT_NAME}.cmxs
 
 # Use sort to get subdir uniqueness
 SERVER_DIRS := $(sort $(dir $(SERVER_FILES)))
