@@ -65,6 +65,7 @@ SEXP_FILE         := $(TEST_PREFIX)$(ETCDIR)/$(PROJECT_NAME).sexp
 byte opt:: $(TEST_PREFIX)$(ELIOMSTATICDIR)/${PROJECT_NAME}.js
 byte opt:: $(CONFIG_FILE)
 byte opt:: $(TEST_CONFIG_FILE)
+byte opt:: $(SEXP_FILE)
 byte:: $(TEST_PREFIX)$(LIBDIR)/${PROJECT_NAME}.cma
 opt:: $(TEST_PREFIX)$(LIBDIR)/${PROJECT_NAME}.cmxs
 
@@ -77,11 +78,11 @@ DIST_FILES = $(ELIOMSTATICDIR)/$(PROJECT_NAME).js $(LIBDIR)/$(PROJECT_NAME).cma
 
 .PHONY: test.byte test.opt
 
-test.byte: $(TEST_CONFIG_FILE) $(SEXP_FILE) $(addprefix $(TEST_PREFIX),$(DIST_DIRS) $(DIST_FILES))
-	$(OCSIGENSERVER) $(RUN_DEBUG) -c $<
+test.byte: byte $(addprefix $(TEST_PREFIX),$(DIST_DIRS))
+	$(OCSIGENSERVER) $(RUN_DEBUG) -c $(TEST_CONFIG_FILE)
 
-test.opt: $(TEST_CONFIG_FILE) $(SEXP_FILE) $(addprefix $(TEST_PREFIX),$(DIST_DIRS) $(patsubst %.cma,%.cmxs, $(DIST_FILES)))
-	$(OCSIGENSERVER.OPT) $(RUN_DEBUG) -c $<
+test.opt: opt $(addprefix $(TEST_PREFIX),$(DIST_DIRS))
+	$(OCSIGENSERVER.OPT) $(RUN_DEBUG) -c $(TEST_CONFIG_FILE)
 
 $(addprefix $(TEST_PREFIX), $(DIST_DIRS)):
 	mkdir -p $@
