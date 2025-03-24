@@ -15,15 +15,15 @@ include Makefile.local
 JSOPT_RUNTIMES := $(addprefix -jsopt +,${JS_RUNTIMES})
 
 ## Required binaries
-OCAMLC		  := ocamlc -w ${WARNINGS} ${CFLAGS} ${OPENFLAGS}
-OCAMLOPT	  := ocamlopt -w ${WARNINGS} ${CFLAGS} ${OPENFLAGS}
+OCAMLC            := ocamlc -w ${WARNINGS} ${CFLAGS} ${OPENFLAGS}
+OCAMLOPT          := ocamlopt -w ${WARNINGS} ${CFLAGS} ${OPENFLAGS}
 ELIOMC            := eliomc -ppx -w ${WARNINGS} ${CFLAGS} ${OPENFLAGS}
 ELIOMOPT          := eliomopt -ppx -w ${WARNINGS} ${CFLAGS} ${OPENFLAGS}
 JS_OF_ELIOM       := js_of_eliom -ppx ${JSOPT_RUNTIMES} ${OPENFLAGS}
 ELIOMDEP          := eliomdep
 OCSIGENSERVER     := ocsigenserver
 OCSIGENSERVER.OPT := ocsigenserver.opt
-OCAMLFORMAT	  := ocamlformat
+OCAMLFORMAT       := ocamlformat
 
 ## Where to put intermediate object files.
 ## - ELIOM_{SERVER,CLIENT}_DIR must be distinct
