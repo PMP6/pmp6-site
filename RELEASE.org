@@ -65,6 +65,18 @@ sudo make install-unit # If needed
 sudo systemctl daemon-reload # If the unit was reinstalled
 sudo make install.byte
 
+* Check and update nginx conf
+
+** BETA
+
+diff nginx_conf/beta.pmp6.fr.conf /etc/nginx/conf.d/beta.pmp6.fr.conf
+sudo systemctl reload nginx.service
+
+** PROD
+
+diff nginx_conf/pmp6.fr.conf /etc/nginx/conf.d/pmp6.fr.conf
+sudo systemctl reload nginx.service
+
 * Run
 
 ** BETA
