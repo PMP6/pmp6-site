@@ -27,6 +27,13 @@ opam update
 opam switch create . ocaml-base-compiler.5.2.1 --locked --deps-only
 eval $(opam env)
 
+# Compilation might fail because of disk space... To restart:
+opam clean
+opam pin add . --locked
+
+# Post-build cache clean may help for future deployments
+opam clean
+
 rm -fr node_modules
 yarn
 
