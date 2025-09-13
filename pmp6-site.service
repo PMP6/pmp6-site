@@ -9,7 +9,7 @@ User=thibault
 Group=thibault
 Restart=always
 RestartSec=1
-ExecStart=/home/thibault/pmp6-site/run
+ExecStart=/home/thibault/prod-pmp6-site/run
 ExecStop=killall ocsigenserver
 
 [Install]

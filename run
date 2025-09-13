@@ -1,4 +1,4 @@
 #!/usr/bin/sh
-cd /home/thibault/pmp6-site
+cd /home/thibault/prod-pmp6-site
 eval $(opam env)
 make run.byte
