@@ -27,6 +27,12 @@ opam update
 opam switch create . ocaml-base-compiler.5.2.1 --locked --deps-only
 eval $(opam env)
 
+# Some locked packages may be not found if they have been pruned from
+# latest opam repository. If that happens, either recreate an update
+# lockfile if convenient, otherwise (eg. to redeploy an old master
+# build) use the archive repository:
+opam switch create . ocaml-base-compiler.5.2.1 --locked --repos default,archive=https://github.com/ocaml/opam-repository-archive.git
+
 # Compilation might fail because of disk space... To restart:
 opam clean
 opam pin add . --locked
