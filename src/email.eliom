@@ -1,11 +1,11 @@
 let config =
   Letters.Config.create
-    ~username:Settings.smtp_username
-    ~password:Settings.smtp_password
-    ~hostname:Settings.smtp_host
-    ~with_starttls:Settings.smtp_starttls
+    ~username:Settings.smtp.username
+    ~password:Settings.smtp.password
+    ~hostname:Settings.smtp.host
+    ~with_starttls:Settings.smtp.use_starttls
     ()
-  |> Letters.Config.set_port (Some Settings.smtp_port)
+  |> Letters.Config.set_port (Some Settings.smtp.port)
 
 let mailbox_as_string_exn ~display_name ~email =
   let email_mailbox =
@@ -18,13 +18,13 @@ let mailbox_as_string_exn ~display_name ~email =
 
 let send
     ?auto_generated
-    ?(display_name = Settings.default_from_display_name)
-    ?(from = Settings.default_from_email)
+    ?(display_name = Settings.email.default_from_display_name)
+    ?(from = Settings.email.default_from_email)
     ~to_
     ~subject
-    ?(subject_prefix = Settings.default_email_subject_prefix)
+    ?(subject_prefix = Settings.email.default_subject_prefix)
     ~content
-    ?(signature = Settings.default_email_signature)
+    ?(signature = Settings.email.default_signature)
     ?(cc = [])
     ?(bcc = [])
     () =
@@ -109,9 +109,9 @@ let check () =
   send
     ~to_:[ "pmp6@mailinator.com" ]
     ~from:"pmp6@dummy.dummy"
-    ~display_name:"Le site PMP6"
+    ~display_name:"Le site PMP6 éèà"
     ~subject_prefix:"[PMP6] "
-    ~subject:"Test"
-    ~content:"Dummy check"
-    ~signature:(Some "Le site PMP6")
+    ~subject:"Test éèa"
+    ~content:"Dummy check éèà"
+    ?signature:None (* Test that default signature works with its accents *)
     ()

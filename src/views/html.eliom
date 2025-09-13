@@ -205,13 +205,13 @@ let filter_content_signal signal =
       Some content_signal
   | _ -> None
 
+[%%server.start]
+
 let parse txt =
   let signals = Markup.string txt |> Markup.parse_html |> Markup.signals in
   Stdlib.Seq.of_dispenser (fun () -> Markup.next signals)
   |> Stdlib.Seq.filter_map filter_content_signal
   |> Eliom_content.Html.F.of_seq
-
-[%%server.start]
 
 let pp_elt = Eliom_content.Html.Printer.pp_elt
 let elt_to_string elt = Fmt.str "%a" (pp_elt ()) elt

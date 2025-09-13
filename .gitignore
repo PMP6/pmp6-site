@@ -16,6 +16,8 @@ local
 .depend
 
 # Machine-specific configuration
-Makefile.localenv
-secrets.env
-src/settings/settings_profile.mlh
+Makefile.local
+pmp6.sexp
+
+# ocsipersist sqlite database
+ocsidb

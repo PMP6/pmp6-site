@@ -1,8 +1,6 @@
 module%client H = Html
-
 module H = Html
 module F = Foundation
-
 open%client Js_of_ocaml
 open%client Js_of_ocaml_lwt
 

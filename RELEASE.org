@@ -10,21 +10,35 @@ git pull
 git checkout master
 git pull
 
-* Check profile
+* Check config
 
-Check that the profile is correct. In any case, running the beta
-/shouldn't/ have permissions to alter the prod db.
+Check that the config (especially db uri) is correct. In any case,
+running the beta /shouldn't/ have permissions to alter the prod db.
 
-cat src/settings/settings_profile.mlh
+cat pmp6.sexp
 
 * Get env
 
 rm -fr _opam
 opam update
 
-# Possibly fix the ocaml version
-opam switch create . ocaml-base-compiler.4.14.2 --locked --deps-only
+# These instructions may not be up-to-date: OCaml version needs to
+# match the lockfile
+opam switch create . ocaml-base-compiler.5.2.1 --locked --deps-only
 eval $(opam env)
+
+# Some locked packages may be not found if they have been pruned from
+# latest opam repository. If that happens, either recreate an update
+# lockfile if convenient, otherwise (eg. to redeploy an old master
+# build) use the archive repository:
+opam switch create . ocaml-base-compiler.5.2.1 --locked --repos default,archive=https://github.com/ocaml/opam-repository-archive.git
+
+# Compilation might fail because of disk space... To restart:
+opam clean
+opam pin add . --locked
+
+# Post-build cache clean may help for future deployments
+opam clean
 
 rm -fr node_modules
 yarn
@@ -63,6 +77,18 @@ No need to install
 sudo make install-unit # If needed
 sudo systemctl daemon-reload # If the unit was reinstalled
 sudo make install.byte
+
+* Check and update nginx conf
+
+** BETA
+
+diff nginx_conf/beta.pmp6.fr.conf /etc/nginx/conf.d/beta.pmp6.fr.conf
+sudo systemctl reload nginx.service
+
+** PROD
+
+diff nginx_conf/pmp6.fr.conf /etc/nginx/conf.d/pmp6.fr.conf
+sudo systemctl reload nginx.service
 
 * Run
 

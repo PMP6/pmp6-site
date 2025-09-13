@@ -13,6 +13,8 @@ PKG ppx_jane
 # PKG eliom.client
 # PKG eliom.ppx.client
 
+PKG ppx_sexp_conv
+
 PKG markup
 
 PKG js_of_ocaml-ppx_deriving_json

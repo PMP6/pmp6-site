@@ -14,13 +14,13 @@
     %%DEBUGMODE%%
     <commandpipe>%%MANAGECMDPIPE%%</commandpipe>
     <extension findlib-package="ocsigenserver.ext.staticmod"/>
-    <extension findlib-package="ocsipersist-%%PERSISTENT_DATA_BACKEND%%"/>
+    <extension findlib-package="ocsipersist-sqlite"/>
     <extension findlib-package="eliom.server"/>
     %%% This will include the packages defined as SERVER_PACKAGES in your Makefile:
     %%PACKAGES%%
 
     <host defaulthostname="localhost" hostfilter="localhost 127.0.0.1">
-      <static dir="%%STATICDIR%%" />
+      <static dir="%%STATICFILESDIR%%" />
       <static dir="%%ELIOMSTATICDIR%%" />
       <eliommodule module="%%LIBDIR%%/%%MANAGE_PROJECT_NAME%%.cma" />
       <eliom>

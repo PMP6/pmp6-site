@@ -46,22 +46,23 @@ let fosse_page () () =
         p
           [
             txt
-              "Pour l'année 2024-2025, les espaces plongée d'Antony et de Charenton \
-               étant toujours en travaux, les séances sont prévues à Villeneuve aux \
-               dates et heures suivantes :";
+              "Pour l'année 2025-2026, suite à la réouverture de l'espace plongée \
+               d'Antony, les séances y sont prévues aux dates et heures suivantes :";
           ];
         ul
         @@ List.map
              ~f:(fun text -> li [ txt text ])
              [
-               "Mercredi 09 octobre 2024 à 20 h ;";
-               "Mercredi 13 novembre 2024 à 20 h ;";
-               "Mercredi 11 décembre 2024 à 20 h ;";
-               "Mercredi 8 janvier 2025 à 20 h ;";
-               "Mercredi 29 janvier 2025 à 20 h ;";
-               "Mercredi 12 février 2025 à 20 h ;";
-               "Mercredi 12 mars 2025 à 20 h ;";
-               "Mardi 25 mars 2025 à 21 h.";
+               "Jeudi 23 octobre à 19 h;";
+               "Jeudi 27 novembre à 19 h ;";
+               "Vendredi 12 décembre à 19 h ;";
+               "Jeudi 15 janvier à 19 h ;";
+               "Jeudi 29 janvier à 19 h ;";
+               "Jeudi 12 février à 19 h ;";
+               "Jeudi 26 février à 19 h ;";
+               "Jeudi 12 mars à 19 h ;";
+               "Jeudi 26 mars à 19 h ;";
+               "Jeudi 9 avril à 19 h.";
              ];
         section
           [
