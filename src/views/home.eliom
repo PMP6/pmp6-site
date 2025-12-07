@@ -68,12 +68,13 @@ let make_news_section news =
     [
       h2 [ txt "Suivez l'actu..." ];
       hr ();
-      div_classes
-        [ "grid-x"; "grid-padding-x" ]
+      F.Grid.padding_x
         [
-          div_classes [ "large-auto"; "medium-12"; "cell" ] [ tabs_titles; tabs_contents ];
-          div_classes
-            [ "large-shrink"; "medium-12"; "cell"; "text-center" ]
+          F.Grid.cell ~large_auto:() ~medium:12 [ tabs_titles; tabs_contents ];
+          F.Grid.cell
+            ~large_shrink:()
+            ~medium:12
+            ~a:[ H.a_class_ "text-center" ]
             [ F.Callout.create [ Facebook.page_widget () ] ];
         ];
     ]

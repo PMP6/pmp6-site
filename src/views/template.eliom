@@ -160,24 +160,25 @@ let header user =
 let carousel () = Carousel.elt ()
 
 let main ~toasts ~content =
-  let open H in
-  H.main ~a:[ a_class [ "grid-container"; "content" ] ] (toasts @ content)
+  H.main ~a:[ Foundation.Grid.a_grid_container; H.a_class_ "content" ] (toasts @ content)
 
 let footer () =
   let open H in
   footer
     [
-      div_classes
-        [ "grid-x"; "grid-padding-x"; "align-left" ]
+      Foundation.Grid.padding_x
+        ~a:[ H.a_class_ "align-left" ]
         [
-          div_classes
-            [ "cell"; "small-1"; "medium-2"; "large-4"; "icons" ]
+          Foundation.Grid.cell
+            ~small:1
+            ~medium:2
+            ~large:4
+            ~a:[ H.a_class_ "icons" ]
             [
-              div_classes
-                [ "grid-x"; "grid-padding-x" ]
+              Foundation.Grid.padding_x
                 [
-                  div_classes
-                    [ "cell"; "auto" ]
+                  Foundation.Grid.cell
+                    ~auto:()
                     [
                       a
                         ~service:(Facebook.page_service ())
@@ -187,19 +188,22 @@ let footer () =
                     ];
                 ];
             ];
-          div_classes
-            [
-              "cell";
-              "small-6";
-              "small-offset-2";
-              "medium-8";
-              "medium-offset-0";
-              "large-4";
-            ]
+          Foundation.Grid.cell
+            ~small:6
+            ~small_offset:2
+            ~medium:8
+            ~medium_offset:0
+            ~large:4
             ~a:[ a_id "immatriculation" ]
             [ txt "ASSU SIM"; br (); txt "FFESSM 07750038" ];
-          div_classes
-            [ "cell"; "small-1"; "small-offset-2"; "large-offset-3"; "icons" ]
+          Foundation.Grid.cell
+            ~small:1
+            ~small_offset:2
+            ~medium:2
+            ~medium_offset:0
+            ~large:1
+            ~large_offset:3
+            ~a:[ H.a_class_ "icons" ]
             [
               fragment_a
                 ~fragment:"top"

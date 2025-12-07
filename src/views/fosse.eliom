@@ -79,11 +79,13 @@ let fosse_page () () =
                 txt "Métro Charenton-Écoles, Ligne 8";
                 br ();
               ];
-            div_classes
-              [ "grid-x"; "align-center" ]
+            Foundation.Grid.x
+              ~a:[ a_class [ "align-center" ] ]
               [
-                div_classes
-                  [ "cell"; "large-8"; "medium-10"; "small-12" ]
+                Foundation.Grid.cell
+                  ~small:12
+                  ~medium:10
+                  ~large:8
                   [ charenton_gmaps_embed () ];
               ];
           ];
@@ -114,11 +116,13 @@ let fosse_page () () =
                    commun, et des covoiturages sont habituellement organisés par les \
                    participants de chaque séance (y compris sur place pour le retour).";
               ];
-            div_classes
-              [ "grid-x"; "align-center" ]
+            Foundation.Grid.x
+              ~a:[ a_class [ "align-center" ] ]
               [
-                div_classes
-                  [ "cell"; "large-8"; "medium-10"; "small-12" ]
+                Foundation.Grid.cell
+                  ~small:12
+                  ~medium:10
+                  ~large:8
                   [ villeneuve_gmaps_embed () ];
               ];
           ];
@@ -143,11 +147,13 @@ let fosse_page () () =
                   "Le rendez-vous est fixé vingt minutes avant la séance, sur le côté \
                    droit du complexe sportif quand on arrive.";
               ];
-            div_classes
-              [ "grid-x"; "align-center" ]
+            Foundation.Grid.x
+              ~a:[ a_class [ "align-center" ] ]
               [
-                div_classes
-                  [ "cell"; "large-8"; "medium-10"; "small-12" ]
+                Foundation.Grid.cell
+                  ~small:12
+                  ~medium:10
+                  ~large:8
                   [ antony_gmaps_embed () ];
               ];
           ];
