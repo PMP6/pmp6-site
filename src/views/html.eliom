@@ -6,7 +6,6 @@ module%client Js = Js_of_ocaml.Js
 include Eliom_content.Html.D
 
 let a_class_ cls = a_class [ cls ]
-let class_ cls = (* Deprecated, to be deleted later on same branch *) a_class_ cls
 let div_classes classes ?(a = []) = div ~a:(a_class classes :: a)
 let div_class class_ = div_classes [ class_ ]
 
