@@ -25,11 +25,16 @@ let header_ news =
   let open H in
   (* Title and pub-time must belong to the same hn class to be vertically aligned *)
   header
-    ~a:[ a_class [ "grid-x"; "align-bottom" ] ]
+    ~a:[ Foundation.Grid.a_x; H.class_ "align-bottom" ]
     [
-      h1 ~a:[ a_class [ "h4"; "cell"; "auto" ] ] [ txt @@ Model.title news ];
-      div_classes
-        [ "h4"; "subheader"; "cell"; "shrink" ]
+      Foundation.Grid.cell_elt
+        ~elt:h1
+        ~auto:()
+        ~a:[ H.class_ "h4" ]
+        [ txt @@ Model.title news ];
+      Foundation.Grid.cell
+        ~shrink:()
+        ~a:[ H.a_class [ "h4"; "subheader" ] ]
         [ time_ ~a:[ a_class [ "pub-time" ] ] @@ Model.pub_time news ];
     ]
 
@@ -48,8 +53,10 @@ let deletion_icon_and_modal news =
     ~service:Service.Admin.delete
     modal_text
     (fun ~opens_modal modal ->
-      div_classes
-        [ "cell"; "text-center"; "large-12"; "small-4" ]
+      Foundation.Grid.cell
+        ~small:4
+        ~large:12
+        ~a:[ H.class_ "text-center" ]
         [
           p
             [
@@ -66,11 +73,12 @@ let action_icons_callout news =
   F.Callout.create
     ~a:[ H.a_class [ "action-icons" ] ]
     [
-      div_classes
-        [ "grid-x" ]
+      Foundation.Grid.x
         [
-          div_classes
-            [ "cell"; "text-center"; "large-12"; "small-4" ]
+          Foundation.Grid.cell
+            ~large:12
+            ~small:4
+            ~a:[ a_class [ "text-center" ] ]
             [
               p
                 [
@@ -86,14 +94,16 @@ let action_icons_callout news =
 
 let article_with_action_icons news =
   let open H in
-  div_classes
-    [ "grid-x"; "grid-margin-x"; "news" ]
+  Foundation.Grid.margin_x
+    ~a:[ H.a_class [ "news" ] ]
     [
-      div_classes
-        [ "cell"; "large-auto"; "large-order-1"; "small-order-2" ]
+      Foundation.Grid.cell
+        ~large_auto:()
+        ~a:[ a_class [ "large-order-1"; "small-order-2" ] ]
         [ article_ news ];
-      div_classes
-        [ "cell"; "large-2"; "large-order-2"; "small-order-1" ]
+      Foundation.Grid.cell
+        ~large:2
+        ~a:[ a_class [ "large-order-2"; "small-order-1" ] ]
         [ action_icons_callout news ];
     ]
 

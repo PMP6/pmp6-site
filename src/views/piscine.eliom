@@ -45,11 +45,9 @@ let piscine_page () () =
                vacances scolaires ou de stage, peuvent être annulées. Les adhérents sont \
                alors prévenus à l'avance via nos divers canaux de communication.";
           ];
-        div_classes
-          [ "grid-x"; "align-center" ]
-          [
-            div_classes [ "cell"; "large-8"; "medium-10"; "small-12" ] [ gmaps_embed () ];
-          ];
+        Foundation.Grid.x
+          ~a:[ H.class_ "align-center" ]
+          [ Foundation.Grid.cell ~small:12 ~medium:10 ~large:8 [ gmaps_embed () ] ];
         Widget.thumbnail_row
           ~subdir:[ "piscine" ]
           [

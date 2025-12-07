@@ -6,13 +6,17 @@ let thumbnail alt path =
 
 let thumbnail_row ?(max_size = 12) ~subdir alt_and_filenames =
   let nb_thumbnails = List.length alt_and_filenames in
-  let thumbnail_size = min max_size (12 / nb_thumbnails) in
-  let large_size = sprintf "large-%d" thumbnail_size in
+  let thumbnail_space_large = min max_size (12 / nb_thumbnails) in
   let make_cell (alt, filename) =
-    H.div_classes
-      [ "cell"; "medium-5"; "small-10"; large_size; "text-center" ]
+    Foundation.Grid.cell
+      ~small:10
+      ~medium:5
+      ~large:thumbnail_space_large
+      ~a:[ H.class_ "text-center" ]
       [ thumbnail alt (subdir @ [ filename ]) ]
   in
-  H.div_classes
-    [ "grid-x"; "grid-padding-x"; "medium-up-2"; "small-up-1"; "align-center-middle" ]
+  Foundation.Grid.padding_x
+    ~medium_up:2
+    ~small_up:1
+    ~a:[ H.class_ "align-center-middle" ]
     (List.map ~f:make_cell alt_and_filenames)

@@ -10,13 +10,13 @@ let list_all news =
     ~title:"Toutes les actus"
     [
       H.h1 [ H.txt "Toutes les actus" ];
-      Html.div_classes
-        [ "grid-x"; "grid-margin-x"; "news" ]
+      Foundation.Grid.margin_x
+        ~a:[ H.a_class [ "news" ] ]
         [
-          Html.div_classes
-            [ "cell"; "large-2" ]
+          Foundation.Grid.cell
+            ~large:2
             [ Widget.button_to_redaction ~expanded:true (); tabs_titles ];
-          Html.div_classes [ "cell"; "large-10" ] [ tabs_contents ];
+          Foundation.Grid.cell ~large:10 [ tabs_contents ];
         ];
     ]
 
