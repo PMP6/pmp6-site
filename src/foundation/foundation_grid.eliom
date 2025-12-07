@@ -4,16 +4,16 @@ let ( <?> ) f opt = Option.map ~f opt
 
 (* Grid container *)
 
-let a_grid_container = H.class_ "grid-container"
+let a_grid_container = H.a_class_ "grid-container"
 
 (* Grid classes *)
 
-let a_x = H.class_ "grid-x"
-let a_margin_x = H.class_ "grid-margin-x"
-let a_padding_x = H.class_ "grid-padding-x"
-let a_small_up n = H.class_ (Fmt.str "small-up-%d" n)
-let a_medium_up n = H.class_ (Fmt.str "medium-up-%d" n)
-let a_large_up n = H.class_ (Fmt.str "large-up-%d" n)
+let a_x = H.a_class_ "grid-x"
+let a_margin_x = H.a_class_ "grid-margin-x"
+let a_padding_x = H.a_class_ "grid-padding-x"
+let a_small_up n = H.a_class_ (Fmt.str "small-up-%d" n)
+let a_medium_up n = H.a_class_ (Fmt.str "medium-up-%d" n)
+let a_large_up n = H.a_class_ (Fmt.str "large-up-%d" n)
 
 (* Grid elements *)
 

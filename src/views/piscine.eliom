@@ -46,7 +46,7 @@ let piscine_page () () =
                alors prévenus à l'avance via nos divers canaux de communication.";
           ];
         Foundation.Grid.x
-          ~a:[ H.class_ "align-center" ]
+          ~a:[ H.a_class_ "align-center" ]
           [ Foundation.Grid.cell ~small:12 ~medium:10 ~large:8 [ gmaps_embed () ] ];
         Widget.thumbnail_row
           ~subdir:[ "piscine" ]

@@ -74,7 +74,7 @@ let make_news_section news =
           F.Grid.cell
             ~large_shrink:()
             ~medium:12
-            ~a:[ H.class_ "text-center" ]
+            ~a:[ H.a_class_ "text-center" ]
             [ F.Callout.create [ Facebook.page_widget () ] ];
         ];
     ]

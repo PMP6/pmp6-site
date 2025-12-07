@@ -5,7 +5,8 @@ module%client Js = Js_of_ocaml.Js
 
 include Eliom_content.Html.D
 
-let class_ cls = a_class [ cls ]
+let a_class_ cls = a_class [ cls ]
+let class_ cls = (* Deprecated, to be deleted later on same branch *) a_class_ cls
 let div_classes classes ?(a = []) = div ~a:(a_class classes :: a)
 let div_class class_ = div_classes [ class_ ]
 
@@ -191,7 +192,7 @@ let time_ ?(a = []) time_ =
 let split_post_pseudo_link ~service content gp =
   let id = new_id () in
   let button =
-    Form.button_no_value ~a:[ class_ "link"; a_form id ] ~button_type:`Submit content
+    Form.button_no_value ~a:[ a_class_ "link"; a_form id ] ~button_type:`Submit content
   in
   (Form.post_form ~service ~a:[ a_id id ] (fun () -> []) gp, button)
 

@@ -160,20 +160,20 @@ let header user =
 let carousel () = Carousel.elt ()
 
 let main ~toasts ~content =
-  H.main ~a:[ Foundation.Grid.a_grid_container; H.class_ "content" ] (toasts @ content)
+  H.main ~a:[ Foundation.Grid.a_grid_container; H.a_class_ "content" ] (toasts @ content)
 
 let footer () =
   let open H in
   footer
     [
       Foundation.Grid.padding_x
-        ~a:[ H.class_ "align-left" ]
+        ~a:[ H.a_class_ "align-left" ]
         [
           Foundation.Grid.cell
             ~small:1
             ~medium:2
             ~large:4
-            ~a:[ H.class_ "icons" ]
+            ~a:[ H.a_class_ "icons" ]
             [
               Foundation.Grid.padding_x
                 [
@@ -203,7 +203,7 @@ let footer () =
             ~medium_offset:0
             ~large:1
             ~large_offset:3
-            ~a:[ H.class_ "icons" ]
+            ~a:[ H.a_class_ "icons" ]
             [
               fragment_a
                 ~fragment:"top"

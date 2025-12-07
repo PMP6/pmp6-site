@@ -25,12 +25,12 @@ let header_ news =
   let open H in
   (* Title and pub-time must belong to the same hn class to be vertically aligned *)
   header
-    ~a:[ Foundation.Grid.a_x; H.class_ "align-bottom" ]
+    ~a:[ Foundation.Grid.a_x; H.a_class_ "align-bottom" ]
     [
       Foundation.Grid.cell_elt
         ~elt:h1
         ~auto:()
-        ~a:[ H.class_ "h4" ]
+        ~a:[ H.a_class_ "h4" ]
         [ txt @@ Model.title news ];
       Foundation.Grid.cell
         ~shrink:()
@@ -56,7 +56,7 @@ let deletion_icon_and_modal news =
       Foundation.Grid.cell
         ~small:4
         ~large:12
-        ~a:[ H.class_ "text-center" ]
+        ~a:[ H.a_class_ "text-center" ]
         [
           p
             [
