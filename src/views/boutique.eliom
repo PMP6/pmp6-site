@@ -6,10 +6,9 @@ let intro () =
       p
         [
           txt
-            "Nous passons par HelloAsso pour permettre aux adhérents de régler divers \
-             frais en ligne. Vous pouvez vous rendre sur ";
-          a ~service:(Hello_asso.main_service ()) [ txt "l'espace de la section" ] ();
-          txt ", ou réaliser directement sur la présente page les principaux paiements.";
+            "Nous passons par AssoConnect pour permettre aux adhérents de régler divers \
+             frais en ligne. Vous pouvez accéder directement aux paiements principaux \
+             sur cette page.";
         ];
       p
         [
@@ -20,57 +19,71 @@ let intro () =
         ];
     ]
 
-let licence () =
-  H.
+(* Utility to ease card definitions *)
+let make_card_cell ~title ~img:(img_filename, img_alt) ~href content =
+  Foundation.Grid.cell
+    ~small:10
+    ~medium:5
+    ~large:5
     [
-      header [ h2 [ txt "Licence FFESSM" ] ];
-      p [ txt "Utilisez ce bouton pour souscrire une licence FFESSM via PMP6." ];
-      p
+      Foundation.Card.divider [ H.h1 ~a:[ H.a_class [ "h3" ] ] [ H.txt title ] ];
+      H.raw_a
+        ~href
         [
-          txt
+          H.img
+            ~src:(Skeleton.Static.img_uri [ "boutique"; img_filename ])
+            ~alt:img_alt
+            ();
+        ];
+      Foundation.Card.section content;
+    ]
+
+let card_licence () =
+  let href =
+    "https://association-sportive-de-sorbonne-sim.assoconnect.com/collect/description/640444-b-souscrire-une-licence-ffessm-2025-2026"
+  in
+  make_card_cell
+    ~title:"Licence FFESSM"
+    ~img:("ffessm.svg", "Logo FFESSM")
+    ~href
+    [
+      H.p
+        [
+          H.txt
             "La licence est valable du 15 septembre au 31 décembre de l'année suivante. \
              Elle est nécessaire dès lors que vous passez un brevet, ainsi que pour \
              certains stages.";
         ];
-      Hello_asso.pay_widget "achat-de-licence-ffessm";
+      H.p [ H.raw_a ~href [ H.txt "Acheter ma licence sur AssoConnect" ] ];
     ]
 
-let carte_niveau () =
-  H.
+let card_certification () =
+  let href =
+    "https://association-sportive-de-sorbonne-sim.assoconnect.com/collect/description/640475-h-achat-d-une-carte-de-brevet"
+  in
+  make_card_cell
+    ~title:"Carte de niveau"
+    ~img:("cmas-formation-niveau-2.jpeg", "Carte de certification CMAS niveau 2")
+    ~href
     [
-      header [ h2 [ txt "Carte de niveau" ] ];
-      p [ txt "Utilisez ce bouton pour payer une carte de niveau." ];
-      p
+      H.p
         [
-          txt
+          H.txt
             "Ce paiement peut être effectué dès lors que votre niveau a été validé par \
              l'encadrant responsable. Vous pourrez alors recevoir votre carte \
              d'attestation.";
         ];
-      Hello_asso.pay_widget "achat-d-une-carte-de-brevet";
+      H.p [ H.raw_a ~href [ H.txt "Acheter ma carte de niveau sur AssoConnect" ] ];
     ]
 
-let boutique () =
-  H.
-    [
-      header [ h2 [ txt "La boutique des plongeurs" ] ];
-      p
-        [
-          txt
-            "La boutique des plongeurs contient les différents achats rendus disponibles \
-             au cours de l'année, comme les inscriptions en stage.";
-        ];
-      Hello_asso.event_widget "boutique-des-plongeurs";
-    ]
+let purchase_cards () =
+  [
+    Foundation.Grid.margin_x
+      ~a:[ H.a_class [ "align-spaced" ] ]
+      [ card_licence (); card_certification () ];
+  ]
 
 let boutique_page () () =
   Content.page
     ~title:"Boutique"
-    H.
-      [
-        h1 [ txt "Boutique" ];
-        section @@ intro ();
-        section @@ licence ();
-        section @@ carte_niveau ();
-        section @@ boutique ();
-      ]
+    H.[ h1 [ txt "Boutique" ]; section @@ intro (); section @@ purchase_cards () ]
