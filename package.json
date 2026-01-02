@@ -56,5 +56,9 @@
         "url": "https://github.com/pmp6/pmp6-site/issues",
         "email": "thi.suzanne@gmail.com"
     },
-    "private": true
+    "private": true,
+    "browserslist": [
+        "last 2 versions",
+        "> 1%"
+    ]
 }

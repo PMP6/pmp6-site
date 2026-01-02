@@ -21,7 +21,7 @@ const sass = require('gulp-sass')(require('sass'));
 const PRODUCTION = !!(yargs.argv.production);
 
 // Load settings from settings.yml
-const { COMPATIBILITY, PORT, PATHS } = loadConfig();
+const { PORT, PATHS } = loadConfig();
 
 function loadConfig() {
     let ymlFile = fs.readFileSync('config.yml', 'utf8');
