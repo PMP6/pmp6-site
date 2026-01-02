@@ -2,7 +2,6 @@
 
 import plugins       from 'gulp-load-plugins';
 import yargs         from 'yargs';
-import browser       from 'browser-sync';
 import gulp          from 'gulp';
 import rimraf        from 'rimraf';
 import yaml          from 'js-yaml';
@@ -49,21 +48,11 @@ gulp.task(
     )
 );
 
-// Build the site and watch for file changes without running the server
+// Build the site and watch for file changes
 gulp.task(
     'watch',
     gulp.series(
         'build',
-        watch
-    )
-);
-
-// Build the site, run the server, and watch for file changes
-gulp.task(
-    'default',
-    gulp.series(
-        'build',
-        server,
         watch
     )
 );
@@ -95,8 +84,7 @@ function sassBuild() {
         .pipe($.postcss(postCssPlugins))
         .pipe($.if(PRODUCTION, $.cleanCss({ compatibility: 'ie9' })))
         .pipe($.if(!PRODUCTION, $.sourcemaps.write()))
-        .pipe(gulp.dest(PATHS.dist + '/css'))
-        .pipe(browser.reload({ stream: true }));
+        .pipe(gulp.dest(PATHS.dist + '/css'));
 }
 
 let webpackConfig = {
@@ -140,23 +128,10 @@ function images() {
         .pipe(gulp.dest(PATHS.dist + '/img'));
 }
 
-// Start a server with BrowserSync to preview the site in
-function server(done) {
-    browser.init({
-        server: PATHS.dist, port: PORT
-    }, done);
-}
-
-// Reload the browser with BrowserSync
-function reload(done) {
-    browser.reload();
-    done();
-}
-
 // Watch for changes to static assets, pages, Sass, and JavaScript
 function watch() {
     gulp.watch(PATHS.assets, copy);
     gulp.watch('assets/scss/**/*.scss').on('all', sassBuild);
-    gulp.watch('assets/js/**/*.js').on('all', gulp.series(javascript, browser.reload));
-    gulp.watch('assets/img/**/*').on('all', gulp.series(images, browser.reload));
+    gulp.watch('assets/js/**/*.js').on('all', javascript);
+    gulp.watch('assets/img/**/*').on('all', images);
 }
