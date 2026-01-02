@@ -13,7 +13,7 @@
     "license": "MIT",
     "dependencies": {
         "@fortawesome/fontawesome-free": "^6.1.1",
-        "foundation-sites": "^6.7.4",
+        "foundation-sites": "^6.9.0",
         "jquery": "^3.6.0",
         "moment": "^2.29.3",
         "motion-ui": "^2.0.3",
