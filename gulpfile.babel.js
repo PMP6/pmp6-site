@@ -15,7 +15,7 @@ import autoprefixer  from 'autoprefixer';
 const $ = plugins();
 
 // Use (dart-)sass compiler
-const sass = require('gulp-sass')(require('sass'));
+const sass = require('gulp-sass')(require('sass-embedded'));
 
 // Check for --production flag
 const PRODUCTION = !!(yargs.argv.production);
