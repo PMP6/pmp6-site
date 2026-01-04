@@ -1,5 +1,10 @@
 @charset 'utf-8';
 
+// FontAwesome
+@use "fontawesome";
+@use "solid";
+@use "brands";
+
 @import 'settings';
 @import 'foundation';
 @import 'motion-ui';
@@ -66,8 +71,3 @@
 // Motion UI
 @include motion-ui-transitions;
 @include motion-ui-animations;
-
-// FontAwesome
-@import 'fontawesome';
-@import "solid.scss";
-@import "brands.scss";
