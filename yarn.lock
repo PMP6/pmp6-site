@@ -3680,21 +3680,15 @@ gulp-sourcemaps@^3.0.0:
     strip-bom-string "^1.0.0"
     through2 "^2.0.0"
 
-gulp-uglify@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/gulp-uglify/-/gulp-uglify-3.0.2.tgz#5f5b2e8337f879ca9dec971feb1b82a5a87850b0"
-  integrity sha512-gk1dhB74AkV2kzqPMQBLA3jPoIAPd/nlNzP2XMDSG8XZrqnlCiDGAqC+rZOumzFvB5zOphlFh6yr3lgcAb/OOg==
+gulp-terser@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/gulp-terser/-/gulp-terser-2.1.0.tgz#149b693a1adbde922807b60b844bb7351dafbde1"
+  integrity sha512-lQ3+JUdHDVISAlUIUSZ/G9Dz/rBQHxOiYDQ70IVWFQeh4b33TC1MCIU+K18w07PS3rq/CVc34aQO4SUbdaNMPQ==
   dependencies:
-    array-each "^1.0.1"
-    extend-shallow "^3.0.2"
-    gulplog "^1.0.0"
-    has-gulplog "^0.1.0"
-    isobject "^3.0.1"
-    make-error-cause "^1.1.1"
-    safe-buffer "^5.1.2"
-    through2 "^2.0.0"
-    uglify-js "^3.0.5"
-    vinyl-sourcemaps-apply "^0.2.0"
+    plugin-error "^1.0.1"
+    terser "^5.9.0"
+    through2 "^4.0.2"
+    vinyl-sourcemaps-apply "^0.2.1"
 
 gulp@^4.0.2:
   version "4.0.2"
@@ -3741,13 +3735,6 @@ has-flag@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/has-flag/-/has-flag-4.0.0.tgz#944771fd9c81c81265c4d6941860da06bb59479b"
   integrity sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==
-
-has-gulplog@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/has-gulplog/-/has-gulplog-0.1.0.tgz#6414c82913697da51590397dafb12f22967811ce"
-  integrity sha512-+F4GzLjwHNNDEAJW2DC1xXfEoPkRDmUdJ7CBYw4MpqtDwOnqdImJl7GWlpqx+Wko6//J8uKTnIe4wZSv7yCqmw==
-  dependencies:
-    sparkles "^1.0.0"
 
 has-gulplog@^1.0.0:
   version "1.0.0"
@@ -4708,18 +4695,6 @@ make-dir@^3.0.0, make-dir@^3.0.2, make-dir@^3.1.0:
   dependencies:
     semver "^6.0.0"
 
-make-error-cause@^1.1.1:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/make-error-cause/-/make-error-cause-1.2.2.tgz#df0388fcd0b37816dff0a5fb8108939777dcbc9d"
-  integrity sha512-4TO2Y3HkBnis4c0dxhAgD/jprySYLACf7nwN6V0HAHDx59g12WlRpUmFy1bRHamjGUEEBrEvCq6SUpsEE2lhUg==
-  dependencies:
-    make-error "^1.2.0"
-
-make-error@^1.2.0:
-  version "1.3.6"
-  resolved "https://registry.yarnpkg.com/make-error/-/make-error-1.3.6.tgz#2eb2e37ea9b67c4891f684a1394799af484cf7a2"
-  integrity sha512-s8UhlNe7vPKomQhC1qFelMokr/Sc3AgNbso3n74mVPA5LTZwkB9NlXf4XPamLxJE8h0gh73rM94xvwRT2CVInw==
-
 make-iterator@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/make-iterator/-/make-iterator-1.0.1.tgz#29b33f312aa8f547c4a5e490f56afcec99133ad6"
@@ -5650,7 +5625,7 @@ read-pkg@^1.0.0:
     normalize-package-data "^2.3.2"
     path-type "^1.0.0"
 
-"readable-stream@2 || 3", readable-stream@^3.1.1:
+"readable-stream@2 || 3", readable-stream@3, readable-stream@^3.1.1:
   version "3.6.2"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-3.6.2.tgz#56a9b36ea965c00c5a93ef31eb111a0f11056967"
   integrity sha512-9u/sniCrY3D5WdsERHzHE4G2YCXqoG5FTHUiCC4SIbr6XcLZBY05ya9EKjYek9O5xOAwjGq+1JdGBAS7Q9ScoA==
@@ -5936,7 +5911,7 @@ safe-array-concat@^1.1.3:
     has-symbols "^1.1.0"
     isarray "^2.0.5"
 
-safe-buffer@5.2.1, safe-buffer@^5.0.1, safe-buffer@^5.1.0, safe-buffer@^5.1.1, safe-buffer@^5.1.2, safe-buffer@^5.2.1, safe-buffer@~5.2.0:
+safe-buffer@5.2.1, safe-buffer@^5.0.1, safe-buffer@^5.1.0, safe-buffer@^5.1.1, safe-buffer@^5.2.1, safe-buffer@~5.2.0:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.2.1.tgz#1eaf9fa9bdb1fdd4ec75f58f9cdb4e6b7827eec6"
   integrity sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==
@@ -6746,7 +6721,7 @@ terser-webpack-plugin@^5.3.16:
     serialize-javascript "^6.0.2"
     terser "^5.31.1"
 
-terser@^5.31.1:
+terser@^5.31.1, terser@^5.9.0:
   version "5.44.1"
   resolved "https://registry.yarnpkg.com/terser/-/terser-5.44.1.tgz#e391e92175c299b8c284ad6ded609e37303b0a9c"
   integrity sha512-t/R3R/n0MSwnnazuPpPNVO60LX0SKL45pyl9YlvxIdkH0Of7D5qM2EVe+yASRIlY5pZ73nclYJfNANGWPwFDZw==
@@ -6793,6 +6768,13 @@ through2@^3.0.1:
   dependencies:
     inherits "^2.0.4"
     readable-stream "2 || 3"
+
+through2@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/through2/-/through2-4.0.2.tgz#a7ce3ac2a7a8b0b966c80e7c49f0484c3b239764"
+  integrity sha512-iOqSav00cVxEEICeD7TjLB1sueEL+81Wpzp2bY17uZjZN0pWZPuo4suZ/61VujxmqSGFfgOcNuTZ85QJwNZQpw==
+  dependencies:
+    readable-stream "3"
 
 through@^2.3.6, through@^2.3.8:
   version "2.3.8"
@@ -6951,11 +6933,6 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==
-
-uglify-js@^3.0.5:
-  version "3.19.3"
-  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.19.3.tgz#82315e9bbc6f2b25888858acd1fff8441035b77f"
-  integrity sha512-v3Xu+yuwBXisp6QYTcH4UbH+xYJXqnq2m/LtQVWKWzYc1iehYnLixoQDN9FH6/j9/oybfd6W9Ghwkl8+UMKTKQ==
 
 unbox-primitive@^1.1.0:
   version "1.1.0"
