@@ -10,8 +10,11 @@ import webpackStream from 'webpack-stream';
 import webpack2      from 'webpack';
 import named         from 'vinyl-named';
 import autoprefixer  from 'autoprefixer';
+import imagemin      from 'gulp-imagemin';
 
 const sass = require('gulp-sass')(require('sass-embedded'));
+const postcss = require('gulp-postcss');
+var sourcemaps = require('gulp-sourcemaps');
 
 // Load all Gulp plugins into one variable
 const $ = plugins();
@@ -26,7 +29,6 @@ function loadConfig() {
 }
 
 const { PORT, PATHS } = loadConfig();
-
 
 // Remove the generated files
 gulp.task(
@@ -79,11 +81,11 @@ function sassBuild() {
     ];
 
     return gulp.src(PATHS.sass_entries)
-        .pipe($.sourcemaps.init())
+        .pipe(sourcemaps.init())
         .pipe(sass({includePaths: PATHS.sass}).on('error', sass.logError))
-        .pipe($.postcss(postCssPlugins))
+        .pipe(postcss(postCssPlugins))
         .pipe($.if(PRODUCTION, $.cleanCss({ compatibility: 'ie9' })))
-        .pipe($.if(!PRODUCTION, $.sourcemaps.write()))
+        .pipe($.if(!PRODUCTION, sourcemaps.write()))
         .pipe(gulp.dest(PATHS.dist + '/css'));
 }
 
@@ -122,9 +124,17 @@ function javascript() {
 // In production, the images are compressed
 function images() {
     return gulp.src('assets/img/**/*')
-        .pipe($.if(PRODUCTION, $.imagemin([
-            $.imagemin.mozjpeg({ progressive: true }),
-            ])))
+        .pipe($.if(PRODUCTION, imagemin([
+            imagemin.gifsicle({interlaced: true}),
+            imagemin.mozjpeg({quality: 85, progressive: true}),
+            imagemin.optipng({optimizationLevel: 5}),
+            imagemin.svgo({
+                plugins: [
+                    {removeViewBox: true},
+                    {cleanupIDs: false}
+                ]
+            })
+        ])))
         .pipe(gulp.dest(PATHS.dist + '/img'));
 }
 
