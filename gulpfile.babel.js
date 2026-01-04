@@ -24,8 +24,10 @@ const PRODUCTION = !!(yargs.argv.production);
 
 // Load settings from settings.yml
 function loadConfig() {
+    const unsafe = require('js-yaml-js-types').all;
+    const schema = yaml.DEFAULT_SCHEMA.extend(unsafe);
     const ymlFile = fs.readFileSync('config.yml', 'utf8');
-    return yaml.load(ymlFile);
+    return yaml.load(ymlFile, {schema});
 }
 
 const { PORT, PATHS } = loadConfig();
