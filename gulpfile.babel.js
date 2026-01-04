@@ -109,6 +109,7 @@ let webpackConfig = {
     },
     devtool: !PRODUCTION && 'source-map'
 }
+
 // Combine JavaScript into one file
 // In production, the file is minified
 function javascript() {
