@@ -11,22 +11,22 @@ import webpack2      from 'webpack';
 import named         from 'vinyl-named';
 import autoprefixer  from 'autoprefixer';
 
+const sass = require('gulp-sass')(require('sass-embedded'));
+
 // Load all Gulp plugins into one variable
 const $ = plugins();
-
-// Use (dart-)sass compiler
-const sass = require('gulp-sass')(require('sass-embedded'));
 
 // Check for --production flag
 const PRODUCTION = !!(yargs.argv.production);
 
 // Load settings from settings.yml
-const { PORT, PATHS } = loadConfig();
-
 function loadConfig() {
-    let ymlFile = fs.readFileSync('config.yml', 'utf8');
+    const ymlFile = fs.readFileSync('config.yml', 'utf8');
     return yaml.load(ymlFile);
 }
+
+const { PORT, PATHS } = loadConfig();
+
 
 // Remove the generated files
 gulp.task(
