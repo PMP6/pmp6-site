@@ -88,7 +88,6 @@ function sassBuild() {
         .pipe(plumber())
         .pipe(sass({includePaths: PATHS.sass}).on('error', sass.logError))
         .pipe(postcss(postCssPlugins))
-        .pipe($.if(PRODUCTION, $.cleanCss({ compatibility: 'ie9' })))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(PATHS.dist + '/css'));
 }
