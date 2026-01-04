@@ -15,6 +15,7 @@ import imagemin      from 'gulp-imagemin';
 const sass = require('gulp-sass')(require('sass-embedded'));
 const postcss = require('gulp-postcss');
 var sourcemaps = require('gulp-sourcemaps');
+var plumber = require('gulp-plumber');
 
 // Load all Gulp plugins into one variable
 const $ = plugins();
@@ -84,6 +85,7 @@ function sassBuild() {
 
     return gulp.src(PATHS.sass_entries)
         .pipe(sourcemaps.init())
+        .pipe(plumber())
         .pipe(sass({includePaths: PATHS.sass}).on('error', sass.logError))
         .pipe(postcss(postCssPlugins))
         .pipe($.if(PRODUCTION, $.cleanCss({ compatibility: 'ie9' })))
