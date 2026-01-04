@@ -12,7 +12,7 @@
     "author": "Thibault Suzanne <thi.suzanne@gmail.com>",
     "license": "MIT",
     "dependencies": {
-        "@fortawesome/fontawesome-free": "^6.1.1",
+        "@fortawesome/fontawesome-free": "^7.1.0",
         "foundation-sites": "^6.9.0",
         "jquery": "^3.7.1",
         "moment": "^2.30.1",
