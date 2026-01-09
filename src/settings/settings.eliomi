@@ -5,6 +5,7 @@ module Smtp : sig
     username : string;
     password : string;
     use_starttls : bool;
+    check_settings : bool;
   }
 end
 

@@ -5,6 +5,7 @@ module Smtp = struct
     username : string;
     password : string;
     use_starttls : bool;
+    check_settings : bool; [@default true]
   }
   [@@deriving sexp]
 end
