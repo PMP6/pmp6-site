@@ -1,5 +1,10 @@
 @charset 'utf-8';
 
+// FontAwesome
+@use "fontawesome";
+@use "solid";
+@use "brands";
+
 @import 'settings';
 @import 'foundation';
 @import 'motion-ui';
@@ -15,7 +20,7 @@
 // Grids (choose one)
 @include foundation-xy-grid-classes;
 // @include foundation-grid;
-@include foundation-flex-grid;
+// @include foundation-flex-grid;
 
 // Generic components
 @include foundation-button;
@@ -24,6 +29,7 @@
 @include foundation-label;
 @include foundation-progress-bar;
 @include foundation-slider;
+@include foundation-range-input;
 @include foundation-switch;
 @include foundation-table;
 // Basic components
@@ -65,8 +71,3 @@
 // Motion UI
 @include motion-ui-transitions;
 @include motion-ui-animations;
-
-// FontAwesome
-@import 'fontawesome';
-@import "solid.scss";
-@import "brands.scss";

@@ -16,7 +16,5 @@ let thumbnail_row ?(max_size = 12) ~subdir alt_and_filenames =
       [ thumbnail alt (subdir @ [ filename ]) ]
   in
   Foundation.Grid.padding_x
-    ~medium_up:2
-    ~small_up:1
     ~a:[ H.a_class_ "align-center-middle" ]
     (List.map ~f:make_cell alt_and_filenames)
