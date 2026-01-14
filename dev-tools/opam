@@ -1,0 +1,21 @@
+opam-version: "2.0"
+name: "pmp6-devtools"
+version: "~dev"
+synopsis: "Outils de développement pour PMP6"
+maintainer: "Thibault Suzanne <thi.suzanne@gmail.com>"
+authors: "Thibault Suzanne <thi.suzanne@gmail.com>"
+homepage: "https://github.com/PMP6/pmp6-site"
+dev-repo: "git+https://github.com/PMP6/pmp6-site.git"
+bug-reports: "https://github.com/PMP6/pmp6-site/issues"
+depends: [
+  "odig"
+  "utop"
+  "merlin"
+  "ocp-indent"
+  "ocamlformat"
+]
+build: []
+install: []
+url {
+  src: "git+file:///home/pmp6/pmp6-site#master"
+}
