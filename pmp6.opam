@@ -31,6 +31,11 @@ depends: [
   "tyxml"
   "uunf"
   "uuseg"
+  "odig" { with-dev-setup }
+  "utop" { with-dev-setup }
+  "merlin" { with-dev-setup }
+  "ocp-indent" { with-dev-setup }
+  "ocamlformat" { with-dev-setup }
 ]
 build: []
 install: []
