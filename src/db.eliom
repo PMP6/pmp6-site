@@ -83,13 +83,6 @@ include Monad.Make (struct
   let map = `Custom map
 end)
 
-let enable_foreign_keys_pragma (module C : C) =
-  C.exec
-    (Caqti_request.Infix.(Type.unit ->. Type.unit)
-       ~oneshot:true
-       "PRAGMA foreign_keys = ON")
-    ()
-
 let check_foreign_keys_pragma (module C : C) =
   C.find
     (Caqti_request.Infix.(Type.unit ->! Type.bool) ~oneshot:true "PRAGMA foreign_keys")
@@ -97,10 +90,7 @@ let check_foreign_keys_pragma (module C : C) =
 
 let pool =
   let pool_config = Caqti_pool_config.(default_from_env () |> set max_size 10) in
-  Caqti_lwt_unix.connect_pool
-    ~pool_config
-    ~post_connect:enable_foreign_keys_pragma
-    (Uri.of_string connection_uri)
+  Caqti_lwt_unix.connect_pool ~pool_config (Uri.of_string connection_uri)
   |> Result.map_error ~f:caqti_exn
   |> Result.ok_exn
 
