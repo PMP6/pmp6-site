@@ -24,11 +24,13 @@ SERVER_PACKAGES := \
 	base64 \
 	caqti-driver-sqlite3 \
 	caqti-lwt.unix \
+	caqti.classic \
 	core \
 	core_unix \
 	fmt \
 	js_of_ocaml-ppx_deriving_json \
 	letters \
+	logs \
 	lwt_ppx \
 	markup \
 	mrmime \
