@@ -19,6 +19,7 @@ depends: [
   "fmt"
   "js_of_ocaml"
   "letters"
+  "logs"
   "lwt"
   "lwt_ppx"
   "markup"
