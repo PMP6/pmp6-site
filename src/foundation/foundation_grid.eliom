@@ -11,6 +11,13 @@ let a_grid_container = H.a_class_ "grid-container"
 let a_x = H.a_class_ "grid-x"
 let a_margin_x = H.a_class_ "grid-margin-x"
 let a_padding_x = H.a_class_ "grid-padding-x"
+
+(* [size]-up-[n] classes allow for a short-hand way to define cell width at the grid
+   level. A grid with eg. [medium-up-5] will display, on medium, 5 equally-sized cells on
+   the same horizontal level.
+
+   These grid attributes shouldn't be used together with defined-size cells, that messes
+   up the grid. *)
 let a_small_up n = H.a_class_ (Fmt.str "small-up-%d" n)
 let a_medium_up n = H.a_class_ (Fmt.str "medium-up-%d" n)
 let a_large_up n = H.a_class_ (Fmt.str "large-up-%d" n)

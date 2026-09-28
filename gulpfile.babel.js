@@ -2,7 +2,6 @@
 
 import plugins       from 'gulp-load-plugins';
 import yargs         from 'yargs';
-import browser       from 'browser-sync';
 import gulp          from 'gulp';
 import rimraf        from 'rimraf';
 import yaml          from 'js-yaml';
@@ -11,23 +10,28 @@ import webpackStream from 'webpack-stream';
 import webpack2      from 'webpack';
 import named         from 'vinyl-named';
 import autoprefixer  from 'autoprefixer';
+import imagemin      from 'gulp-imagemin';
+
+const sass = require('gulp-sass')(require('sass-embedded'));
+const postcss = require('gulp-postcss');
+var sourcemaps = require('gulp-sourcemaps');
+var plumber = require('gulp-plumber');
 
 // Load all Gulp plugins into one variable
 const $ = plugins();
-
-// Use (dart-)sass compiler
-const sass = require('gulp-sass')(require('sass'));
 
 // Check for --production flag
 const PRODUCTION = !!(yargs.argv.production);
 
 // Load settings from settings.yml
-const { COMPATIBILITY, PORT, PATHS } = loadConfig();
-
 function loadConfig() {
-    let ymlFile = fs.readFileSync('config.yml', 'utf8');
-    return yaml.load(ymlFile);
+    const unsafe = require('js-yaml-js-types').all;
+    const schema = yaml.DEFAULT_SCHEMA.extend(unsafe);
+    const ymlFile = fs.readFileSync('config.yml', 'utf8');
+    return yaml.load(ymlFile, {schema});
 }
+
+const { PORT, PATHS } = loadConfig();
 
 // Remove the generated files
 gulp.task(
@@ -49,21 +53,11 @@ gulp.task(
     )
 );
 
-// Build the site and watch for file changes without running the server
+// Build the site and watch for file changes
 gulp.task(
     'watch',
     gulp.series(
         'build',
-        watch
-    )
-);
-
-// Build the site, run the server, and watch for file changes
-gulp.task(
-    'default',
-    gulp.series(
-        'build',
-        server,
         watch
     )
 );
@@ -90,13 +84,12 @@ function sassBuild() {
     ];
 
     return gulp.src(PATHS.sass_entries)
-        .pipe($.sourcemaps.init())
+        .pipe(sourcemaps.init())
+        .pipe(plumber())
         .pipe(sass({includePaths: PATHS.sass}).on('error', sass.logError))
-        .pipe($.postcss(postCssPlugins))
-        .pipe($.if(PRODUCTION, $.cleanCss({ compatibility: 'ie9' })))
-        .pipe($.if(!PRODUCTION, $.sourcemaps.write()))
-        .pipe(gulp.dest(PATHS.dist + '/css'))
-        .pipe(browser.reload({ stream: true }));
+        .pipe(postcss(postCssPlugins))
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest(PATHS.dist + '/css'));
 }
 
 let webpackConfig = {
@@ -117,6 +110,7 @@ let webpackConfig = {
     },
     devtool: !PRODUCTION && 'source-map'
 }
+
 // Combine JavaScript into one file
 // In production, the file is minified
 function javascript() {
@@ -124,8 +118,9 @@ function javascript() {
         .pipe(named())
         .pipe($.sourcemaps.init())
         .pipe(webpackStream(webpackConfig, webpack2))
-        .pipe($.if(PRODUCTION,
-                   $.uglify().on('error', e => { console.log(e); })))
+        .pipe($.if(PRODUCTION, $.terser()
+                   .on('error', e => { console.log(e); })
+                  ))
         .pipe($.if(!PRODUCTION, $.sourcemaps.write()))
         .pipe(gulp.dest(PATHS.dist + '/js'));
 }
@@ -134,29 +129,24 @@ function javascript() {
 // In production, the images are compressed
 function images() {
     return gulp.src('assets/img/**/*')
-        .pipe($.if(PRODUCTION, $.imagemin([
-            $.imagemin.mozjpeg({ progressive: true }),
-            ])))
+        .pipe($.if(PRODUCTION, imagemin([
+            imagemin.gifsicle({interlaced: true}),
+            imagemin.mozjpeg({quality: 85, progressive: true}),
+            imagemin.optipng({optimizationLevel: 5}),
+            imagemin.svgo({
+                plugins: [
+                    {removeViewBox: true},
+                    {cleanupIDs: false}
+                ]
+            })
+        ])))
         .pipe(gulp.dest(PATHS.dist + '/img'));
-}
-
-// Start a server with BrowserSync to preview the site in
-function server(done) {
-    browser.init({
-        server: PATHS.dist, port: PORT
-    }, done);
-}
-
-// Reload the browser with BrowserSync
-function reload(done) {
-    browser.reload();
-    done();
 }
 
 // Watch for changes to static assets, pages, Sass, and JavaScript
 function watch() {
     gulp.watch(PATHS.assets, copy);
     gulp.watch('assets/scss/**/*.scss').on('all', sassBuild);
-    gulp.watch('assets/js/**/*.js').on('all', gulp.series(javascript, browser.reload));
-    gulp.watch('assets/img/**/*').on('all', gulp.series(images, browser.reload));
+    gulp.watch('assets/js/**/*.js').on('all', javascript);
+    gulp.watch('assets/img/**/*').on('all', images);
 }

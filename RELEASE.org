@@ -33,9 +33,14 @@ eval $(opam env)
 # build) use the archive repository:
 opam switch create . ocaml-base-compiler.5.2.1 --locked --repos default,archive=https://github.com/ocaml/opam-repository-archive.git
 
+# Compilation might be oom-killed, try making the GC (of the compiler)
+# more aggressive:
+# (https://discuss.ocaml.org/t/how-to-limit-the-amount-of-memory-the-ocaml-compiler-is-allowed-to-use/797)
+OCAMLRUNPARAM="o=20" opam pin add . --locked -y
+
 # Compilation might fail because of disk space... To restart:
 opam clean
-opam pin add . --locked
+opam pin add . --locked -y
 
 # Post-build cache clean may help for future deployments
 opam clean

@@ -70,23 +70,23 @@ module Confirmation_modal : sig
       For instance, one could use a modal to delete an element by writing:
 
       {[
-        Confirmation_modal.with_modal
-          ~service:delete_an_element
-          ("Are you sure you want to delete " ^ to_string the_element ^ "?")
-          (fun ~opens_modal modal ->
-            div
-              [
-                p
-                  [
-                    Raw.a
-                      ~a:[ opens_modal ]
-                      [ txt @@ "Click me to delete " ^ to_string the_element ];
-                  ];
-                modal;
-              ])
-          () (* get delete service parameter *)
-          id_of_the_element (* post delete service parameter *)
-          (Form.user id_to_string)
+      Confirmation_modal.with_modal
+        ~service:delete_an_element
+        ("Are you sure you want to delete " ^ to_string the_element ^ "?")
+        (fun ~opens_modal modal ->
+          div
+            [
+              p
+                [
+                  Raw.a
+                    ~a:[ opens_modal ]
+                    [ txt @@ "Click me to delete " ^ to_string the_element ];
+                ];
+              modal;
+            ])
+        () (* get delete service parameter *)
+        id_of_the_element (* post delete service parameter *)
+        (Form.user id_to_string)
       ]}
 
       The building function mechanism, similarly to Forms, allows here to have a modal

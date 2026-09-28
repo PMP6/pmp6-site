@@ -17,7 +17,12 @@
    (port 465)
    (username noreply@pmp6.fr)
    (password "***********")
-   (use_starttls false)))
+   (use_starttls false)
+
+   ;; Set the following to false to disable the check of the SMTP
+   ;; settings at site startup (default is true).
+   (check_settings true)
+   ))
  (database
   ((uri "sqlite3:/var/local/pmp6/pmp6.db")
    ;; (uri sqlite3:pmp6_beta.db)

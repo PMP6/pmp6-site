@@ -26,6 +26,7 @@ PKG argon2
 PKG letters
 PKG mrmime
 PKG fmt
+PKG logs
 PKG omd
 PKG uucp
 PKG uuseg
@@ -37,6 +38,7 @@ PKG js_of_ocaml
 PKG lwt
 PKG core_unix
 
+PKG caqti.classic
 PKG caqti-lwt.unix
 PKG caqti-driver-sqlite3
 
