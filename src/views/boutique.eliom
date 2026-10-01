@@ -27,7 +27,7 @@ let make_card_cell ~title ~img:(img_filename, img_alt) ~href content =
     ~large:5
     [
       Foundation.Card.divider [ H.h1 ~a:[ H.a_class [ "h3" ] ] [ H.txt title ] ];
-      H.raw_a
+      H.extern_raw_a
         ~href
         [
           H.img
@@ -54,7 +54,7 @@ let card_licence () =
              Elle est nécessaire dès lors que vous passez un brevet, ainsi que pour \
              certains stages.";
         ];
-      H.p [ H.raw_a ~href [ H.txt "Acheter ma licence sur AssoConnect" ] ];
+      H.p [ H.extern_raw_a ~href [ H.txt "Acheter ma licence sur AssoConnect" ] ];
     ]
 
 let card_certification () =
@@ -73,7 +73,7 @@ let card_certification () =
              l'encadrant responsable. Vous pourrez alors recevoir votre carte \
              d'attestation.";
         ];
-      H.p [ H.raw_a ~href [ H.txt "Acheter ma carte de niveau sur AssoConnect" ] ];
+      H.p [ H.extern_raw_a ~href [ H.txt "Acheter ma carte de niveau sur AssoConnect" ] ];
     ]
 
 let purchase_cards () =

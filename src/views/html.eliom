@@ -23,6 +23,20 @@ let mailto_a address ?(a = []) content =
 let email address ?(a = []) ?(content = [ txt address ]) () =
   mailto_a address ~a:(a_class [ "email" ] :: a) content
 
+let extern_raw_a ?a:(a_ = []) ~href content =
+  raw_a
+    ~a:(a_target "_blank" :: a_rel [ `Noopener; `Noreferrer ] :: a_)
+    ~href
+    content
+
+let extern_a ?a:(a_ = []) ~service content get =
+  a
+    ~xhr:false
+    ~a:(a_target "_blank" :: a_rel [ `Noopener; `Noreferrer ] :: a_)
+    ~service
+    content
+    get
+
 let js_script uri ?(a = []) () =
   (* H.js_script generates unneeded "type=text/javascript" attribute, which triggers a
      warning on HTML validation *)

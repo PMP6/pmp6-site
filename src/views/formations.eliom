@@ -150,20 +150,6 @@ let niveau_3 () =
     ]
 
 let autres () =
-  let tapsec_service =
-    Eliom_service.extern
-      ~prefix:"http://www.fc.upmc.fr"
-      ~path:
-        [
-          "fr";
-          "catalogue-de-formations-2018-2019";
-          "formation-qualifiante-FC6";
-          "sciences-technologies-sante-STS";
-          "techniques-appliquees-de-plongee-scientifique-pour-l-ecologie-cotiere-program-techniques-appliquees-de-plongee-scientifique-pour-l-ecologie-cotiere-2-2.html";
-        ]
-      ~meth:(Eliom_service.Get Eliom_parameter.unit)
-      ()
-  in
   H.
     [
       header
@@ -205,18 +191,6 @@ let autres () =
               txt
                 "Enrichissez votre air en oxygène pour réduire vos paliers et augmenter \
                  la sécurité !";
-            ];
-          dt [ txt "Plongée scientifique" ];
-          dd
-            [
-              txt "Les étudiants de Sorbonne Université ont accès à une ";
-              a
-                ~service:tapsec_service
-                [ txt "UE de formation en plongée scientifique" ]
-                ();
-              txt
-                " à laquelle certains de nos moniteurs participent comme formateurs. \
-                 Nous contacter pour plus d'informations.";
             ];
           dt [ txt "Bio, archéo..." ];
           dd
