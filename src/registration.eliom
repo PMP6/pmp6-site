@@ -23,7 +23,6 @@ let legacy_redirects =
     ( [ "informations-pratiques"; "inscription" ],
       Skeleton.Informations.Services.inscription );
     ([ "espace-membre"; "boutique" ], Skeleton.Espace_membre.Services.boutique);
-    ([ "espace-membre"; "calendrier" ], Skeleton.Espace_membre.Services.calendrier);
   ]
 
 let () =
