@@ -3,12 +3,10 @@ module H = Eliom_content.Html.D
 module AS = struct
   let page_service =
     Eliom_service.extern
-      ~prefix:"https://as.upmc.fr"
-      ~path:[ "gestion"; "index.php" ]
-      ~meth:(Eliom_service.Get (Eliom_parameter.int "page"))
+      ~prefix:"https://mes.activites.sorbonne-universite.fr"
+      ~path:[ "" ]
+      ~meth:(Eliom_service.Get Eliom_parameter.unit)
       ()
-
-  let contact = 22
 end
 
 let caci_service =
@@ -46,7 +44,7 @@ let inscription_page () () =
         p
           [
             txt "Pour s'inscrire à la section plongée, il faut d'abord s'inscrire à l'";
-            a ~service:AS.page_service [ txt "AS" ] AS.contact;
+            a ~service:AS.page_service [ txt "AS" ] ();
             txt
               ". Vous pourrez ensuite choisir la plongée parmi la liste des sports sur \
                le portail dédié.";
