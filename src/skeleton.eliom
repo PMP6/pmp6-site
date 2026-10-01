@@ -82,11 +82,14 @@ module Espace_membre = struct
   end)
 
   module Services = struct
+    let calendrier = sub_service [ "calendrier" ]
     let boutique = sub_service [ "boutique" ]
   end
 
   let hierarchy_item =
-    make_hierarchy_item "Espace membre" Services.[ ("Boutique", boutique) ]
+    make_hierarchy_item
+      "Espace membre"
+      Services.[ ("Calendrier", calendrier); ("Boutique", boutique) ]
 end
 
 module Contact = struct
