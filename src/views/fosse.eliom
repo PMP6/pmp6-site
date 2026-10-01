@@ -12,6 +12,85 @@ let villeneuve_gmaps_embed () =
   Google.Maps.embed
     "!1m18!1m12!1m3!1d2620.5825615796984!2d2.3149239516407483!3d48.942392202640114!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e668ce0172bedb%3A0x19a2a82e09902bfe!2sCentre%20de%20plong%C3%A9e%20Aqua%20Hauts-de-Seine%20-%20UCPA!5e0!3m2!1sfr!2suk!4v1666202603898!5m2!1sfr!2suk"
 
+let antony_section () =
+  let open H in
+  section
+    [
+      header [ anchored ~fragment:"antony" h2 [ txt "Espace Plongée d'Antony" ] ];
+      p
+        [
+          txt "Centre Aquatique Pajeaud";
+          br ();
+          txt "104 rue Adolphe Pajeaud";
+          br ();
+          txt "92160 ANTONY";
+          br ();
+          txt "RER B, direction St Rémy, station Les Baconnets puis 5-10 min à pieds";
+          br ();
+        ];
+      p
+        [
+          txt
+            "Le rendez-vous est fixé vingt minutes avant la séance, sur le côté droit du \
+             complexe sportif quand on arrive.";
+        ];
+      Foundation.Grid.x
+        ~a:[ a_class [ "align-center" ] ]
+        [ Foundation.Grid.cell ~small:12 ~medium:10 ~large:8 [ antony_gmaps_embed () ] ];
+    ]
+
+let villeneuve_section () =
+  let open H in
+  section
+    [
+      header
+        [ anchored ~fragment:"villeneuve" h2 [ txt "Aqua Hauts-de-Seine, Villeneuve" ] ];
+      p
+        [
+          txt "Centre UCPA Aqua Hauts-de-Seine";
+          br ();
+          txt "119 boulevard Charles de Gaulle";
+          br ();
+          txt "92390 Villeneuve-la-Garenne";
+          br ();
+        ];
+      p
+        [
+          txt
+            "Pour les plongeurs arrivant en voiture, des places de parking sont \
+             disponibles près de l'entrée (ne pas franchir la grille qui peut être \
+             verrouillée le soir). Il est possible de s'y rendre en transports en \
+             commun, et des covoiturages sont habituellement organisés par les \
+             participants de chaque séance (y compris sur place pour le retour).";
+        ];
+      Foundation.Grid.x
+        ~a:[ a_class [ "align-center" ] ]
+        [
+          Foundation.Grid.cell ~small:12 ~medium:10 ~large:8 [ villeneuve_gmaps_embed () ];
+        ];
+    ]
+
+let charenton_section () =
+  let open H in
+  section
+    [
+      header [ anchored ~fragment:"charenton" h2 [ txt "Fosse de plongée de Charenton" ] ];
+      p
+        [
+          txt "4 bis avenue Anatole France";
+          br ();
+          txt "94220 Charenton-le-Pont";
+          br ();
+          txt "Métro Charenton-Écoles, Ligne 8";
+          br ();
+        ];
+      Foundation.Grid.x
+        ~a:[ a_class [ "align-center" ] ]
+        [
+          Foundation.Grid.cell ~small:12 ~medium:10 ~large:8 [ charenton_gmaps_embed () ];
+        ];
+    ]
+
 let fosse_page () () =
   Content.page
     ~title:"Fosse"
@@ -64,99 +143,9 @@ let fosse_page () () =
                "Jeudi 25 mars à 19 h ;";
                "Jeudi 22 avril à 19 h.";
              ];
-        section
-          [
-            header
-              [
-                anchored ~fragment:"charenton" h2 [ txt "Fosse de plongée de Charenton" ];
-              ];
-            p
-              [
-                txt "4 bis avenue Anatole France";
-                br ();
-                txt "94220 Charenton-le-Pont";
-                br ();
-                txt "Métro Charenton-Écoles, Ligne 8";
-                br ();
-              ];
-            Foundation.Grid.x
-              ~a:[ a_class [ "align-center" ] ]
-              [
-                Foundation.Grid.cell
-                  ~small:12
-                  ~medium:10
-                  ~large:8
-                  [ charenton_gmaps_embed () ];
-              ];
-          ];
-        section
-          [
-            header
-              [
-                anchored
-                  ~fragment:"villeneuve"
-                  h2
-                  [ txt "Aqua Hauts-de-Seine, Villeneuve" ];
-              ];
-            p
-              [
-                txt "Centre UCPA Aqua Hauts-de-Seine";
-                br ();
-                txt "119 boulevard Charles de Gaulle";
-                br ();
-                txt "92390 Villeneuve-la-Garenne";
-                br ();
-              ];
-            p
-              [
-                txt
-                  "Pour les plongeurs arrivant en voiture, des places de parking sont \
-                   disponibles près de l'entrée (ne pas franchir la grille qui peut être \
-                   verrouillée le soir). Il est possible de s'y rendre en transports en \
-                   commun, et des covoiturages sont habituellement organisés par les \
-                   participants de chaque séance (y compris sur place pour le retour).";
-              ];
-            Foundation.Grid.x
-              ~a:[ a_class [ "align-center" ] ]
-              [
-                Foundation.Grid.cell
-                  ~small:12
-                  ~medium:10
-                  ~large:8
-                  [ villeneuve_gmaps_embed () ];
-              ];
-          ];
-        section
-          [
-            header [ anchored ~fragment:"antony" h2 [ txt "Espace Plongée d'Antony" ] ];
-            p
-              [
-                txt "Centre Aquatique Pajeaud";
-                br ();
-                txt "104 rue Adolphe Pajeaud";
-                br ();
-                txt "92160 ANTONY";
-                br ();
-                txt
-                  "RER B, direction St Rémy, station Les Baconnets puis 5-10 min à pieds";
-                br ();
-              ];
-            p
-              [
-                txt
-                  "Le rendez-vous est fixé vingt minutes avant la séance, sur le côté \
-                   droit du complexe sportif quand on arrive.";
-              ];
-            Foundation.Grid.x
-              ~a:[ a_class [ "align-center" ] ]
-              [
-                Foundation.Grid.cell
-                  ~small:12
-                  ~medium:10
-                  ~large:8
-                  [ antony_gmaps_embed () ];
-              ];
-          ];
+        antony_section ();
+        villeneuve_section ();
+        (* charenton_section () (* Fermée indéfiniment *); *)
         Widget.thumbnail_row
           ~subdir:[ "fosse" ]
           [

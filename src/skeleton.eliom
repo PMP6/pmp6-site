@@ -3,98 +3,55 @@ module H = Html
 let main_page service = Eliom_tools.Main_page (Srv service)
 let hierarchy_leaf service = Eliom_tools.Site_tree (main_page service, [])
 
-module SubLeaf (Config : sig
-  val path_root : string
-end) =
-struct
-  let service =
-    let open Eliom_service in
-    create ~path:(Path [ Config.path_root; "" ]) ~meth:(Get Eliom_parameter.unit) ()
+let page_service name =
+  let open Eliom_service in
+  create ~path:(Path [ name; "" ]) ~meth:(Get Eliom_parameter.unit) ()
 
-  let make_hierarchy_item main_name sub_entries =
-    ( H.txt main_name,
-      Eliom_tools.Site_tree
-        ( main_page service,
-          List.map ~f:(fun (name, srv) -> (H.txt name, hierarchy_leaf srv)) sub_entries )
-    )
-end
-
-module SubTree (Config : sig
-  val path_root : string
-end) =
-struct
-  (* Currently works only for one level. *)
-
-  let path_root = Config.path_root
-
-  let sub_service subpath =
-    let open Eliom_service in
-    create
-      ~path:(Path ((path_root :: subpath) @ [ "" ]))
-      ~meth:(Get Eliom_parameter.unit)
-      ()
-
-  let make_hierarchy_item main_name sub_entries =
-    ( H.txt main_name,
-      Eliom_tools.Site_tree
-        ( Not_clickable,
-          List.map ~f:(fun (name, srv) -> (H.txt name, hierarchy_leaf srv)) sub_entries )
-    )
-end
+let menu_item main_name sub_entries =
+  ( H.txt main_name,
+    Eliom_tools.Site_tree
+      ( Not_clickable,
+        List.map ~f:(fun (name, srv) -> (H.txt name, hierarchy_leaf srv)) sub_entries ) )
 
 module Plonger = struct
-  include SubTree (struct
-    let path_root = "plonger"
-  end)
-
   module Services = struct
-    let formations = sub_service [ "formations" ]
-    let stages = sub_service [ "stages" ]
+    let formations = page_service "formations"
+    let stages = page_service "stages"
   end
 
   let hierarchy_item =
-    make_hierarchy_item
-      "Plonger"
-      Services.[ ("Formations", formations); ("Stages", stages) ]
+    menu_item "Plonger" Services.[ ("Formations", formations); ("Stages", stages) ]
 end
 
 module Informations = struct
-  include SubTree (struct
-    let path_root = "informations-pratiques"
-  end)
-
   module Services = struct
-    let piscine = sub_service [ "piscine" ]
-    let fosse = sub_service [ "fosse" ]
-    let inscription = sub_service [ "inscription" ]
+    let piscine = page_service "piscine"
+    let fosse = page_service "fosse"
+    let inscription = page_service "inscription"
   end
 
   let hierarchy_item =
-    make_hierarchy_item
+    menu_item
       "Informations pratiques"
       Services.
         [ ("Piscine", piscine); ("Fosse", fosse); ("Inscription au club", inscription) ]
 end
 
 module Espace_membre = struct
-  include SubTree (struct
-    let path_root = "espace-membre"
-  end)
-
   module Services = struct
-    let boutique = sub_service [ "boutique" ]
+    let calendrier = page_service "calendrier"
+    let boutique = page_service "boutique"
   end
 
   let hierarchy_item =
-    make_hierarchy_item "Espace membre" Services.[ ("Boutique", boutique) ]
+    menu_item
+      "Espace membre"
+      Services.[ ("Calendrier", calendrier); ("Boutique", boutique) ]
 end
 
 module Contact = struct
-  include SubLeaf (struct
-    let path_root = "contact"
-  end)
-
-  let hierarchy_item = make_hierarchy_item "Nous contacter" []
+  let service = page_service "contact"
+  let hierarchy_item = (H.txt "Nous contacter", hierarchy_leaf service)
 end
 
 module Media = struct

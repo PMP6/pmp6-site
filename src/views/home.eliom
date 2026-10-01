@@ -14,11 +14,18 @@ let page_title () =
   in
   h1 [ poulpe (); txt " Bienvenue à PMP6 ! "; poulpe () ]
 
+let mola_mola () =
+  Widget.thumbnail_row
+    ~max_size:8
+    ~subdir:[]
+    [ ("Un mola-mola à Banyuls", "mola-mola.jpg") ]
+
 let presentation_section () =
   let open H in
   section
     ~a:[ a_id "presentation" ]
     [
+      h1 ~a:[ a_class_ "h3" ] [ txt "Qui sommes-nous ?" ];
       p
         [
           txt
@@ -29,9 +36,8 @@ let presentation_section () =
       p
         [
           txt
-            "Encadrés par une vingtaine de moniteurs bénévoles, nous proposons des \
-             formations à tous les niveaux de plongeur ainsi qu'un accompagnement pour \
-             ceux qui désirent se préparer aux niveaux d'encadrement.";
+            "Encadrés par nos moniteurs bénévoles, nous proposons des formations à tous \
+             les niveaux de plongeur ainsi qu'une préparation aux niveaux d'encadrement.";
         ];
       p
         [
@@ -47,44 +53,38 @@ let presentation_section () =
         ];
       p
         [
-          txt
-            "N'hésitez pas à parcourir les différentes sections de ce site pour plus \
-             d'informations. Si vous avez des questions, vous pouvez aussi contacter nos \
-             délégués à l'adresse ";
+          txt "Pour plus d'informations, vous pouvez contacter nos délégués à l'adresse ";
           email "delegues@pmp6.fr" ();
           txt ".";
         ];
-      Widget.thumbnail_row
-        ~max_size:4
-        ~subdir:[]
-        [ ("Un mola-mola à Banyuls", "mola-mola.jpg") ];
+      mola_mola ();
     ]
 
-let make_news_section news =
+let news_section news =
   let open H in
   let tabs_titles, tabs_contents = News.View.Widget.news_tabs news in
   section
     ~a:[ a_id "section-news"; a_class [ "news" ] ]
+    [ h1 ~a:[ a_class_ "h3" ] [ txt "Actualités" ]; hr (); tabs_titles; tabs_contents ]
+
+let top_section news =
+  let open H in
+  section
+    ~a:[ a_id "section-news"; a_class [ "news" ] ]
     [
-      h2 [ txt "Suivez l'actu..." ];
-      hr ();
       F.Grid.padding_x
         [
-          F.Grid.cell ~large_auto:() ~medium:12 [ tabs_titles; tabs_contents ];
-          F.Grid.cell
-            ~large_shrink:()
-            ~medium:12
-            ~a:[ H.a_class_ "text-center" ]
-            [ F.Callout.create [ Facebook.page_widget () ] ];
+          F.Grid.cell ~large:6 ~medium:12 [ H.div [ presentation_section () ] ];
+          F.Grid.cell ~large:6 ~medium:12 [ F.Callout.create [ news_section news ] ];
         ];
     ]
 
-let fetch_and_make_news_section () =
+let fetch_and_make_top_section () =
   let%map.Lwt news = News.Model.visible () in
-  make_news_section news
+  top_section news
+
+let callendar_callout () = F.Callout.create [ Calendar_widget.calendar () ]
 
 let home_page () () =
-  let%lwt news_section = fetch_and_make_news_section () in
-  Content.page
-    ~title:"PMP6"
-    [ page_title (); H.hr (); presentation_section (); news_section ]
+  let%lwt top_section = fetch_and_make_top_section () in
+  Content.page ~title:"PMP6" [ page_title (); top_section; callendar_callout () ]
