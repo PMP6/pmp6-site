@@ -180,9 +180,8 @@ let footer () =
                   Foundation.Grid.cell
                     ~auto:()
                     [
-                      a
+                      extern_a
                         ~service:(Facebook.page_service ())
-                        ~a:[ a_target "_blank" ]
                         [ Icon.brands "facebook-f" () ]
                         ();
                     ];
