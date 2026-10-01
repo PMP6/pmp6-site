@@ -268,7 +268,9 @@ let redaction_form ?news () =
       F.Form.help_text
         [
           H.txt "Le contenu de la news. HTML et ";
-          H.raw_a ~href:"https://www.markdownguide.org/cheat-sheet/" [ H.txt "Markdown" ];
+          H.extern_raw_a
+            ~href:"https://www.markdownguide.org/cheat-sheet/"
+            [ H.txt "Markdown" ];
           H.txt " autorisés.";
         ];
       fieldset

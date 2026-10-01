@@ -30,15 +30,13 @@ let contact_page () () =
         p
           ~a:[ a_class [ "text-center" ] ]
           [
-            a
+            extern_a
               ~service:(Facebook.page_service ())
-              ~a:[ a_target "_blank" ]
               [ Icon.brands "facebook-square" (); txt " as.pmp6" ]
               ();
             br ();
-            a
+            extern_a
               ~service:(Facebook.messenger_service ())
-              ~a:[ a_target "_blank" ]
               [ Icon.brands "facebook-messenger" (); txt " as.pmp6" ]
               ();
           ];
