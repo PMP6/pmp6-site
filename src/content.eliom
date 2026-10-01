@@ -43,7 +43,7 @@ let send : type result. _ -> result t -> result Lwt.t =
   | Page page ->
       let%lwt doc = return_page page in
       Pmp6.App.send doc
-  | Redirection srv -> Eliom_registration.Redirection.(send @@ Redirection srv)
+  | Redirection srv -> Eliom_registration.Redirection.send (Redirection srv)
   | Unit -> Eliom_registration.Action.send ()
 
 let send_lwt return_page content =

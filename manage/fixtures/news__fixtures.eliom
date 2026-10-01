@@ -26,7 +26,7 @@ let content_rentree =
 C'est la rentrée !
 
 Les séances de piscine ont déjà repris pour les anciens aux [horaires
-habituels](/informations-pratiques/piscine).
+habituels](/piscine).
 
 Dans ce contexte sanitaire particulier, des règles sont en place pour
 pratiquer en toute sécurité. En particulier, n'oubliez pas de remplir
@@ -94,7 +94,7 @@ RER B, direction St Rémy, station Les Baconnets puis 5-10 min à pieds
 Nous ne savons pas encore quand les séances de fosse pourront
 reprendre pour la saison 2020-2021. Dès qu'elles seront connues, les
 dates seront disponibles sur [la page
-dédiée](/informations-pratiques/fosse/).
+dédiée](/fosse/).
 
 Les inscriptions se feront comme d'habitude en remplissant le
 formulaire envoyé par mail avant chaque séance.
